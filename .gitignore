@@ -8,3 +8,6 @@ __pycache__/
 
 # literature API cache
 literature_cache.sqlite3
+
+# docs
+team_tasks.md
