@@ -47,7 +47,8 @@ not required for validation, and not on the critical backend path.
                               v
                      +----------------+
                      | 2. Literature  |
-                     |    Retriever   |
+                     |    Retriever/  |
+                     |  Cartographer  |
                      +--------+-------+
                               |
          +--------------------+--------------------+
@@ -130,6 +131,29 @@ should be implemented in code.
 Every hypothesis receives a metric-backed scorecard. Scores should be reported
 on a 0-100 scale, with confidence intervals where appropriate.
 
+### Scoring Contract
+
+The core quantitative scoring agents must share a common output contract so the
+dashboard, ranker, and validation harness can treat them consistently.
+
+Each scoring agent should emit:
+
+- `score`: integer from 0 to 100.
+- `confidence_low` and `confidence_high`: lower and upper score bounds on the
+  same 0-100 scale.
+- `rationale`: concise explanation of how the score was produced.
+- `evidence_ids`: stable identifiers for the papers used to support the score.
+- `method`: a short versioned description of the formula or procedure used.
+
+Evidence IDs should be stable across reruns and source merges. Preferred order:
+
+1. DOI when present.
+2. OpenAlex work identifier.
+3. Semantic Scholar paper identifier.
+
+The score contract is designed so every metric can be inspected, reproduced,
+and compared in backtests.
+
 | Metric | What it captures | Candidate signals |
 |---|---|---|
 | **Novelty** | How different the idea is from the nearest prior work | Embedding distance, lexical overlap, closest-paper similarity, concept novelty |
@@ -147,6 +171,140 @@ on a 0-100 scale, with confidence intervals where appropriate.
 The Idea Hater verdict should not be a single opaque number. The dashboard
 should show the composite score alongside the contributing metrics and the
 evidence behind each score.
+
+### Immediate Metric Implementation Plan
+
+The first scoring implementation pass should prioritize four defensible metrics
+that can be supported directly from OpenAlex and Semantic Scholar metadata:
+
+1. Novelty
+2. Saturation
+3. Conflict Risk
+4. Evidence Quality
+
+These four metrics form the first quantitative spine of the Idea Hater. The
+remaining metrics can build on the same retrieval, normalization, and evidence
+trace infrastructure.
+
+#### Shared retrieval and normalization layer
+
+All four scorers should use one common literature neighbourhood:
+
+- Build a canonical query from the parsed hypothesis fields.
+- Query OpenAlex for global counts and a top-N work neighbourhood.
+- Query Semantic Scholar for abstracts, citation metadata, and external IDs.
+- Normalize papers into one internal record format.
+- Deduplicate papers using DOI first, then source-specific IDs.
+- Cache all responses locally in SQLite for reproducibility and demo speed.
+
+The shared paper record should preserve source provenance so source agreement
+and missingness can be measured directly.
+
+#### Saturation
+
+Saturation is the crowding score: how densely populated the nearby literature
+already is.
+
+Planned deterministic components:
+
+- OpenAlex result count for the canonical query.
+- Recent publication velocity using year buckets.
+- Count of close neighbours in the retrieved top-N set.
+- Optional concept spread signal to distinguish broad versus narrow crowding.
+
+Suggested initial scoring shape:
+
+- Transform global count with a bounded nonlinear function so very large fields
+  saturate without dominating the whole scale.
+- Adjust upward when recent publication velocity is high.
+- Report the most representative overlapping papers as evidence.
+
+Confidence intervals should come from count uncertainty and retrieval stability
+over the top-N neighbourhood.
+
+#### Novelty
+
+Novelty measures whether the hypothesis is scarce, differentiated, or simply a
+rephrasing of nearby prior work.
+
+Planned deterministic components:
+
+- Inverse relationship to saturation.
+- Earliest relevant-paper year.
+- Concentration of authors or institutions in the neighbourhood.
+- Closest-paper overlap using metadata-derived similarity.
+
+Planned LLM assistance:
+
+- Use the model only for bounded disambiguation when metadata alone cannot tell
+  whether a paper is a true analogue or only loosely related.
+- Keep these calls limited and auditable.
+
+Confidence intervals should come from bootstrap resampling over the retrieved
+paper neighbourhood.
+
+#### Conflict Risk
+
+Conflict risk estimates how strongly existing literature challenges the claim,
+mechanism, or population in the hypothesis.
+
+Planned deterministic and hybrid components:
+
+- Retrieve the same literature neighbourhood with abstracts where available.
+- Use weighted paper importance based on recency and citations per year.
+- Classify papers into support, contradiction, or unclear.
+- Track disagreement dimensions such as mechanism, population, method, or
+  direction of effect.
+
+The deterministic part should handle weighting and score aggregation. The LLM
+should only do the bounded abstract-level classification and disagreement-label
+assignment when needed.
+
+Confidence intervals should be computed from the effective support-versus-
+contradiction sample size, using a binomial-style interval after weighting.
+
+#### Evidence Quality
+
+Evidence quality measures how trustworthy the retrieved evidence base is, not
+whether the hypothesis itself is true.
+
+Planned deterministic components:
+
+- Retrieval coverage across the top-N relevant papers.
+- Agreement between OpenAlex and Semantic Scholar records.
+- Share of papers with abstracts and usable identifiers.
+- Citation-normalized paper quality proxies.
+- Recency balance across the evidence set.
+- Source completeness penalties for missing key metadata.
+
+Planned bounded LLM assistance:
+
+- Optional lightweight study-type classification from title and abstract for a
+  small number of influential papers.
+
+Confidence intervals should be derived from bootstrap variation over the paper
+set and widened when metadata is sparse or the LLM-labelled fraction is high.
+
+### Quantitative Backend Build Sequence
+
+The immediate backend build order for the scoring layer should be:
+
+1. Extend schemas with a reusable metric score object and a quantitative
+   evaluation container.
+2. Build shared retrieval and paper normalization utilities.
+3. Implement deterministic saturation scoring and confidence intervals.
+4. Implement deterministic novelty scoring and confidence intervals.
+5. Implement conflict-risk classification plus weighted aggregation.
+6. Implement evidence-quality scoring and confidence intervals.
+7. Wire the four agents into the LangGraph pipeline as parallel score modules.
+8. Add an aggregator that assembles the scorecard and preserves evidence trace.
+9. Produce realistic mock outputs for the dashboard while the real metrics are
+   still being calibrated.
+10. Run small-sample calibration and validation checks before expanding to the
+   full backtest.
+
+This sequence intentionally delays broader forecasting and mutation work until
+the first evidence-backed scorecard is stable.
 
 ---
 

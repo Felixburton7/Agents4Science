@@ -149,6 +149,18 @@ scaffolding, schemas, model routing, tracing, literature tools, and agent prompt
 files. The demo CLI runs the quantitative Idea Hater path end to end with mock
 data while real agents land.
 
+The immediate scoring implementation priority is the first defensible
+quantitative layer:
+
+- `novelty_scorer`
+- `saturation_scorer`
+- `conflict_scorer`
+- `evidence_quality_scorer`
+
+These four modules should share one literature neighbourhood, one evidence-ID
+contract, and one structured score format so the dashboard and validation code
+can inspect every metric in the same way.
+
 Immediate implementation targets from [team_tasks.md](team_tasks.md):
 
 - Replace mock metric scorer stubs with retrieval-backed implementations.
@@ -157,6 +169,15 @@ Immediate implementation targets from [team_tasks.md](team_tasks.md):
 - Build a dashboard around the scorecard, evidence trace, ranked variants, and
   validation plots.
 - Build a historical backtest harness.
+
+For the first scoring pass, the working plan is:
+
+1. Normalize OpenAlex and Semantic Scholar records into one paper format.
+2. Use DOI-first evidence IDs for reproducible metric traces.
+3. Implement deterministic saturation and novelty before hybrid metrics.
+4. Use bounded LLM calls only for explanation and abstract-level
+   support-versus-contradiction classification.
+5. Return every score with rationale, confidence interval, and evidence IDs.
 
 ## Repository Layout
 

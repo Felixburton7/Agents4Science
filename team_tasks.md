@@ -220,32 +220,86 @@ metric, rationale, and evidence trail.
   - `saturation_scorer`
   - `conflict_scorer`
   - `evidence_quality_scorer`
+- Standardize each scorer on a shared structured contract:
+  - `score` from 0 to 100
+  - `confidence_low`
+  - `confidence_high`
+  - `rationale`
+  - `evidence_ids`
+  - `method`
 - Reuse existing material where useful:
   - `backend/agents/cartographer.md`
   - `backend/agents/conflict_detector.md`
   - `backend/agents/overlap_auditor.md`
   - `AgentsIdeas.md` for the earlier novelty and literature-coverage concepts
 - Define evidence IDs so every score can point back to papers.
+- Build a shared retrieval-and-normalization layer for the four scorers:
+  - canonical query from parsed hypothesis
+  - OpenAlex result counts and work metadata
+  - Semantic Scholar abstracts and cross-source metadata
+  - DOI-first deduplication
+  - stable source provenance per paper
 - Make novelty and saturation quantitative:
   - closest-paper similarity
   - number of near neighbours
   - recent publication velocity
   - concept overlap
   - named overlapping papers
+- Implement saturation first as the initial deterministic vertical slice:
+  - transform OpenAlex result count into a bounded 0-100 crowding score
+  - adjust by recent publication velocity
+  - attach top overlapping paper IDs as evidence
+  - estimate confidence interval from retrieval-count uncertainty
+- Implement novelty second on top of the same normalized paper set:
+  - inverse saturation contribution
+  - earliest relevant-paper year
+  - author / institution concentration
+  - limited LLM disambiguation only for ambiguous nearest neighbours
+  - estimate confidence interval with bootstrap resampling
 - Make conflict risk quantitative:
   - contradiction count
   - severity-weighted conflict score
   - disagreement dimensions
+- Implement conflict risk as a hybrid metric:
+  - deterministic paper weighting by recency and citations per year
+  - bounded abstract-level classification into support / contradiction / unclear
+  - disagreement labels for mechanism, population, method, or effect direction
+  - confidence interval from weighted support-versus-contradiction uncertainty
 - Make evidence quality quantitative:
   - retrieval coverage
   - source agreement between OpenAlex and Semantic Scholar
   - proportion of papers with abstracts
   - recency balance
+- Implement evidence quality as a trust score over the evidence base:
+  - metadata completeness
+  - identifier availability
+  - citation-normalized paper quality proxy
+  - cross-source agreement
+  - optional lightweight study-type classification for only the most relevant papers
+  - confidence interval from bootstrap variation and missingness penalties
 - Provide realistic mock outputs for Felix's dashboard while real scoring is being built.
 - Keep group emulation as optional frontend-only concept:
   - no critical backend dependency
   - no validation dependency
   - clearly labelled as experimental
+
+**Execution order for Harvey's lane**
+
+1. Extend schema and evidence-ID contract.
+2. Add retrieval normalization notes to the cartographer handoff.
+3. Implement saturation metric specification and mock output.
+4. Implement novelty metric specification and mock output.
+5. Implement conflict-risk metric specification and mock output.
+6. Implement evidence-quality metric specification and mock output.
+7. Review calibration assumptions with Fred and Funmi before code freeze.
+
+**Definition of done**
+
+- Each of the four score modules has a documented deterministic core.
+- Each score returns 0-100, interval, rationale, evidence IDs, and method tag.
+- Every rationale can name the quantities used to compute the score.
+- Evidence IDs resolve back to retrieved paper records.
+- Mock outputs exist for dashboard integration before full implementation lands.
 
 **Prompt for your AI**
 
