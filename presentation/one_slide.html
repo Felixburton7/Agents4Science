@@ -90,7 +90,7 @@
     /* ── headline ─────────────────────────────────────── */
     .headline {
       position: absolute;
-      top: 44%;
+      top: 46%;
       left: 5.5%;
       z-index: 1;
       color: var(--charcoal);
@@ -103,7 +103,7 @@
     /* ── subhead ──────────────────────────────────────── */
     .subhead {
       position: absolute;
-      top: 55%;
+      top: 58%;
       left: 5.5%;
       z-index: 1;
       color: var(--muted);
@@ -118,7 +118,7 @@
       position: absolute;
       left: 5.5%;
       right: 50%;
-      top: 65%;
+      top: 71%;
       z-index: 1;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -150,7 +150,7 @@
     .numbers {
       position: absolute;
       left: 5.5%;
-      top: 80%;
+      top: 87%;
       z-index: 1;
       color: var(--muted);
       font-size: clamp(9px, 0.80vw, 15px);
@@ -165,7 +165,7 @@
       left: 56%;
       right: 4%;
       top: 14%;
-      bottom: 11%;
+      bottom: 4%;
       z-index: 1;
       background: none;
       border: none;
@@ -181,21 +181,6 @@
       height: 100%;
     }
 
-    /* ── footer ───────────────────────────────────────── */
-    .footer {
-      position: absolute;
-      left: 5.5%;
-      right: 5.5%;
-      bottom: 5%;
-      z-index: 1;
-      color: var(--muted);
-      display: flex;
-      justify-content: space-between;
-      gap: 24px;
-      font-size: clamp(10px, 0.88vw, 17px);
-      font-weight: 640;
-    }
-
     /* ── mobile fallback ──────────────────────────────── */
     @media (max-width: 900px) {
       body { padding: 0; }
@@ -206,7 +191,7 @@
         border-radius: 0;
       }
       .rule, .headline, .subhead, .title,
-      .workflow, .footer, .schematic {
+      .workflow, .schematic {
         position: relative;
         left: auto; right: auto; top: auto; bottom: auto;
         margin-left: 24px; margin-right: 24px;
@@ -219,7 +204,6 @@
       .workflow  { margin-top: 44px; grid-template-columns: 1fr; right: 24px; }
       .numbers   { margin-top: 28px; white-space: normal; }
       .schematic { margin-top: 40px; min-height: 320px; border-radius: 8px; }
-      .footer    { margin-top: 36px; display: grid; padding-bottom: 32px; }
     }
   </style>
 </head>
@@ -581,10 +565,6 @@
       11 scored metrics &nbsp;&middot;&nbsp; 7 mutation operators &nbsp;&middot;&nbsp; 2 literature sources
     </div>
 
-    <div class="footer">
-      <span>Live case: accepted Denario cosmology paper</span>
-      <span>Evidence before generation</span>
-    </div>
 
   </section>
 </body>
