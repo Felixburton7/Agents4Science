@@ -146,18 +146,14 @@ visually and conceptually separate from the validated Idea Hater scorecard.
 
 The repo now contains a backend skeleton under `backend/`, including pipeline
 scaffolding, schemas, model routing, tracing, literature tools, and agent prompt
-files. The next implementation step is to refactor that skeleton from the old
-group-emulation path into the quantitative Idea Hater pipeline.
+files. The demo CLI runs the quantitative Idea Hater path end to end with mock
+data while real agents land.
 
 Immediate implementation targets from [team_tasks.md](team_tasks.md):
 
-- Refactor `backend/schemas.py` around `MetricScore`, `IdeaEvaluation`, and
-  `VariantEvaluation`.
-- Refactor `backend/pipeline.py` so group emulation is not on the critical path.
-- Add metric scorer agents for novelty, saturation, conflict, feasibility,
-  impact, and evidence quality.
-- Implement score aggregation, mutation, variant re-scoring, ranking, and
-  strategy memo generation.
+- Replace mock metric scorer stubs with retrieval-backed implementations.
+- Improve score aggregation weights and calibration.
+- Connect mutation and variant re-scoring to the real scorecard.
 - Build a dashboard around the scorecard, evidence trace, ranked variants, and
   validation plots.
 - Build a historical backtest harness.
