@@ -9,9 +9,9 @@ import {
   useRef,
   useState,
 } from "react";
-import { Stage, STAGE_DURATIONS_MS, nextStage } from "@/lib/stages";
+import { Stage } from "@/lib/stages";
 import { buildMockState, DEFAULT_HYPOTHESIS } from "@/lib/mockState";
-import type { DemoState } from "@/types/schemas";
+import type { DemoState, PipelineState } from "@/types/schemas";
 
 interface DemoContextValue {
   stage: Stage;
@@ -49,35 +49,50 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
     clearTimer();
     const fresh = buildMockState(hypothesis);
     setState(fresh);
-    setStage(Stage.IDLE);
+    setStage(Stage.PARSING);
     setIsRunning(true);
 
-    const advance = (current: Stage) => {
-      const duration = STAGE_DURATIONS_MS[current];
+    const apiBase = process.env.NEXT_PUBLIC_API_BASE ?? "http://localhost:8000";
+    const minWaitMs = 900;
+    const startedAt = Date.now();
+
+    const finish = (data?: Partial<PipelineState>) => {
+      if (data) {
+        setState((prev) => ({
+          ...prev,
+          raw_hypothesis: data.raw_hypothesis ?? hypothesis,
+          parsed: data.parsed ?? prev.parsed,
+          papers: data.papers ?? prev.papers,
+          conflicts: data.conflicts ?? prev.conflicts,
+          overlaps: data.overlaps ?? prev.overlaps,
+          forecast: data.forecast ?? prev.forecast,
+          variants: data.variants ?? prev.variants,
+          final_memo: data.final_memo ?? prev.final_memo,
+        }));
+      }
+      const elapsed = Date.now() - startedAt;
+      const delay = Math.max(0, minWaitMs - elapsed);
       timer.current = setTimeout(() => {
-        const next = nextStage(current);
-        if (next === null) {
-          setIsRunning(false);
-          return;
-        }
-        setStage(next);
-        if (next === Stage.DONE) {
-          setIsRunning(false);
-          return;
-        }
-        advance(next);
-      }, duration);
+        setStage(Stage.DONE);
+        setIsRunning(false);
+      }, delay);
     };
 
-    setStage(Stage.PARSING);
-    advance(Stage.PARSING);
+    fetch(`${apiBase}/api/run`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ hypothesis }),
+    })
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
+      .then((data: Partial<PipelineState>) => finish(data))
+      .catch((err) => {
+        console.warn("Backend unavailable; showing mock scorecard.", err);
+        finish();
+      });
   }, [hypothesis]);
 
   useEffect(() => () => clearTimer(), []);
 
-  // ?autostart=1 query-string trigger — kicks off Run on mount. Useful for
-  // headless-screenshot testing and for opening the demo "ready to go" on
-  // stage day so the speaker only needs to point at the screen.
   useEffect(() => {
     if (typeof window === "undefined") return;
     const params = new URLSearchParams(window.location.search);

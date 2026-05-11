@@ -136,6 +136,7 @@ export default function ParetoPlot() {
     paper_bgcolor: "#FFFFFF",
     plot_bgcolor: "#FFFFFF",
     font: { family: "Inter" },
+    transition: { duration: 900, easing: "cubic-in-out" },
   };
 
   return (

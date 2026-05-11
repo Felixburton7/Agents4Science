@@ -5,3 +5,5 @@ requests
 openai
 numpy
 matplotlib
+fastapi
+uvicorn[standard]

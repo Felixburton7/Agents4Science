@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
+import { motion } from "framer-motion";
 import type { Core, ElementDefinition, StylesheetJson } from "cytoscape";
 import dynamic from "next/dynamic";
 
@@ -30,9 +31,11 @@ const STYLESHEET: StylesheetJson = [
       "font-family": "Inter",
       "font-size": 9,
       color: "#3F3F3F",
-      "text-margin-y": -6,
+      "text-valign": "bottom",
+      "text-halign": "center",
+      "text-margin-y": 6,
       "text-wrap": "wrap",
-      "text-max-width": "120px",
+      "text-max-width": "110px",
       "min-zoomed-font-size": 6,
     },
   },
@@ -47,10 +50,15 @@ const STYLESHEET: StylesheetJson = [
       label: "data(label)",
       "font-size": 11,
       "font-family": "IBM Plex Mono",
-      "text-margin-y": -12,
+      "text-valign": "top",
+      "text-halign": "center",
+      "text-margin-y": -8,
       "text-wrap": "wrap",
       "text-max-width": "180px",
       color: "#1A1A1A",
+      "transition-property": "background-color border-color color",
+      "transition-duration": 600,
+      "transition-timing-function": "ease-in-out",
     },
   },
   {
@@ -82,12 +90,13 @@ const STYLESHEET: StylesheetJson = [
       label: "data(label)",
       "font-size": 10,
       "font-family": "Inter",
-      "text-margin-y": -10,
+      "text-margin-y": 10,
       color: "#1A1A1A",
       "text-wrap": "wrap",
-      "text-max-width": "120px",
+      "text-max-width": "110px",
       "text-valign": "bottom",
       "text-halign": "center",
+      "line-height": 1.15,
     },
   },
   {
@@ -101,10 +110,13 @@ const STYLESHEET: StylesheetJson = [
       label: "data(label)",
       "font-size": 9,
       color: "#1E5A8F",
+      "text-valign": "center",
+      "text-halign": "center",
       "text-margin-y": 0,
       "text-wrap": "wrap",
-      "text-max-width": "140px",
+      "text-max-width": "130px",
       "font-family": "IBM Plex Mono",
+      "line-height": 1.15,
     },
   },
   {
@@ -117,7 +129,9 @@ const STYLESHEET: StylesheetJson = [
       label: "data(label)",
       "font-size": 9,
       color: "#A65151",
-      "text-margin-y": -6,
+      "text-valign": "top",
+      "text-halign": "center",
+      "text-margin-y": -4,
       "font-family": "IBM Plex Mono",
     },
   },
@@ -131,7 +145,9 @@ const STYLESHEET: StylesheetJson = [
       label: "data(label)",
       "font-size": 9,
       color: "#5B8A6A",
-      "text-margin-y": -6,
+      "text-valign": "top",
+      "text-halign": "center",
+      "text-margin-y": -4,
       "font-family": "IBM Plex Mono",
     },
   },
@@ -148,8 +164,14 @@ const STYLESHEET: StylesheetJson = [
       label: "data(label)",
       "font-family": "IBM Plex Mono",
       "font-size": 9,
-      "text-margin-y": -6,
+      "text-valign": "bottom",
+      "text-halign": "center",
+      "text-margin-y": 4,
       color: "#1A1A1A",
+      "transition-property":
+        "background-color background-opacity border-color border-width width height",
+      "transition-duration": 600,
+      "transition-timing-function": "ease-in-out",
     },
   },
   {
@@ -287,14 +309,9 @@ export default function LiteratureMap() {
       classes: ["hypothesis", paretoRevealed ? "dominated" : ""].join(" ").trim(),
     });
 
-    // Reveal classified papers as the bloom progresses.
-    const totalClassified = classifiedPapers.length;
-    const showCount =
-      stage < Stage.LITERATURE
-        ? 0
-        : stage === Stage.LITERATURE
-        ? Math.max(3, Math.floor(totalClassified * 0.6))
-        : totalClassified;
+    // Papers all reveal at LITERATURE in one deliberate animation rather than
+    // 60% then 100% — the two-step caused a second jarring re-layout.
+    const showCount = stage < Stage.LITERATURE ? 0 : classifiedPapers.length;
     classifiedPapers.slice(0, showCount).forEach(({ paper: p, tag }) => {
       const size = Math.round(14 + p.relevance_score * 14);
       els.push({
@@ -409,38 +426,50 @@ export default function LiteratureMap() {
   ]);
 
   // cose layout tuned for breathing room — high repulsion, generous edge length,
-  // less gravity so the graph spreads out and labels don't overlap.
+  // less gravity so the graph spreads out and labels don't overlap. Slow
+  // animation so nodes glide instead of strobing into place.
   const layout = useMemo(
     () => ({
       name: "cose",
-      animate: true,
-      animationDuration: 800,
+      animate: "end" as const,
+      animationDuration: 1500,
+      animationEasing: "ease-in-out-cubic" as const,
       randomize: false,
-      nodeRepulsion: 12000,
-      nodeOverlap: 40,
-      idealEdgeLength: 140,
-      edgeElasticity: 60,
-      gravity: 0.15,
+      nodeRepulsion: 32000,
+      nodeOverlap: 80,
+      idealEdgeLength: 180,
+      edgeElasticity: 45,
+      gravity: 0.25,
       fit: true,
-      padding: 48,
-      componentSpacing: 80,
+      padding: 60,
+      componentSpacing: 140,
+      nestingFactor: 1.2,
+      numIter: 2500,
     }),
     [],
   );
 
-  // Re-run layout when elements change.
+  // Stable key for the element ID set. Re-runs layout only when the set of
+  // nodes/edges changes — class flips at PARETO no longer trigger a re-layout,
+  // which was the source of the "jiggy" feel.
+  const structureKey = useMemo(
+    () =>
+      elements
+        .map((el) => el.data?.id ?? "")
+        .filter(Boolean)
+        .sort()
+        .join("|"),
+    [elements],
+  );
+
   useEffect(() => {
     const cy = cyRef.current;
     if (!cy) return;
     cy.layout(layout).run();
-  }, [elements, layout]);
+  }, [structureKey, layout]);
 
   if (!hasContent) {
-    return (
-      <div className="h-full w-full flex items-center justify-center text-mono text-[11px] text-muted/40">
-        —
-      </div>
-    );
+    return <ParsingVisual active={stage === Stage.PARSING} />;
   }
 
   return (
@@ -477,4 +506,82 @@ function shortenTitle(t: string): string {
 function shortenDirection(t: string): string {
   if (t.length <= 60) return t;
   return t.slice(0, 57) + "…";
+}
+
+// Explicit "we are parsing your hypothesis" visualisation. Replaces the
+// previous em-dash placeholder so the Parse stage has a clear, slow animation
+// of its own rather than feeling like dead time before the graph appears.
+const PARSE_TAGS = [
+  "claim",
+  "method",
+  "domain",
+  "predicate",
+  "scope",
+  "evidence",
+];
+
+function ParsingVisual({ active }: { active: boolean }) {
+  return (
+    <div className="relative h-full w-full overflow-hidden flex items-center justify-center">
+      <div className="absolute top-3 left-3 text-mono text-[10px] uppercase tracking-[0.2em] text-muted">
+        Parse
+      </div>
+      <div className="relative w-[260px] h-[260px] flex items-center justify-center">
+        {/* Slow concentric pulses around the hypothesis node. */}
+        {active && [0, 1, 2].map((ring) => (
+          <motion.span
+            key={ring}
+            className="absolute rounded-full border border-accent/40"
+            initial={{ width: 36, height: 36, opacity: 0.5 }}
+            animate={{ width: 240, height: 240, opacity: 0 }}
+            transition={{
+              duration: 2.6,
+              delay: ring * 0.85,
+              repeat: Infinity,
+              ease: "easeOut",
+            }}
+          />
+        ))}
+        {/* Center node. */}
+        <motion.div
+          className="relative w-9 h-9 rounded-full bg-ink border-2 border-canvas shadow-[0_0_0_2px_rgba(30,90,143,0.25)]"
+          animate={active ? { scale: [1, 1.08, 1] } : { scale: 1 }}
+          transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+        />
+        {/* Concept tags fade in around the dot — staggered & slow. */}
+        {active &&
+          PARSE_TAGS.map((tag, i) => {
+            const angle = (i / PARSE_TAGS.length) * Math.PI * 2 - Math.PI / 2;
+            const r = 100;
+            const x = Math.cos(angle) * r;
+            const y = Math.sin(angle) * r;
+            return (
+              <motion.div
+                key={tag}
+                className="absolute text-mono text-[10px] uppercase tracking-wider text-muted"
+                style={{ left: "50%", top: "50%" }}
+                initial={{ opacity: 0, x: 0, y: 0 }}
+                animate={{
+                  opacity: [0, 1, 1],
+                  x: [0, x],
+                  y: [0, y],
+                }}
+                transition={{
+                  duration: 1.6,
+                  delay: 0.25 + i * 0.18,
+                  ease: [0.2, 0.6, 0.2, 1],
+                }}
+              >
+                <span className="-translate-x-1/2 -translate-y-1/2 inline-block px-1.5 py-0.5 bg-canvas/80 border border-divider rounded-sm whitespace-nowrap">
+                  {tag}
+                </span>
+              </motion.div>
+            );
+          })}
+      </div>
+      <div className="absolute bottom-3 right-3 text-mono text-[10px] text-muted">
+        parsing hypothesis…
+      </div>
+    </div>
+  );
 }

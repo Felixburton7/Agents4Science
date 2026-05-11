@@ -118,6 +118,7 @@ export default function ImpactRadar() {
 
   const layout: Partial<Plotly.Layout> = {
     polar: {
+      domain: { x: [0.08, 0.92], y: [0.05, 0.95] },
       radialaxis: {
         visible: true,
         range: [0, 100],
@@ -128,15 +129,16 @@ export default function ImpactRadar() {
       },
       angularaxis: {
         gridcolor: "#E3E3E0",
-        tickfont: { family: "Inter", size: 11, color: "#1A1A1A" },
+        tickfont: { family: "Inter", size: 10, color: "#1A1A1A" },
       },
       bgcolor: "#FFFFFF",
     },
-    margin: { l: 30, r: 30, t: 6, b: 6 },
+    margin: { l: 70, r: 70, t: 20, b: 20 },
     showlegend: false,
     paper_bgcolor: "#FFFFFF",
     plot_bgcolor: "#FFFFFF",
     font: { family: "Inter" },
+    transition: { duration: 900, easing: "cubic-in-out" },
   };
 
   return (
