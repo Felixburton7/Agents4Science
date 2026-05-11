@@ -9,7 +9,7 @@ Everything below assumes this exists. Person 6 — that's your first task before
 
 ---
 
-## Person 1 — Presentation & Marketing Lead (You)
+## Baron — Presentation & Marketing Lead
 
 **Tasks**
 - Write the 5-minute pitch script (opening, problem, solution, demo voiceover, validation, close)
@@ -71,7 +71,7 @@ Ask me clarifying questions before drafting if you need to.
 
 ---
 
-## Person 2 — Orchestration Lead
+## Fred — Orchestration Lead
 
 **Tasks**
 - Set up LangGraph project structure
@@ -158,7 +158,7 @@ build sequential first and parallelise later.
 
 ---
 
-## Person 3 — Audience Emulator Lead
+## Harvey — Audience Emulator Lead
 
 **Tasks**
 - Build Group Identifier (cluster authors via Semantic Scholar / OpenAlex)
@@ -250,7 +250,7 @@ end-to-end on one hypothesis before parallelising.
 
 ---
 
-## Person 4 — Impact Forecaster & Mutation Lead
+## Basia — Impact Forecaster & Mutation Lead
 
 **Tasks**
 - Pull 30-paper historical backtest dataset from 2018 with 2024 ground truth
@@ -362,7 +362,7 @@ Read agents/citation-potential-agent.md and agents/INSTRUCTIONS.md first.
 
 ---
 
-## Person 5 — Dashboard Lead
+## Felix — Dashboard Lead
 
 **Tasks**
 - Streamlit skeleton with all panel placeholders
@@ -489,7 +489,7 @@ Read architecture.md "Demo Arc" section first. That's your spec.
 
 ---
 
-## Person 6 — Strategist & Glue (the linchpin)
+## Funmi — Strategist & Glue (the linchpin)
 
 **Tasks**
 - Define shared `schemas.py` in first 30 minutes — UNBLOCKS EVERYONE
