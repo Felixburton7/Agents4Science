@@ -4,6 +4,7 @@ import importlib
 import inspect
 import operator
 import warnings
+from datetime import datetime
 from typing import Annotated, Any, Callable, List, TypedDict
 
 try:
@@ -268,6 +269,10 @@ async def _cartographer_stub(state: PipelineState) -> PartialState:
             citation_count=idx * 9,
             relevance_score=round(1.0 - (idx * 0.012), 3),
             cluster=f"mock-evidence-cluster-{(idx % 6) + 1}",
+            doi=f"10.1000/mock.{idx:02d}" if idx <= 20 else "",
+            openalex_id=f"https://openalex.org/W{100000 + idx}",
+            semantic_scholar_id=f"S2-MOCK-{idx:02d}",
+            source_provenance=["openalex", "semantic_scholar"] if idx <= 15 else ["openalex"],
         )
         for idx in range(1, 51)
     ]
@@ -275,31 +280,102 @@ async def _cartographer_stub(state: PipelineState) -> PartialState:
 
 
 async def _novelty_scorer_stub(state: PipelineState) -> PartialState:
+    papers = sorted(
+        state.get("papers", []),
+        key=lambda paper: (paper.relevance_score, paper.citation_count),
+        reverse=True,
+    )
+    if not papers:
+        return {
+            "metric_scores": [
+                _metric(
+                    "novelty",
+                    50,
+                    "Novelty defaults to neutral when no literature neighbourhood is available.",
+                    [],
+                    "Retrieve papers before trusting this metric.",
+                    method="fallback:no_papers",
+                )
+            ]
+        }
+
+    neighbours = [paper for paper in papers if paper.relevance_score >= 0.6][:5]
+    current_year = datetime.now().year
+    nearest_year = min((paper.year for paper in neighbours if paper.year), default=current_year)
+    neighbour_density = min(1.0, len(neighbours) / 5)
+    recency_penalty = max(0.0, 1 - ((current_year - nearest_year) / 10)) if nearest_year else 0.5
+    novelty_penalty = round((neighbour_density * 65) + (recency_penalty * 20))
+    novelty_score = max(0, 100 - novelty_penalty)
+    evidence_ids = [_paper_evidence_id(paper) for paper in neighbours]
+    confidence_span = max(8, 18 - len(neighbours))
+
     return {
         "metric_scores": [
             _metric(
                 "novelty",
-                58,
-                "Mock novelty is moderate: several close analogues exist, but the mechanism framing is shifted.",
-                ["Closest analogue: mock-paper-04", "Nearest cluster: mock-evidence-cluster-2"],
+                novelty_score,
+                (
+                    f"Novelty is based on {len(neighbours)} close neighbours and a nearest relevant paper year of "
+                    f"{nearest_year}; more dense and more recent analogues reduce novelty."
+                ),
+                evidence_ids,
                 "Closest papers make the base idea feel only partly new.",
+                confidence_low=max(0, novelty_score - confidence_span),
+                confidence_high=min(100, novelty_score + confidence_span),
+                method="deterministic:nearest_neighbour_density",
             )
         ]
     }
 
 
 async def _saturation_scorer_stub(state: PipelineState) -> PartialState:
+    papers = sorted(
+        state.get("papers", []),
+        key=lambda paper: (paper.relevance_score, paper.citation_count),
+        reverse=True,
+    )
+    if not papers:
+        return {
+            "overlaps": OverlapReport(
+                crowding_score=0,
+                overlapping_papers=[],
+                whitespace_summary="No paper neighbourhood was available, so saturation could not be estimated.",
+                risk_notes=["Retrieval returned no papers."],
+            ),
+            "metric_scores": [
+                _metric(
+                    "saturation",
+                    50,
+                    "Saturation defaults to neutral when no literature neighbourhood is available.",
+                    [],
+                    "Retrieve papers before trusting this metric.",
+                    method="fallback:no_papers",
+                )
+            ],
+        }
+
+    current_year = datetime.now().year
+    relevant_papers = [paper for paper in papers if paper.relevance_score >= 0.5]
+    recent_papers = [paper for paper in relevant_papers if paper.year and paper.year >= current_year - 3]
+    top_overlaps = relevant_papers[:5]
+
+    coverage_ratio = min(1.0, len(relevant_papers) / 25)
+    recent_ratio = len(recent_papers) / max(1, len(relevant_papers))
+    crowding_score = round(min(100, (coverage_ratio * 70) + (recent_ratio * 30)))
+    saturation_score = max(0, 100 - crowding_score)
+    confidence_span = max(8, min(20, 24 - len(relevant_papers) // 3))
+    evidence_ids = [_paper_evidence_id(paper) for paper in top_overlaps]
+
     overlaps = OverlapReport(
-        crowding_score=67,
-        overlapping_papers=[
-            "Mock literature neighbour 08",
-            "Mock literature neighbour 21",
-            "Mock literature neighbour 34",
-        ],
-        whitespace_summary="Mock whitespace: narrower timing and population constraints remain under-tested.",
+        crowding_score=crowding_score,
+        overlapping_papers=[paper.title for paper in top_overlaps],
+        whitespace_summary=(
+            "Whitespace is most likely to come from narrowing the claim to a sharper context or subgroup "
+            "than the current high-overlap paper neighbourhood."
+        ),
         risk_notes=[
-            "Mock saturation risk: recent publication velocity is high.",
-            "Mock overlap risk: three close analogue papers already cover broad framing.",
+            f"{len(relevant_papers)} strongly relevant papers were found in the shared neighbourhood.",
+            f"{len(recent_papers)} of those papers are recent, which increases crowding risk.",
         ],
     )
     return {
@@ -307,41 +383,76 @@ async def _saturation_scorer_stub(state: PipelineState) -> PartialState:
         "metric_scores": [
             _metric(
                 "saturation",
-                33,
-                "Mock saturation score is low because the area is visibly crowded.",
-                overlaps.overlapping_papers,
-                "The hypothesis needs sharper positioning to avoid crowded territory.",
+                saturation_score,
+                (
+                    f"Saturation is based on {len(relevant_papers)} relevant papers and a recent-publication "
+                    f"share of {recent_ratio:.0%}; higher crowding lowers the Idea Hater saturation score."
+                ),
+                evidence_ids,
+                "The hypothesis likely needs sharper positioning to avoid crowded territory.",
+                confidence_low=max(0, saturation_score - confidence_span),
+                confidence_high=min(100, saturation_score + confidence_span),
+                method="deterministic:relevance_count_plus_recent_share",
             )
         ],
     }
 
 
 async def _conflict_scorer_stub(state: PipelineState) -> PartialState:
-    conflicts = [
-        Conflict(
-            paper_id="mock-paper-03",
-            title="Mock literature neighbour 03",
-            disagreement_dimension="mechanism",
-            explanation="Fake contradiction: the paper claims the proposed mechanism runs backwards.",
-            severity=0.72,
-        ),
-        Conflict(
-            paper_id="mock-paper-17",
-            title="Mock literature neighbour 17",
-            disagreement_dimension="population",
-            explanation="Fake contradiction: the paper only supports a narrower toy population.",
-            severity=0.41,
-        ),
-    ]
+    papers = sorted(
+        state.get("papers", []),
+        key=lambda paper: (paper.relevance_score, paper.citation_count),
+        reverse=True,
+    )
+    keywords = ("contradict", "inconsistent", "mixed", "fails", "not support")
+    conflicts = []
+    for paper in papers[:10]:
+        abstract = paper.abstract.lower()
+        if any(keyword in abstract for keyword in keywords):
+            conflicts.append(
+                Conflict(
+                    paper_id=paper.paper_id,
+                    title=paper.title,
+                    disagreement_dimension="effect_direction",
+                    explanation="Abstract contains conflict-language heuristic triggers.",
+                    severity=min(1.0, 0.35 + (paper.relevance_score * 0.5)),
+                )
+            )
+
+    if not conflicts and papers:
+        for paper in papers[:2]:
+            if paper.relevance_score >= 0.85:
+                conflicts.append(
+                    Conflict(
+                        paper_id=paper.paper_id,
+                        title=paper.title,
+                        disagreement_dimension="context",
+                        explanation="Highly similar prior work creates execution risk even without explicit contradiction.",
+                        severity=0.25,
+                    )
+                )
+
+    weighted_conflict = sum(conflict.severity for conflict in conflicts)
+    conflict_penalty = min(55, round(weighted_conflict * 25))
+    conflict_score = max(0, 100 - conflict_penalty)
+    evidence_ids = [conflict.paper_id for conflict in conflicts[:5]]
+    confidence_span = 12 if conflicts else 18
+
     return {
         "conflicts": conflicts,
         "metric_scores": [
             _metric(
                 "conflict_risk",
-                46,
-                "Mock conflict risk is material: two nearby papers challenge mechanism and population assumptions.",
-                [conflict.title for conflict in conflicts],
-                "The current claim should address mechanism reversal and population scope.",
+                conflict_score,
+                (
+                    f"Conflict risk is based on {len(conflicts)} heuristic conflict signals from the most relevant papers; "
+                    "higher weighted conflict lowers the score."
+                ),
+                evidence_ids,
+                "The current claim should address the strongest nearby disagreement signals.",
+                confidence_low=max(0, conflict_score - confidence_span),
+                confidence_high=min(100, conflict_score + confidence_span),
+                method="heuristic:abstract_conflict_scan",
             )
         ],
     }
@@ -385,14 +496,55 @@ async def _impact_forecaster_stub(state: PipelineState) -> PartialState:
 
 
 async def _evidence_quality_scorer_stub(state: PipelineState) -> PartialState:
+    papers = state.get("papers", [])
+    if not papers:
+        return {
+            "metric_scores": [
+                _metric(
+                    "evidence_quality",
+                    40,
+                    "Evidence quality is low because no retrieved papers were available.",
+                    [],
+                    "Retrieve papers before trusting the scorecard.",
+                    method="fallback:no_papers",
+                )
+            ]
+        }
+
+    abstract_ratio = sum(1 for paper in papers if paper.abstract.strip()) / len(papers)
+    identifier_ratio = sum(1 for paper in papers if _paper_evidence_id(paper) != paper.paper_id) / len(papers)
+    multi_source_ratio = sum(1 for paper in papers if len(paper.source_provenance) > 1) / len(papers)
+    strong_relevance_ratio = sum(1 for paper in papers if paper.relevance_score >= 0.7) / len(papers)
+
+    evidence_quality_score = round(
+        (abstract_ratio * 35)
+        + (identifier_ratio * 25)
+        + (multi_source_ratio * 20)
+        + (strong_relevance_ratio * 20)
+    )
+    top_supported = sorted(
+        papers,
+        key=lambda paper: (len(paper.source_provenance), paper.relevance_score, bool(paper.abstract.strip())),
+        reverse=True,
+    )[:5]
+    evidence_ids = [_paper_evidence_id(paper) for paper in top_supported]
+    confidence_span = max(8, 18 - len(top_supported))
+
     return {
         "metric_scores": [
             _metric(
                 "evidence_quality",
-                69,
-                "Mock evidence quality is adequate: retrieval coverage is broad, but several abstracts are thin.",
-                ["50 mock papers retrieved", "6 mock clusters represented"],
-                "Confidence is limited by abstract-only evidence in the demo stub.",
+                evidence_quality_score,
+                (
+                    f"Evidence quality is based on abstract coverage ({abstract_ratio:.0%}), stable identifiers "
+                    f"({identifier_ratio:.0%}), cross-source provenance ({multi_source_ratio:.0%}), and strong relevance "
+                    f"coverage ({strong_relevance_ratio:.0%})."
+                ),
+                evidence_ids,
+                "Confidence is limited when identifiers, abstracts, or cross-source agreement are missing.",
+                confidence_low=max(0, evidence_quality_score - confidence_span),
+                confidence_high=min(100, evidence_quality_score + confidence_span),
+                method="deterministic:coverage_completeness",
             )
         ]
     }
@@ -591,16 +743,33 @@ def _metric(
     rationale: str,
     evidence: list[str] | None = None,
     weakness: str = "",
+    confidence_low: int | None = None,
+    confidence_high: int | None = None,
+    method: str = "",
 ) -> MetricScore:
+    low = max(0, score - 10) if confidence_low is None else confidence_low
+    high = min(100, score + 10) if confidence_high is None else confidence_high
     return MetricScore(
         metric_name=metric_name,
         score=score,
-        confidence_low=max(0, score - 10),
-        confidence_high=min(100, score + 10),
+        confidence_low=low,
+        confidence_high=high,
         rationale=rationale,
         evidence=evidence or [],
+        evidence_ids=evidence or [],
+        method=method,
         weakness=weakness,
     )
+
+
+def _paper_evidence_id(paper: Paper) -> str:
+    if paper.doi:
+        return f"doi:{paper.doi.lower()}"
+    if paper.openalex_id:
+        return f"openalex:{paper.openalex_id.rsplit('/', 1)[-1]}"
+    if paper.semantic_scholar_id:
+        return f"s2:{paper.semantic_scholar_id}"
+    return paper.paper_id
 
 
 def _impact_dimension(score: int, rationale: str) -> ImpactDimension:

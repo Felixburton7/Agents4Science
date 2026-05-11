@@ -13,8 +13,54 @@ from backend.tools.api_cache import get_api_cache
 
 BASE_URL = "https://api.semanticscholar.org/graph/v1/paper/search"
 PAPER_URL = "https://api.semanticscholar.org/graph/v1/paper"
-FIELDS = "title,authors,year,abstract,url,citationCount,externalIds"
+FIELDS = "paperId,title,authors,year,abstract,url,citationCount,externalIds"
 CITATION_FIELDS = "title,authors,year,abstract,url,citationCount,venue,externalIds,fieldsOfStudy,s2FieldsOfStudy"
+
+
+def search_paper_records(query: str, limit: int = 25) -> list[dict]:
+    """Return raw Semantic Scholar paper records for production scoring."""
+
+    params = {
+        "query": query,
+        "limit": limit,
+        "fields": FIELDS,
+    }
+    headers = {}
+    if SEMANTIC_SCHOLAR_KEY:
+        headers["x-api-key"] = SEMANTIC_SCHOLAR_KEY
+
+    cache = get_api_cache()
+    cached = cache.get("semantic_scholar", BASE_URL, params)
+    if cached is not None:
+        return list(cached.get("data", []))
+
+    last_error = ""
+    for attempt in range(5):
+        try:
+            resp = requests.get(
+                BASE_URL,
+                params=params,
+                headers=headers if headers else None,
+                timeout=MAX_API_TIMEOUT,
+            )
+            if resp.status_code == 200:
+                data = resp.json()
+                cache.set("semantic_scholar", BASE_URL, params, data)
+                return list(data.get("data", []))
+            if resp.status_code == 429:
+                last_error = "Rate limited (429)"
+                time.sleep(1.0 * (attempt + 1))
+                continue
+            last_error = f"HTTP {resp.status_code}: {resp.text[:200]}"
+            time.sleep(0.5)
+        except requests.Timeout:
+            last_error = "Request timed out"
+            time.sleep(0.5)
+        except requests.RequestException as exc:
+            last_error = str(exc)
+            break
+
+    raise RuntimeError(f"Semantic Scholar search failed for '{query}': {last_error}")
 
 
 def search_papers(query: str, limit: int = 8) -> tuple[str, list[dict]]:
