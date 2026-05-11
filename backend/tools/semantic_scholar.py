@@ -5,7 +5,9 @@ Pattern borrowed from Denario's literature.py SSAPI() function.
 
 import time
 import requests
-from ..config import MAX_API_TIMEOUT, SEMANTIC_SCHOLAR_KEY
+
+from backend.config import MAX_API_TIMEOUT, SEMANTIC_SCHOLAR_KEY
+from backend.tools.api_cache import get_api_cache
 
 BASE_URL = "https://api.semanticscholar.org/graph/v1/paper/search"
 FIELDS = "title,authors,year,abstract,url,citationCount,externalIds"
@@ -34,6 +36,11 @@ def search_papers(query: str, limit: int = 8) -> tuple[str, list[dict]]:
     if SEMANTIC_SCHOLAR_KEY:
         headers["x-api-key"] = SEMANTIC_SCHOLAR_KEY
 
+    cache = get_api_cache()
+    cached = cache.get("semantic_scholar", BASE_URL, params)
+    if cached is not None:
+        return _format_results(cached, query)
+
     # Retry loop (Denario pattern: handles rate-limiting 429s)
     last_error = ""
     for attempt in range(5):
@@ -45,7 +52,9 @@ def search_papers(query: str, limit: int = 8) -> tuple[str, list[dict]]:
                 timeout=MAX_API_TIMEOUT,
             )
             if resp.status_code == 200:
-                return _format_results(resp.json(), query)
+                data = resp.json()
+                cache.set("semantic_scholar", BASE_URL, params, data)
+                return _format_results(data, query)
             elif resp.status_code == 429:
                 # Rate limited — back off
                 time.sleep(1.0 * (attempt + 1))

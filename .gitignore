@@ -1,2 +1,10 @@
 # secret api key
 .env
+
+# local runtime
+.venv/
+__pycache__/
+*.pyc
+
+# literature API cache
+literature_cache.sqlite3
