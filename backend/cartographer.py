@@ -8,6 +8,7 @@ from backend.evidence_utils import (
     normalize_openalex_id,
     paper_evidence_id,
     parsed_query,
+    query_candidates,
     text_relevance,
 )
 from backend.schemas import Paper
@@ -16,22 +17,27 @@ from backend.tools.semantic_scholar import search_paper_records
 
 
 MAX_PAPERS = 50
+MAX_QUERY_ATTEMPTS = 5
+MAX_SEMANTIC_SCHOLAR_QUERIES = 1
 
 
 async def cartographer(state: dict[str, Any]) -> dict[str, list[Paper]]:
-    query = parsed_query(state)
+    primary_query = parsed_query(state)
     papers_by_key: dict[str, Paper] = {}
 
-    for paper in _openalex_papers(query):
-        _merge_paper(papers_by_key, paper)
+    attempted_queries = query_candidates(state, max_candidates=MAX_QUERY_ATTEMPTS)
+    for query in attempted_queries:
+        for paper in _openalex_papers(query, primary_query):
+            _merge_paper(papers_by_key, paper)
 
-    for paper in _semantic_scholar_papers(query):
-        _merge_paper(papers_by_key, paper)
+    for query in attempted_queries[:MAX_SEMANTIC_SCHOLAR_QUERIES]:
+        for paper in _semantic_scholar_papers(query, primary_query):
+            _merge_paper(papers_by_key, paper)
 
     papers = list(papers_by_key.values())
     for index, paper in enumerate(papers):
         if not paper.cluster or paper.cluster == "unclustered":
-            papers[index] = _copy_model(paper, cluster=cluster_label(paper, query))
+            papers[index] = _copy_model(paper, cluster=cluster_label(paper, primary_query))
 
     ranked = sorted(
         papers,
@@ -44,7 +50,7 @@ async def cartographer(state: dict[str, Any]) -> dict[str, list[Paper]]:
 run = cartographer
 
 
-def _openalex_papers(query: str) -> list[Paper]:
+def _openalex_papers(query: str, scoring_query: str) -> list[Paper]:
     try:
         data = search_works(query, per_page=MAX_PAPERS)
     except Exception:
@@ -66,11 +72,14 @@ def _openalex_papers(query: str) -> list[Paper]:
             for authorship in work.get("authorships", [])[:8]
         ]
         authors = [author for author in authors if author]
-        relevance = text_relevance(query, title, abstract)
+        lexical_relevance = max(text_relevance(query, title, abstract), text_relevance(scoring_query, title, abstract))
+        relevance = lexical_relevance
         raw_relevance = float(work.get("relevance_score") or 0)
         if max_raw_relevance > 0:
             ranked_relevance = (raw_relevance / max_raw_relevance) * 0.55 + max(0.0, 1 - (rank / MAX_PAPERS)) * 0.15
-            relevance = max(relevance, min(1.0, ranked_relevance))
+            relevance = max(relevance, min(1.0, (lexical_relevance * 0.75) + (ranked_relevance * 0.25)))
+        if relevance < 0.05 or "<mml:" in title.lower():
+            continue
 
         paper = Paper(
             paper_id="",
@@ -91,7 +100,7 @@ def _openalex_papers(query: str) -> list[Paper]:
     return papers
 
 
-def _semantic_scholar_papers(query: str) -> list[Paper]:
+def _semantic_scholar_papers(query: str, scoring_query: str) -> list[Paper]:
     try:
         records = search_paper_records(query, limit=MAX_PAPERS // 2)
     except Exception:
@@ -117,7 +126,7 @@ def _semantic_scholar_papers(query: str) -> list[Paper]:
             abstract=abstract,
             url=_semantic_scholar_url(record, doi),
             citation_count=int(record.get("citationCount") or 0),
-            relevance_score=round(text_relevance(query, title, abstract), 3),
+            relevance_score=round(max(text_relevance(query, title, abstract), text_relevance(scoring_query, title, abstract)), 3),
             cluster="unclustered",
             doi=doi,
             openalex_id=openalex_id,

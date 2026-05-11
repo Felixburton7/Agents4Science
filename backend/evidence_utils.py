@@ -36,10 +36,61 @@ STOPWORDS = {
     "to",
     "using",
     "with",
+    "plus",
+    "should",
+    "produce",
+    "produces",
+    "prediction",
+    "predict",
+    "improve",
+    "improves",
+    "contain",
+    "contains",
+    "information",
+    "feature",
+    "features",
+    "compact",
+    "combining",
+    "combined",
+    "learned",
+    "mock",
+    "hypothesis",
+    "research",
+    "stated",
+    "structured",
+    "extracted",
+    "extract",
+    "claim",
+    "mechanism",
+    "context",
+    "population",
+    "method",
+    "target",
+    "setting",
+    "demo",
+    "idea",
+    "hater",
+    "quantitative",
+    "pathway",
+    "measurable",
+    "intervention",
+    "outcome",
 }
 
+NOISY_PHRASES = (
+    "mock structured claim extracted from",
+    "mock mechanism",
+    "mock context",
+    "mock population",
+    "mock method",
+    "quantitative pathway 42",
+    "literature-backed idea hater demo",
+    "target research setting",
+    "measurable intervention and outcome",
+)
 
-def parsed_query(state: dict[str, Any], *, max_terms: int = 28) -> str:
+
+def parsed_query(state: dict[str, Any], *, max_terms: int = 14) -> str:
     parsed = state.get("parsed")
     parts = [state.get("raw_hypothesis", "")]
     if isinstance(parsed, ParsedHypothesis):
@@ -48,20 +99,44 @@ def parsed_query(state: dict[str, Any], *, max_terms: int = 28) -> str:
         dumped = _dump(parsed)
         parts.extend(str(dumped.get(key, "")) for key in ("claim", "mechanism", "context", "population", "method"))
 
-    tokens = tokens_for_text(" ".join(str(part) for part in parts if part))
+    tokens = tokens_for_text(clean_query_text(" ".join(str(part) for part in parts if part)))
     counts = Counter(tokens)
     ranked = [token for token, _count in counts.most_common(max_terms)]
     return " ".join(ranked) or "research hypothesis"
 
 
+def query_candidates(state: dict[str, Any], *, max_candidates: int = 6) -> list[str]:
+    raw = clean_query_text(str(state.get("raw_hypothesis", "")))
+    parsed_text = clean_query_text(hypothesis_text(state))
+    candidates = [
+        parsed_query(state, max_terms=10),
+        _keyword_query(raw, max_terms=10),
+        _keyword_query(parsed_text, max_terms=10),
+        _keyword_query(raw, max_terms=6),
+        _keyword_query(parsed_text, max_terms=6),
+        raw,
+    ]
+    deduped: list[str] = []
+    seen: set[str] = set()
+    for candidate in candidates:
+        candidate = clean_query_text(candidate)
+        if not candidate or candidate in seen:
+            continue
+        seen.add(candidate)
+        deduped.append(candidate)
+        if len(deduped) >= max_candidates:
+            break
+    return deduped or ["research hypothesis"]
+
+
 def hypothesis_text(state: dict[str, Any]) -> str:
     parsed = state.get("parsed")
     if isinstance(parsed, ParsedHypothesis):
-        return " ".join([parsed.claim, parsed.mechanism, parsed.context, parsed.population, parsed.method])
+        return clean_query_text(" ".join([parsed.claim, parsed.mechanism, parsed.context, parsed.population, parsed.method]))
     if parsed:
         dumped = _dump(parsed)
-        return " ".join(str(dumped.get(key, "")) for key in ("claim", "mechanism", "context", "population", "method"))
-    return str(state.get("raw_hypothesis", ""))
+        return clean_query_text(" ".join(str(dumped.get(key, "")) for key in ("claim", "mechanism", "context", "population", "method")))
+    return clean_query_text(str(state.get("raw_hypothesis", "")))
 
 
 def paper_evidence_id(paper: Paper) -> str:
@@ -158,6 +233,22 @@ def tokens_for_text(text: str) -> list[str]:
         for token in re.findall(r"[a-zA-Z][a-zA-Z0-9_+-]{2,}", text.lower())
         if token not in STOPWORDS and not token.isdigit()
     ]
+
+
+def clean_query_text(text: str) -> str:
+    cleaned = str(text or "")
+    for phrase in NOISY_PHRASES:
+        cleaned = re.sub(re.escape(phrase), " ", cleaned, flags=re.IGNORECASE)
+    cleaned = re.sub(r"\bmock[-_\s]+", " ", cleaned, flags=re.IGNORECASE)
+    cleaned = re.sub(r"[^a-zA-Z0-9_+\-\s]", " ", cleaned)
+    cleaned = re.sub(r"\s+", " ", cleaned).strip()
+    return cleaned
+
+
+def _keyword_query(text: str, *, max_terms: int) -> str:
+    tokens = tokens_for_text(text)
+    counts = Counter(tokens)
+    return " ".join(token for token, _count in counts.most_common(max_terms))
 
 
 def cluster_label(paper: Paper, query_text: str) -> str:
