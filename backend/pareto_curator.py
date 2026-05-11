@@ -10,7 +10,19 @@ from backend.llm_client import LLMUnavailable, complete_structured
 from backend.schemas import Variant
 
 
-DIMENSIONS = ("volume", "velocity", "reach", "depth", "disruption", "translation")
+DIMENSIONS = (
+    "novelty",
+    "saturation",
+    "conflict_risk",
+    "feasibility",
+    "volume",
+    "velocity",
+    "reach",
+    "depth",
+    "disruption",
+    "translation",
+    "evidence_quality",
+)
 
 
 class ParetoExplanation(BaseModel):
@@ -23,7 +35,7 @@ class ParetoExplanationResponse(BaseModel):
 
 
 async def pareto_curator(state: dict[str, Any]) -> dict[str, list[Variant]]:
-    variants = list(state.get("variants", []) or [])
+    variants = list(state.get("rescored_variants") or state.get("variants", []) or [])
     selected_ids, dominators = _pareto_front(variants)
 
     selected_explanations = _fallback_selected_explanations(variants, selected_ids)
@@ -40,7 +52,7 @@ async def pareto_curator(state: dict[str, Any]) -> dict[str, list[Variant]]:
         if is_selected:
             explanation = selected_explanations.get(
                 variant.variant_id,
-                "Pareto-selected: no other variant is at least as strong across every available impact dimension.",
+                "Pareto-selected: no other variant is at least as strong across every available scorecard metric.",
             )
         else:
             dominator = dominators.get(variant.variant_id)
@@ -79,7 +91,7 @@ def _pareto_front(variants: list[Variant]) -> tuple[set[str], dict[str, Variant]
 
 def _dominates(challenger: dict[str, int], candidate: dict[str, int]) -> bool:
     dimensions = [dimension for dimension in DIMENSIONS if dimension in challenger and dimension in candidate]
-    if not dimensions:
+    if len(dimensions) < 6:
         return False
     return all(challenger[dimension] >= candidate[dimension] for dimension in dimensions) and any(
         challenger[dimension] > candidate[dimension] for dimension in dimensions
@@ -88,25 +100,25 @@ def _dominates(challenger: dict[str, int], candidate: dict[str, int]) -> bool:
 
 async def _llm_selected_explanations(variants: list[Variant], selected_ids: set[str]) -> dict[str, str]:
     payload = {
-        "task": "For each Pareto-selected variant, write one sentence explaining why it is non-dominated and what it trades off.",
+        "task": "For each Pareto-selected variant, write one sentence explaining why it is non-dominated across the scorecard and what it trades off.",
         "selected_variants": [
             {
                 "variant_id": variant.variant_id,
                 "operator": variant.operator,
                 "hypothesis_text": variant.hypothesis_text,
-                "impact_scores": _scores(variant),
+                "scorecard_scores": _scores(variant),
             }
             for variant in variants
             if variant.variant_id in selected_ids
         ],
         "all_scores": [
-            {"variant_id": variant.variant_id, "operator": variant.operator, "impact_scores": _scores(variant)}
+            {"variant_id": variant.variant_id, "operator": variant.operator, "scorecard_scores": _scores(variant)}
             for variant in variants
         ],
     }
     response = await complete_structured(
         "pareto_curator",
-        "You are the Pareto Curator. You MUST explain only non-dominated variants in one sentence each.",
+        "You are the Pareto Curator. You MUST explain only non-dominated scorecard variants in one sentence each.",
         json.dumps(payload, indent=2),
         ParetoExplanationResponse,
         temperature=0.1,
@@ -145,20 +157,29 @@ def _dominated_explanation(variant: Variant, dominator: Variant | None) -> str:
 
 def _missing_scores_explanation(scores: dict[str, int]) -> str:
     if scores:
-        return "Not selected: available scores were insufficient for a six-dimensional Pareto comparison."
+        return "Not selected: available scores were insufficient for a full scorecard Pareto comparison."
     return "Not selected: no usable impact scores were available."
 
 
 def _scores(variant: Variant) -> dict[str, int]:
-    if variant.impact_scores:
-        return {
-            key.lower().replace(" ", "_").replace("-", "_"): int(value)
-            for key, value in variant.impact_scores.items()
-            if key.lower().replace(" ", "_").replace("-", "_") in DIMENSIONS
-        }
+    scores = {
+        key.lower().replace(" ", "_").replace("-", "_"): int(value)
+        for key, value in (variant.impact_scores or {}).items()
+        if key.lower().replace(" ", "_").replace("-", "_") in DIMENSIONS
+    }
+    if variant.scorecard:
+        for metric in variant.scorecard.metric_scores:
+            metric_name = str(getattr(metric, "metric_name", None) or getattr(metric, "name", "")).lower()
+            if metric_name in DIMENSIONS:
+                scores[metric_name] = int(metric.score)
+    if scores:
+        return scores
     if variant.impact_forecast:
         forecast = variant.impact_forecast
-        return {dimension: int(getattr(forecast, dimension).score) for dimension in DIMENSIONS}
+        return {
+            dimension: int(getattr(forecast, dimension).score)
+            for dimension in ("volume", "velocity", "reach", "depth", "disruption", "translation")
+        }
     return {}
 
 

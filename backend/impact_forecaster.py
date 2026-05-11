@@ -109,6 +109,7 @@ def _paper_for_prompt(paper: Any, cutoff_year: int | None) -> dict[str, Any]:
 def _heuristic_forecast(state: dict[str, Any], cutoff_year: int | None) -> ImpactForecast:
     parsed = _dump(state.get("parsed"))
     metadata = state.get("backtest_metadata") or {}
+    papers = [_dump(paper) for paper in state.get("papers", [])[:30]]
     text_parts = [
         state.get("raw_hypothesis", ""),
         parsed.get("claim", ""),
@@ -120,12 +121,20 @@ def _heuristic_forecast(state: dict[str, Any], cutoff_year: int | None) -> Impac
         metadata.get("abstract", ""),
         metadata.get("venue", ""),
         " ".join(metadata.get("concepts", []) if isinstance(metadata.get("concepts"), list) else []),
+        " ".join(str(paper.get("title", "")) for paper in papers[:12]),
+        " ".join(str(paper.get("abstract", "")) for paper in papers[:8]),
+        " ".join(str(paper.get("cluster", "")) for paper in papers[:20]),
     ]
     text = " ".join(str(part) for part in text_parts if part).lower()
-    abstract_len = len((metadata.get("abstract") or "").split())
+    abstract_len = max(
+        len((metadata.get("abstract") or "").split()),
+        len(str(state.get("raw_hypothesis", "")).split()),
+        int(sum(len(str(paper.get("abstract", "")).split()) for paper in papers[:8]) / max(1, min(8, len(papers)))),
+    )
     venue_bonus = _venue_bonus(metadata.get("venue", ""))
     author_bonus = min(8, len(metadata.get("authors", []) or []) // 2)
     evidence_bonus = min(10, abstract_len / 35)
+    paper_signal = _paper_signal(state)
     crowding = _crowding_penalty(state)
     interest = _audience_interest(state)
 
@@ -134,6 +143,8 @@ def _heuristic_forecast(state: dict[str, Any], cutoff_year: int | None) -> Impac
         + venue_bonus
         + author_bonus
         + evidence_bonus
+        + paper_signal["citation_momentum"] * 0.45
+        + paper_signal["source_depth"] * 0.20
         + _keyword_score(text, VOLUME_KEYWORDS)
         + interest * 0.10
         - crowding * 0.10
@@ -141,18 +152,22 @@ def _heuristic_forecast(state: dict[str, Any], cutoff_year: int | None) -> Impac
     velocity = _clamp(
         volume * 0.78
         + _keyword_score(text, VELOCITY_KEYWORDS)
+        + paper_signal["relevance"] * 0.12
+        + paper_signal["recency"] * 0.10
         + venue_bonus * 0.35
         + interest * 0.08
     )
     reach = _clamp(
         30
         + min(22, _concept_count(state, metadata) * 3.5)
+        + min(12, paper_signal["cluster_diversity"] * 2.0)
         + _keyword_score(text, REACH_KEYWORDS)
         + interest * 0.07
     )
     depth = _clamp(
         32
         + venue_bonus * 0.45
+        + paper_signal["citation_momentum"] * 0.25
         + _keyword_score(text, DEPTH_KEYWORDS)
         + min(12, abstract_len / 45)
         - crowding * 0.05
@@ -162,11 +177,13 @@ def _heuristic_forecast(state: dict[str, Any], cutoff_year: int | None) -> Impac
         + _keyword_score(text, DISRUPTION_KEYWORDS)
         + max(0, 12 - crowding * 0.18)
         + _conflict_bonus(state)
+        + max(0, 10 - paper_signal["relevance"] * 0.10)
     )
     translation = _clamp(
         22
         + _keyword_score(text, TRANSLATION_KEYWORDS)
         + _keyword_score(text, MATERIALS_KEYWORDS) * 0.8
+        + paper_signal["source_depth"] * 0.15
         + interest * 0.04
     )
 
@@ -326,7 +343,41 @@ def _concept_count(state: dict[str, Any], metadata: dict[str, Any]) -> int:
         payload = _dump(paper)
         for concept in payload.get("concepts", []) or []:
             concepts.add(str(concept).lower())
+        if payload.get("cluster"):
+            concepts.add(str(payload["cluster"]).lower())
     return len(concepts)
+
+
+def _paper_signal(state: dict[str, Any]) -> dict[str, float]:
+    papers = [_dump(paper) for paper in state.get("papers", []) or []]
+    if not papers:
+        return {
+            "citation_momentum": 0.0,
+            "relevance": 0.0,
+            "recency": 0.0,
+            "cluster_diversity": 0.0,
+            "source_depth": 0.0,
+        }
+    citation_counts = [float(paper.get("citation_count", 0) or 0) for paper in papers]
+    relevance_scores = [float(paper.get("relevance_score", 0) or 0) for paper in papers]
+    years = [int(paper["year"]) for paper in papers if paper.get("year")]
+    clusters = {str(paper.get("cluster", "")).lower() for paper in papers if paper.get("cluster")}
+    source_depth = [
+        len(paper.get("source_provenance", []) or [])
+        + int(bool(paper.get("doi")))
+        + int(bool(paper.get("openalex_id")))
+        + int(bool(paper.get("semantic_scholar_id")))
+        for paper in papers
+    ]
+    current_year = 2024 if state.get("information_cutoff_year") else 2026
+    recent = sum(1 for year in years if year >= current_year - 4) / max(1, len(years))
+    return {
+        "citation_momentum": min(30.0, sum(citation_counts[:20]) / max(1, len(citation_counts[:20])) / 10.0),
+        "relevance": min(100.0, (sum(relevance_scores) / max(1, len(relevance_scores))) * 100.0),
+        "recency": recent * 100.0,
+        "cluster_diversity": float(len(clusters)),
+        "source_depth": min(30.0, sum(source_depth) / max(1, len(source_depth)) * 7.5),
+    }
 
 
 def _crowding_penalty(state: dict[str, Any]) -> float:

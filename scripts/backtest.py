@@ -18,6 +18,7 @@ if str(ROOT) not in sys.path:
 from backend.config import MAX_API_TIMEOUT, OPENALEX_EMAIL
 from backend.impact_forecaster import impact_forecaster
 from backend.llm_client import LLMUnavailable, complete_structured
+from backend.pipeline import run_pipeline
 from backend.schemas import ImpactForecast, Paper, ParsedHypothesis
 from backend.tools.api_cache import cached_get_json
 from backend.tools.semantic_scholar import get_paper_citations
@@ -128,15 +129,19 @@ async def main() -> None:
         prediction = await run_prediction(record)
         baseline_gpt = await run_single_call_baseline(record)
         row = build_result_row(record, prediction, baseline_gpt)
+        row.update(await run_variant_improvement_summary(record))
         results.append(row)
 
     add_linear_regression_baseline(results)
+    add_mean_and_random_baselines(results)
     correlations = compute_correlations(results)
 
     csv_path = output_dir / "backtest_results.csv"
     write_results_csv(csv_path, results)
     corr_path = output_dir / "spearman_correlations.json"
     corr_path.write_text(json.dumps(correlations, indent=2, sort_keys=True))
+    variant_path = output_dir / "variant_improvement_summary.json"
+    variant_path.write_text(json.dumps(build_variant_improvement_export(results), indent=2, sort_keys=True))
 
     plot_path = output_dir / "predicted_vs_actual_scatter.png"
     if not args.skip_plot:
@@ -149,10 +154,13 @@ async def main() -> None:
             f"  {dimension:12s} forecaster={values['forecaster']:.3f} "
             f"citation_1y={values['citation_1y']:.3f} "
             f"single_call={values['single_call']:.3f} "
-            f"linear={values['linear_regression']:.3f}"
+            f"linear={values['linear_regression']:.3f} "
+            f"mean={values['mean_baseline']:.3f} "
+            f"random={values['random_baseline']:.3f}"
         )
     print(f"\nDataset: {dataset_path}")
     print(f"Results: {csv_path}")
+    print(f"Variant summary: {variant_path}")
     if not args.skip_plot:
         print(f"Scatter plot: {plot_path}")
 
@@ -350,6 +358,41 @@ async def run_prediction(record: dict[str, Any]) -> ImpactForecast:
     return result["forecast"]
 
 
+async def run_variant_improvement_summary(record: dict[str, Any]) -> dict[str, Any]:
+    metadata = record["metadata"]
+    extraction = await extract_hypothesis(metadata)
+    try:
+        state = await run_pipeline(extraction.hypothesis)
+    except Exception as exc:
+        return {
+            "pipeline_status": f"failed:{type(exc).__name__}",
+            "original_composite_score": 0,
+            "top_candidate_id": "",
+            "top_candidate_operator": "",
+            "top_candidate_score": 0,
+            "variant_improvement": 0,
+            "original_dominated": False,
+            "pareto_selected_count": 0,
+        }
+
+    scorecard = state.get("scorecard")
+    ranked = state.get("ranked_variants", [])
+    top = ranked[0] if ranked else None
+    original = next((variant for variant in ranked if variant.variant_id == "original"), None)
+    original_score = int(getattr(scorecard, "composite_score", 0) or 0)
+    top_score = int(getattr(top, "composite_score", original_score) or 0) if top else original_score
+    return {
+        "pipeline_status": "ok",
+        "original_composite_score": original_score,
+        "top_candidate_id": getattr(top, "variant_id", "") if top else "",
+        "top_candidate_operator": getattr(top, "operator", "") if top else "",
+        "top_candidate_score": top_score,
+        "variant_improvement": top_score - original_score,
+        "original_dominated": bool(original and not original.is_pareto_selected),
+        "pareto_selected_count": sum(1 for variant in ranked if variant.is_pareto_selected),
+    }
+
+
 async def extract_hypothesis(metadata: dict[str, Any]) -> HypothesisExtraction:
     title = metadata["title"]
     abstract = metadata["abstract"]
@@ -478,6 +521,22 @@ def add_linear_regression_baseline(results: list[dict[str, Any]]) -> None:
             row[f"linear_{dimension}"] = float(pred)
 
 
+def add_mean_and_random_baselines(results: list[dict[str, Any]]) -> None:
+    if not results:
+        return
+    rng = np.random.default_rng(42)
+    for dimension in DIMENSIONS:
+        actual = np.array([row[f"actual_{dimension}"] for row in results], dtype=float)
+        mean_value = float(np.mean(actual)) if len(actual) else 0.0
+        if len(actual) > 1:
+            random_values = rng.permutation(actual)
+        else:
+            random_values = actual
+        for idx, row in enumerate(results):
+            row[f"mean_{dimension}"] = mean_value
+            row[f"random_{dimension}"] = float(random_values[idx]) if len(random_values) else 0.0
+
+
 def leave_one_out_linear_predictions(features: np.ndarray, y: np.ndarray) -> np.ndarray:
     n_rows = len(y)
     predictions = np.zeros(n_rows, dtype=float)
@@ -501,8 +560,38 @@ def compute_correlations(results: list[dict[str, Any]]) -> dict[str, dict[str, f
             "citation_1y": spearman(actual, [row["citation_1y_baseline"] for row in results]),
             "single_call": spearman(actual, [row[f"single_call_{dimension}"] for row in results]),
             "linear_regression": spearman(actual, [row.get(f"linear_{dimension}", 0.0) for row in results]),
+            "mean_baseline": spearman(actual, [row.get(f"mean_{dimension}", 0.0) for row in results]),
+            "random_baseline": spearman(actual, [row.get(f"random_{dimension}", 0.0) for row in results]),
         }
     return correlations
+
+
+def build_variant_improvement_export(results: list[dict[str, Any]]) -> dict[str, Any]:
+    improvements = [float(row.get("variant_improvement", 0)) for row in results]
+    dominated = [bool(row.get("original_dominated")) for row in results]
+    return {
+        "records": [
+            {
+                "paper_id": row.get("paper_id"),
+                "title": row.get("title"),
+                "original_composite_score": row.get("original_composite_score"),
+                "top_candidate_id": row.get("top_candidate_id"),
+                "top_candidate_operator": row.get("top_candidate_operator"),
+                "top_candidate_score": row.get("top_candidate_score"),
+                "variant_improvement": row.get("variant_improvement"),
+                "original_dominated": row.get("original_dominated"),
+                "pareto_selected_count": row.get("pareto_selected_count"),
+                "pipeline_status": row.get("pipeline_status"),
+            }
+            for row in results
+        ],
+        "summary": {
+            "record_count": len(results),
+            "mean_variant_improvement": float(np.mean(improvements)) if improvements else 0.0,
+            "median_variant_improvement": float(np.median(improvements)) if improvements else 0.0,
+            "original_dominated_rate": float(sum(dominated) / len(dominated)) if dominated else 0.0,
+        },
+    }
 
 
 def write_results_csv(path: Path, results: list[dict[str, Any]]) -> None:

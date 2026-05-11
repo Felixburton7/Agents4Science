@@ -703,30 +703,56 @@ async def _strategist_stub(state: PipelineState) -> PartialState:
     ranked = state.get("ranked_variants", [])
     best = ranked[0] if ranked else None
     selected = [
-        f"#{variant.rank}: {variant.variant_id} ({variant.operator}) - score {variant.composite_score}"
+        (
+            f"#{variant.rank}: original hypothesis - score {variant.composite_score}"
+            if variant.variant_id == "original"
+            else f"#{variant.rank}: {variant.variant_id} ({variant.operator}) - score {variant.composite_score}"
+        )
         for variant in ranked
         if variant.is_pareto_selected
     ]
-    recommendation = (
-        f"Develop {best.variant_id} via {best.operator}; it has the strongest mock composite score."
-        if best
-        else "Do not proceed until variants can be generated and scored."
-    )
+    if best and best.variant_id == "original":
+        recommendation = "Keep the original hypothesis; it remains the strongest ranked candidate after mutation."
+    elif best:
+        recommendation = f"Develop {best.variant_id} via {best.operator}; it has the strongest composite score."
+    else:
+        recommendation = "Do not proceed until variants can be generated and scored."
     scorecard = state["scorecard"]
     memo = StrategyMemo(
         recommendation=recommendation,
+        recommended_hypothesis_text=best.hypothesis_text if best else "",
+        recommended_variant_id=None if not best or best.variant_id == "original" else best.variant_id,
+        original_verdict=scorecard.verdict,
+        recommended_verdict=best.scorecard.verdict if best and best.scorecard else None,
         executive_summary=(
             f"The quantitative Idea Hater pipeline completed end-to-end. "
             f"The original idea scored {scorecard.composite_score}/100 ({scorecard.verdict}), "
-            f"then variants were re-scored and ranked."
+            f"then the original and generated variants were re-scored and ranked together."
         ),
+        scorecard_summary=[
+            f"{metric.metric_name}: {metric.score} ({metric.confidence_low}-{metric.confidence_high})"
+            for metric in scorecard.metric_scores
+        ],
         key_findings=[
             f"Parsed claim: {state['parsed'].claim}",
             f"Retrieved {len(state.get('papers', []))} mock literature neighbours.",
             f"Aggregated {len(scorecard.metric_scores)} quantitative metric scores.",
             f"Generated and re-scored {len(state.get('rescored_variants', []))} variants.",
+            f"Ranked {len(ranked)} candidates including the original hypothesis.",
         ],
         selected_variants=selected,
+        trade_offs=[
+            variant.dominance_explanation
+            for variant in ranked[:5]
+            if variant.dominance_explanation
+        ],
+        evidence_trail=sorted(
+            {
+                evidence_id
+                for metric in scorecard.metric_scores
+                for evidence_id in (metric.evidence_ids or metric.evidence)
+            }
+        )[:12],
         risks=scorecard.weaknesses[:3],
         next_steps=[
             "Replace mock metric scorers with real retrieval-backed implementations.",
