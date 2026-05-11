@@ -23,6 +23,10 @@ class Paper(BaseModel):
     citation_count: int = 0
     relevance_score: float = 0.0
     cluster: str = "unclustered"
+    doi: str = ""
+    openalex_id: str = ""
+    semantic_scholar_id: str = ""
+    source_provenance: List[str] = Field(default_factory=list)
 
 
 class Conflict(BaseModel):
@@ -99,6 +103,8 @@ class MetricScore(BaseModel):
     confidence_high: int = Field(ge=0, le=100)
     rationale: str
     evidence: List[str] = Field(default_factory=list)
+    evidence_ids: List[str] = Field(default_factory=list)
+    method: str = ""
     weakness: str = ""
 
 
