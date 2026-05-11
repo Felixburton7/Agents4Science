@@ -52,6 +52,7 @@ class PipelineState(TypedDict, total=False):
     variants: List[Variant]
     current_variant: Variant
     rescored_variants: Annotated[List[Variant], operator.add]
+    pareto_variants: List[Variant]
     ranked_variants: List[Variant]
     final_memo: StrategyMemo
 
@@ -90,7 +91,7 @@ def _load_agent(agent_name: str, fallback: AgentFn, aliases: tuple[str, ...] = (
         )
         if implementation is not None:
             return implementation
-    return fallback
+    raise RuntimeError(f"No production implementation found for backend.{agent_name}.")
 
 
 @observe(name="parser")
@@ -154,6 +155,11 @@ async def variant_rescorer(state: PipelineState) -> PartialState:
     return await _call_agent("variant_rescorer", _variant_rescorer_stub, state)
 
 
+@observe(name="pareto_curator")
+async def pareto_curator(state: PipelineState) -> PartialState:
+    return await _call_agent("pareto_curator", _ranker_stub, state)
+
+
 @observe(name="ranker")
 async def ranker(state: PipelineState) -> PartialState:
     result = await _call_agent("ranker", _ranker_stub, state)
@@ -181,6 +187,7 @@ def build_graph():
     graph.add_node("score_aggregator", score_aggregator)
     graph.add_node("mutator", mutator)
     graph.add_node("variant_rescorer", variant_rescorer)
+    graph.add_node("pareto_curator", pareto_curator)
     graph.add_node("ranker", ranker)
     graph.add_node("strategist", strategist)
 
@@ -206,7 +213,8 @@ def build_graph():
         _dispatch_variant_rescorers,
         ["variant_rescorer"],
     )
-    graph.add_edge("variant_rescorer", "ranker")
+    graph.add_edge("variant_rescorer", "pareto_curator")
+    graph.add_edge("pareto_curator", "ranker")
     graph.add_edge("ranker", "strategist")
     graph.add_edge("strategist", END)
 

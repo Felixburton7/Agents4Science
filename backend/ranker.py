@@ -21,7 +21,7 @@ ALL_METRICS = (
 
 
 async def ranker(state: dict[str, Any]) -> dict[str, list[Variant]]:
-    variants = list(state.get("rescored_variants") or state.get("variants", []) or [])
+    variants = list(state.get("pareto_variants") or state.get("rescored_variants") or state.get("variants", []) or [])
     original = _original_variant(state)
     candidates = [original, *variants]
     selected_ids, dominators = _pareto_front(candidates)

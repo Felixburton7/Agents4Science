@@ -59,7 +59,7 @@ async def pareto_curator(state: dict[str, Any]) -> dict[str, list[Variant]]:
             explanation = _dominated_explanation(variant, dominator) if dominator else _missing_scores_explanation(scores)
         updated.append(_copy_model(variant, is_pareto_selected=is_selected, dominance_explanation=explanation))
 
-    return {"variants": updated}
+    return {"pareto_variants": updated, "variants": updated}
 
 
 run = pareto_curator
