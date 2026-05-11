@@ -6,7 +6,6 @@ import { Stage } from "@/lib/stages";
 import {
   CircularGauge,
   DimensionRadar,
-  ScoreDistribution,
   SparkLine,
   EvidenceQualityCard,
   ImpactProjections,
@@ -44,52 +43,40 @@ function Hero({ isRunning }: { isRunning: boolean }) {
     "Self-supervised world models with action chunking will substantially outperform transformer predictors on long-horizon robot manipulation.";
 
   return (
-    <div className="min-h-screen flex flex-col bg-white">
-      <TopNav />
-      <div className="flex-1 flex flex-col items-center justify-center px-6 py-16">
-        <div className="w-full max-w-[640px] flex flex-col items-center">
-          <h1 className="display-tight text-[56px] sm:text-[64px] leading-[1.04] text-[color:var(--color-ink)] text-center">
-            A reality check for your hypothesis.
+    <div className="min-h-screen flex flex-col">
+      <div className="flex-1 flex flex-col items-center justify-center px-6 py-14">
+        <div className="w-full max-w-[680px] flex flex-col items-center">
+          <h1 className="display-tight text-[120px] sm:text-[160px] leading-[0.9] text-[color:var(--color-ink)] text-center">
+            Q-H8R
           </h1>
-          <p className="mt-5 text-[17px] text-[color:var(--color-muted)] tracking-tight text-center max-w-md">
-            Paste a research claim. Get a multi-dimensional scorecard grounded in the literature.
+          <h2 className="heading mt-8 text-[22px] sm:text-[26px] text-[color:var(--color-ink)] text-center leading-[1.15] max-w-[560px]">
+            Quantitative idea-hating for AI-generated science.
+          </h2>
+          <p className="mt-4 text-[14px] text-[color:var(--color-muted)] text-center leading-relaxed">
+            Denario writes the paper.
+            <br />
+            Q-H8R decides which hypothesis is worth writing.
           </p>
 
           <div className="w-full mt-12">
-            <div className="relative bg-white border border-[color:var(--color-border)] rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.03)] focus-within:border-[color:var(--color-ink)] transition-colors">
+            <div className="relative bg-white/70 border border-white/80 rounded-xl shadow-[0_1px_2px_rgba(40,50,65,0.04)] focus-within:border-[color:var(--color-ink)] transition-colors backdrop-blur-md">
               <textarea
                 value={hypothesis}
                 onChange={(e) => setHypothesis(e.target.value.slice(0, max))}
                 placeholder="e.g. Sparse autoencoders trained on residual streams of frontier language models will reveal monosemantic features predictive of out-of-distribution generalization."
-                className="w-full h-36 bg-transparent text-[15px] text-[color:var(--color-ink)] placeholder:text-[color:var(--color-muted-2)] resize-none outline-none scrollbar-thin leading-relaxed px-5 py-4"
+                className="w-full h-44 bg-transparent text-[15px] text-[color:var(--color-ink)] placeholder:text-[color:var(--color-muted-2)] resize-none outline-none scrollbar-thin leading-relaxed px-5 pt-4 pb-2"
                 maxLength={max}
               />
-              <div className="flex items-center justify-between px-5 py-2.5 border-t border-[color:var(--color-hairline)]">
+              <div className="flex items-center justify-end px-3 pb-3">
                 <button
-                  className="text-[12px] text-[color:var(--color-muted)] hover:text-[color:var(--color-ink)] transition-colors flex items-center gap-1.5"
-                  onClick={() => setHypothesis(example)}
-                  disabled={isRunning}
-                  type="button"
+                  onClick={run}
+                  disabled={!canSubmit}
+                  className="btn-primary text-[13px] px-4 py-1.5"
                 >
-                  <SparkIcon /> Try an example
+                  {isRunning ? "Analyzing…" : "Analyze"}
                 </button>
-                <div className="flex items-center gap-3">
-                  <span className="text-[11px] text-[color:var(--color-muted-2)] text-mono">
-                    {count} / {max}
-                  </span>
-                  <button
-                    onClick={run}
-                    disabled={!canSubmit}
-                    className="btn-primary text-[13px] px-4 py-1.5"
-                  >
-                    {isRunning ? "Analyzing…" : "Analyze"}
-                  </button>
-                </div>
               </div>
             </div>
-            <p className="mt-3 text-[12px] text-[color:var(--color-muted-2)] text-center flex items-center justify-center gap-1.5">
-              <LockIcon /> Your hypothesis is private and only used for analysis.
-            </p>
           </div>
 
           {isRunning && (
@@ -111,7 +98,7 @@ function Hero({ isRunning }: { isRunning: boolean }) {
 
 function ResultsLayout() {
   return (
-    <div className="min-h-screen flex flex-col bg-[color:var(--color-canvas-2)]">
+    <div className="min-h-screen flex flex-col">
       <TopNav />
       <CompactHypothesisBar />
       <Scorecard />
@@ -125,9 +112,9 @@ function CompactHypothesisBar() {
   const count = hypothesis.length;
 
   return (
-    <section className="px-8 py-4 bg-white hairline-b">
-      <div className="max-w-[1400px] mx-auto flex items-center gap-4">
-        <div className="flex-1 relative bg-[color:var(--color-canvas-2)] border border-[color:var(--color-hairline)] rounded-xl px-4 py-2.5 focus-within:border-[color:var(--color-blue)] transition-colors">
+    <section className="px-8 py-4 bg-white/55 backdrop-blur-md hairline-b">
+      <div className="max-w-[1400px] mx-auto flex items-center gap-3">
+        <div className="flex-1 relative bg-white/70 border border-white/70 rounded-xl px-4 py-2.5 focus-within:border-[color:var(--color-ink)] transition-colors">
           <textarea
             value={hypothesis}
             onChange={(e) => setHypothesis(e.target.value.slice(0, max))}
@@ -135,9 +122,6 @@ function CompactHypothesisBar() {
             className="w-full h-10 bg-transparent text-[13.5px] text-[color:var(--color-ink)] placeholder:text-[color:var(--color-muted-2)] resize-none outline-none scrollbar-thin leading-snug"
             maxLength={max}
           />
-        </div>
-        <div className="text-[11px] text-mono text-[color:var(--color-muted-2)] w-20 text-right">
-          {count} / {max}
         </div>
         <button
           onClick={reset}
@@ -149,7 +133,7 @@ function CompactHypothesisBar() {
         <button
           onClick={run}
           disabled={isRunning || count === 0}
-          className="btn-primary px-5 py-2 text-[13.5px]"
+          className="btn-ghost"
         >
           {isRunning ? "Analyzing…" : "Re-analyze"}
         </button>
@@ -160,21 +144,13 @@ function CompactHypothesisBar() {
 
 function TopNav() {
   return (
-    <header className="h-14 hairline-b px-8 flex items-center justify-between bg-white/85 backdrop-blur-md sticky top-0 z-20">
+    <header className="h-14 hairline-b px-8 flex items-center bg-white/40 backdrop-blur-xl sticky top-0 z-20">
       <div className="flex items-center gap-2.5">
         <Logo size={20} />
-        <span className="text-[color:var(--color-ink)] font-medium text-[14px] tracking-tight">
-          Hypothesis Hater
+        <span className="text-[color:var(--color-ink)] font-bold text-[14px] tracking-tight">
+          Q-H8R
         </span>
       </div>
-      <nav className="flex items-center gap-6">
-        <span className="nav-link">History</span>
-        <span className="nav-link">Saved</span>
-        <span className="nav-link">Docs</span>
-        <div className="w-7 h-7 rounded-full bg-[color:var(--color-canvas-2)] text-[color:var(--color-ink)] flex items-center justify-center text-[10.5px] font-medium border border-[color:var(--color-hairline)]">
-          AH
-        </div>
-      </nav>
     </header>
   );
 }
@@ -186,21 +162,13 @@ function Scorecard() {
   return (
     <div className="flex-1 overflow-y-auto scrollbar-thin px-8 py-7">
       <div className="max-w-[1400px] mx-auto">
-        <header className="flex items-start justify-between mb-6">
-          <div>
-            <div className="flex items-center gap-3">
-              <h1 className="display-tight text-[40px] text-[color:var(--color-ink)] leading-tight">
-                Hypothesis Scorecard
-              </h1>
-              <span className="badge-beta">Beta</span>
-            </div>
-            <p className="mt-1 text-[15px] text-[color:var(--color-muted)] tracking-tight">
-              A multi-dimensional reality check.
-            </p>
-          </div>
-          <button className="btn-ghost flex items-center gap-1.5">
-            <InfoIcon /> How to read this
-          </button>
+        <header className="mb-6">
+          <h1 className="display-tight text-[44px] text-[color:var(--color-ink)] leading-[0.98]">
+            Hypothesis Scorecard
+          </h1>
+          <p className="mt-2 text-[15px] text-[color:var(--color-muted)] tracking-tight">
+            A multi-dimensional reality check.
+          </p>
         </header>
 
         <section className="panel p-8 mb-4">
@@ -212,7 +180,7 @@ function Scorecard() {
               </p>
             </div>
             <div className="col-span-4">
-              <h3 className="text-[16px] font-semibold text-[color:var(--color-ink)] mb-2 tracking-tight">
+              <h3 className="text-[16px] font-bold text-[color:var(--color-ink)] mb-2 tracking-tight">
                 Takeaway
               </h3>
               <p className="text-[14px] text-[color:var(--color-body)] leading-relaxed tracking-tight">
@@ -245,13 +213,19 @@ function Scorecard() {
 
         <div className="grid grid-cols-12 gap-4 mb-4">
           <section className="col-span-3 panel p-5">
-            <h3 className="text-[13px] font-semibold text-[color:var(--color-ink)] mb-3 tracking-tight">
-              Score distribution
+            <h3 className="text-[13px] font-bold text-[color:var(--color-ink)] tracking-tight">
+              Similar landscape
             </h3>
-            <ScoreDistribution value={scorecardData.overall} />
+            <p className="text-[11px] text-[color:var(--color-muted)] mb-3">
+              Closest prior work
+            </p>
+            <SimilarLandscape
+              items={scorecardData.similar}
+              total={scorecardData.similarTotal}
+            />
           </section>
           <section className="col-span-6 panel p-5">
-            <h3 className="text-[13px] font-semibold text-[color:var(--color-ink)] mb-4 tracking-tight">
+            <h3 className="text-[13px] font-bold text-[color:var(--color-ink)] mb-4 tracking-tight">
               Dimension scores
             </h3>
             <div className="grid grid-cols-5 gap-3">
@@ -271,10 +245,10 @@ function Scorecard() {
         </div>
 
         <div className="grid grid-cols-12 gap-4 mb-4">
-          <section className="col-span-5 panel p-5">
+          <section className="col-span-7 panel p-5">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-[13px] font-semibold text-[color:var(--color-ink)] flex items-center gap-1.5 tracking-tight">
-                Impact projections <InfoIcon />
+              <h3 className="text-[13px] font-bold text-[color:var(--color-ink)] tracking-tight">
+                Impact projections
               </h3>
               <div className="flex gap-1 bg-[color:var(--color-canvas-2)] rounded-full p-0.5">
                 {["5Y", "3Y", "1Y"].map((y, i) => (
@@ -293,29 +267,92 @@ function Scorecard() {
             </div>
             <ImpactProjections data={scorecardData.projections} />
           </section>
-          <section className="col-span-4 panel p-5">
-            <h3 className="text-[13px] font-semibold text-[color:var(--color-ink)] flex items-center gap-1.5 mb-3 tracking-tight">
+          <section className="col-span-5 panel p-5">
+            <h3 className="text-[13px] font-bold text-[color:var(--color-ink)] mb-3 tracking-tight">
               Concept spread{" "}
               <span className="text-[color:var(--color-muted)] text-[11px] font-normal">
                 (predicted)
               </span>
-              <InfoIcon />
             </h3>
             <ConceptSpread clusters={scorecardData.clusters} />
           </section>
-          <section className="col-span-3 panel p-5">
-            <h3 className="text-[13px] font-semibold text-[color:var(--color-ink)] tracking-tight">
-              Similar landscape
-            </h3>
-            <p className="text-[11px] text-[color:var(--color-muted)] mb-3">
-              Closest prior work
+        </div>
+
+        <div className="grid grid-cols-12 gap-4 mb-4">
+          <section className="col-span-7 panel p-5">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-[color:var(--color-amber)]">
+                <WarnIcon />
+              </span>
+              <h3 className="text-[13px] font-bold text-[color:var(--color-ink)] tracking-tight">
+                What&apos;s missing?
+              </h3>
+            </div>
+            <p className="text-[11.5px] text-[color:var(--color-muted)] mb-4">
+              Key areas to strengthen before this hypothesis can reach its full potential.
             </p>
-            <SimilarLandscape items={scorecardData.similar} />
-            <button className="btn-ghost w-full mt-3">
-              View all ({scorecardData.similarTotal})
-            </button>
+            <div className="grid grid-cols-5 gap-2.5">
+              {scorecardData.gaps.map((g) => (
+                <div key={g.label} className="panel-inner p-3">
+                  <div className="flex items-center gap-1.5 text-[11px] text-[color:var(--color-ink)] font-medium mb-1.5 tracking-tight">
+                    <span style={{ color: g.color }}>●</span>
+                    {g.label}
+                  </div>
+                  <p className="text-[10.5px] text-[color:var(--color-muted)] leading-snug">
+                    {g.body}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+          <section className="col-span-5 panel p-5">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-[color:var(--color-ink)]">
+                <BulbIcon />
+              </span>
+              <h3 className="text-[13px] font-bold text-[color:var(--color-ink)] tracking-tight">
+                Top opportunities
+              </h3>
+            </div>
+            <p className="text-[11.5px] text-[color:var(--color-muted)] mb-3">
+              Opportunities to increase your signal.
+            </p>
+            <ul className="flex flex-col gap-2">
+              {scorecardData.opportunities.map((o, i) => (
+                <li key={i} className="flex items-start gap-2 text-[12.5px] text-[color:var(--color-body)] leading-snug">
+                  <span className="text-[color:var(--color-green)] mt-[2px]">
+                    <CheckIcon />
+                  </span>
+                  <span>{o}</span>
+                </li>
+              ))}
+            </ul>
           </section>
         </div>
+
+        <section className="panel p-5 mb-4">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <span className="text-[color:var(--color-ink)]">
+                <StackIcon />
+              </span>
+              <h3 className="text-[15px] font-bold text-[color:var(--color-ink)] tracking-tight">
+                Suggested hypotheses
+              </h3>
+              <span className="text-[12px] text-[color:var(--color-muted)]">
+                Alternative ideas with higher potential.
+              </span>
+            </div>
+            <button className="text-[12px] text-[color:var(--color-ink)] hover:text-[color:var(--color-muted)] flex items-center gap-1">
+              View all suggestions <span>→</span>
+            </button>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            {scorecardData.suggestions.map((s, i) => (
+              <SuggestionCard key={i} index={i + 1} {...s} />
+            ))}
+          </div>
+        </section>
 
         <footer className="panel p-3.5 flex items-center justify-between text-[12px]">
           <div className="flex items-center gap-2 text-[color:var(--color-muted)]">
@@ -369,6 +406,149 @@ function DimensionTile({
   );
 }
 
+function SuggestionCard({
+  index,
+  text,
+  score,
+  tier,
+  trend,
+  radar,
+  metrics,
+}: {
+  index: number;
+  text: string;
+  score: number;
+  tier: string;
+  trend: number[];
+  radar: number[];
+  metrics: { label: string; value: number }[];
+}) {
+  return (
+    <div className="panel-inner p-5 flex flex-col gap-4">
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex items-start gap-3 flex-1">
+          <span className="text-[11px] text-mono text-[color:var(--color-muted-2)] mt-1 w-6">
+            {String(index).padStart(2, "0")}
+          </span>
+          <p className="text-[13.5px] text-[color:var(--color-ink)] leading-snug tracking-tight flex-1">
+            {text}
+          </p>
+        </div>
+        <div className="text-right">
+          <div className="display-tight text-[32px] text-[color:var(--color-ink)] leading-none">
+            {score}
+          </div>
+          <div className="text-[10.5px] text-[color:var(--color-green)] font-semibold mt-1">
+            {tier}
+          </div>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-3">
+        <div className="flex-1">
+          <SparkLine values={trend} color="#2d7a3a" />
+        </div>
+        <MiniRadar values={radar} />
+      </div>
+
+      <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 pt-2 border-t border-white/60">
+        {metrics.map((m) => (
+          <div key={m.label} className="flex items-center gap-2">
+            <span className="text-[10.5px] text-[color:var(--color-muted)] w-[78px] truncate">
+              {m.label}
+            </span>
+            <div className="flex-1 h-1 bg-[rgba(29,29,31,0.08)] rounded-full overflow-hidden">
+              <div
+                className="h-full rounded-full"
+                style={{
+                  width: `${m.value}%`,
+                  background: m.value >= 65 ? "#2d7a3a" : m.value >= 45 ? "#9ca3af" : "#6b7280",
+                }}
+              />
+            </div>
+            <span className="text-[10.5px] text-mono text-[color:var(--color-ink)] w-6 text-right">
+              {m.value}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function MiniRadar({ values }: { values: number[] }) {
+  const size = 44;
+  const cx = size / 2;
+  const cy = size / 2;
+  const radius = 18;
+  const n = values.length;
+  const points = values.map((v, i) => {
+    const angle = (i / n) * Math.PI * 2 - Math.PI / 2;
+    const r = (v / 100) * radius;
+    return `${cx + Math.cos(angle) * r},${cy + Math.sin(angle) * r}`;
+  });
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+      <polygon
+        points={dimensions(radius, n, cx, cy).join(" ")}
+        fill="none"
+        stroke="#e5e7eb"
+        strokeWidth="0.8"
+      />
+      <polygon
+        points={points.join(" ")}
+        fill="#16a34a"
+        fillOpacity="0.35"
+        stroke="#16a34a"
+        strokeWidth="1"
+      />
+    </svg>
+  );
+}
+
+function dimensions(radius: number, n: number, cx: number, cy: number) {
+  return Array.from({ length: n }).map((_, i) => {
+    const angle = (i / n) * Math.PI * 2 - Math.PI / 2;
+    return `${cx + Math.cos(angle) * radius},${cy + Math.sin(angle) * radius}`;
+  });
+}
+
+function WarnIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+      <line x1="12" y1="9" x2="12" y2="13" />
+      <line x1="12" y1="17" x2="12.01" y2="17" />
+    </svg>
+  );
+}
+
+function BulbIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.74V17h8v-2.26A7 7 0 0 0 12 2z" />
+    </svg>
+  );
+}
+
+function CheckIcon() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  );
+}
+
+function StackIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <polygon points="12 2 2 7 12 12 22 7 12 2" />
+      <polyline points="2 17 12 22 22 17" />
+      <polyline points="2 12 12 17 22 12" />
+    </svg>
+  );
+}
+
 function SparkIcon() {
   return (
     <svg
@@ -382,25 +562,6 @@ function SparkIcon() {
       strokeLinejoin="round"
     >
       <path d="M12 3l1.9 5.8L20 10l-5.6 2.8L13 19l-2-5.8L5 11l5.8-1.9L12 3z" />
-    </svg>
-  );
-}
-
-function InfoIcon() {
-  return (
-    <svg
-      width="13"
-      height="13"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="text-[color:var(--color-muted)]"
-    >
-      <circle cx="12" cy="12" r="10" />
-      <path d="M12 16v-4M12 8h.01" />
     </svg>
   );
 }
@@ -553,6 +714,9 @@ function deriveScorecard(state: DemoState) {
     clusters: buildClusters(state),
     similar: buildSimilar(state),
     similarTotal: state.papers?.length || 23,
+    gaps: buildGaps(get, state),
+    opportunities: buildOpportunities(state, get),
+    suggestions: buildSuggestions(state, overall),
   };
 }
 
@@ -622,17 +786,158 @@ function buildClusters(state: DemoState) {
   return counts;
 }
 
+function buildGaps(get: (k: string, def?: number) => number, state: DemoState) {
+  const pool = [
+    {
+      key: "novelty",
+      label: "Novelty gap",
+      body: "Too similar to existing work.",
+      color: "#dc2626",
+      score: get("novelty"),
+    },
+    {
+      key: "conflict_risk",
+      label: "High conflict",
+      body: `Contradicts ${state.conflicts?.length ?? 12} recent papers.`,
+      color: "#dc2626",
+      score: 100 - get("conflict_risk"),
+    },
+    {
+      key: "disruption",
+      label: "Low disruption",
+      body: "Unlikely to displace existing paradigm.",
+      color: "#d97706",
+      score: 100 - get("disruption"),
+    },
+    {
+      key: "translation",
+      label: "Weak translation",
+      body: "Limited real-world uptake signals.",
+      color: "#d97706",
+      score: 100 - get("translation"),
+    },
+    {
+      key: "reach",
+      label: "Narrow reach",
+      body: "Mostly confined to 1–2 disciplines.",
+      color: "#d97706",
+      score: 100 - get("reach"),
+    },
+    {
+      key: "saturation",
+      label: "Saturated area",
+      body: "Field is already crowded.",
+      color: "#d97706",
+      score: get("saturation"),
+    },
+  ];
+  return pool.sort((a, b) => b.score - a.score).slice(0, 5);
+}
+
+function buildOpportunities(state: DemoState, get: (k: string, def?: number) => number) {
+  const memo = state.final_memo;
+  if (memo && memo.next_steps && memo.next_steps.length > 0) {
+    return memo.next_steps.slice(0, 4);
+  }
+  const out: string[] = [];
+  if (get("novelty") < 60) out.push("Reframe to emphasize the unique mechanism");
+  if (get("conflict_risk") < 60) out.push("Address key contradictory findings");
+  if (get("reach") < 70) out.push("Extend to additional domains or datasets");
+  if (get("translation") < 70) out.push("Explore real-world use cases or applications");
+  while (out.length < 4) {
+    out.push(
+      [
+        "Strengthen evidence with a benchmark study",
+        "Specify the target population more tightly",
+        "Add a falsifiable prediction",
+      ][out.length % 3],
+    );
+  }
+  return out.slice(0, 4);
+}
+
+const METRIC_KEYS: { key: string; label: string }[] = [
+  { key: "novelty", label: "Novelty" },
+  { key: "saturation", label: "Saturation" },
+  { key: "conflict_risk", label: "Conflict" },
+  { key: "feasibility", label: "Feasibility" },
+  { key: "evidence_quality", label: "Evidence" },
+  { key: "volume", label: "Volume" },
+  { key: "velocity", label: "Velocity" },
+  { key: "reach", label: "Reach" },
+  { key: "depth", label: "Depth" },
+  { key: "disruption", label: "Disruption" },
+  { key: "translation", label: "Translation" },
+];
+
+function buildSuggestions(state: DemoState, baseline: number) {
+  const variants = state.variants ?? [];
+  if (variants.length > 0) {
+    return variants.slice(0, 4).map((v, i) => {
+      const impact = (v.impact_scores ?? {}) as Record<string, number>;
+      const score = Math.max(baseline + 3, impact.composite ?? baseline + 5 + (4 - i) * 2);
+      const metrics = METRIC_KEYS.map(({ key, label }) => ({
+        label,
+        value: impact[key] ?? Math.round(50 + Math.sin(i + key.length) * 18 + 5),
+      }));
+      const radar = [
+        metrics[0].value,
+        metrics[3].value,
+        metrics[7].value,
+        metrics[8].value,
+        metrics[10].value,
+        metrics[9].value,
+      ];
+      return {
+        text: v.hypothesis_text,
+        score,
+        tier: score >= 80 ? "High Potential" : score >= 70 ? "Moderate-High" : "Moderate",
+        trend: spark(score),
+        radar,
+        metrics,
+      };
+    });
+  }
+  const fallback = [
+    "Hierarchical latent world models with goal-conditioned planning will improve long-horizon manipulation.",
+    "Dynamic curriculum world models will outperform static datasets in robotics generalization.",
+    "Sim-to-real adaptation via self-supervised latent alignment will reduce data requirements.",
+    "Causal world models with intervention policies will improve safety in open-world robots.",
+  ];
+  return fallback.map((text, i) => {
+    const score = 81 - i * 3;
+    const metrics = METRIC_KEYS.map(({ label }, mi) => ({
+      label,
+      value: Math.max(35, Math.min(92, score + Math.round(Math.sin(i * 3 + mi) * 14))),
+    }));
+    return {
+      text,
+      score,
+      tier: score >= 80 ? "High Potential" : score >= 70 ? "Moderate-High" : "Moderate",
+      trend: spark(score),
+      radar: [metrics[0].value, metrics[3].value, metrics[7].value, metrics[8].value, metrics[10].value, metrics[9].value],
+      metrics,
+    };
+  });
+}
+
 function buildSimilar(state: DemoState) {
-  const papers = (state.papers ?? []).slice(0, 3);
+  const papers = state.papers ?? [];
   if (papers.length === 0) {
     return [
       { title: "World Models are Simply Context", similarity: 78 },
-      { title: "Efficient Online Reinforcement Learning…", similarity: 72 },
-      { title: "Action Chunking for Long Horizon Learning…", similarity: 67 },
+      { title: "Efficient Online Reinforcement Learning for Robotics", similarity: 72 },
+      { title: "Action Chunking for Long Horizon Learning", similarity: 67 },
+      { title: "Self-Supervised Latent Prediction in Manipulation", similarity: 64 },
+      { title: "Transformer World Models at Scale", similarity: 61 },
     ];
   }
-  return papers.map((p, i) => ({
-    title: p.title.length > 50 ? p.title.slice(0, 48) + "…" : p.title,
-    similarity: Math.round(78 - i * 6),
-  }));
+  return papers
+    .slice()
+    .sort((a, b) => (b.relevance_score ?? 0) - (a.relevance_score ?? 0))
+    .map((p, i) => ({
+      title: p.title,
+      similarity: Math.max(35, Math.round((p.relevance_score ?? 0.5 - i * 0.01) * 100)),
+      url: p.url || undefined,
+    }));
 }
