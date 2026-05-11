@@ -319,7 +319,7 @@ function Scorecard() {
 
         <footer className="panel p-3.5 flex items-center justify-between text-[12px]">
           <div className="flex items-center gap-2 text-[color:var(--color-muted)]">
-            <span className="px-1.5 py-0.5 rounded-full bg-[color:var(--color-blue)] text-white text-[9px] font-semibold">
+            <span className="px-1.5 py-0.5 rounded bg-[color:var(--color-ink)] text-white text-[9px] font-semibold">
               AI
             </span>
             <span>
@@ -528,16 +528,16 @@ function deriveScorecard(state: DemoState) {
       },
     ],
     dimensions: [
-      { key: "novelty", label: "Novelty", value: get("novelty"), tier: tierLabel(get("novelty")), trend: spark(get("novelty")), color: "#0071e3", icon: "◆" },
-      { key: "saturation", label: "Saturation", value: get("saturation"), tier: tierLabel(get("saturation")), trend: spark(get("saturation")), color: "#5e5ce6", icon: "◉" },
-      { key: "conflict_risk", label: "Conflict Risk", value: get("conflict_risk"), tier: tierLabel(get("conflict_risk")), trend: spark(get("conflict_risk")), color: "#ff9f0a", icon: "▲" },
-      { key: "feasibility", label: "Feasibility", value: get("feasibility"), tier: tierLabel(get("feasibility")), trend: spark(get("feasibility")), color: "#34c759", icon: "⚙" },
-      { key: "volume", label: "Volume", value: get("volume"), tier: tierLabel(get("volume")), trend: spark(get("volume")), color: "#34c759", icon: "▮" },
-      { key: "velocity", label: "Velocity", value: get("velocity"), tier: tierLabel(get("velocity")), trend: spark(get("velocity")), color: "#34c759", icon: "↗" },
-      { key: "reach", label: "Reach", value: get("reach"), tier: tierLabel(get("reach")), trend: spark(get("reach")), color: "#34c759", icon: "◎" },
-      { key: "depth", label: "Depth", value: get("depth"), tier: tierLabel(get("depth")), trend: spark(get("depth")), color: "#34c759", icon: "▼" },
-      { key: "disruption", label: "Disruption", value: get("disruption"), tier: tierLabel(get("disruption")), trend: spark(get("disruption")), color: "#ff9f0a", icon: "⚡" },
-      { key: "translation", label: "Translation", value: get("translation"), tier: tierLabel(get("translation")), trend: spark(get("translation")), color: "#34c759", icon: "⇄" },
+      { key: "novelty", label: "Novelty", value: get("novelty"), tier: tierLabel(get("novelty")), trend: spark(get("novelty")), color: dimColor(get("novelty")), icon: "◆" },
+      { key: "saturation", label: "Saturation", value: get("saturation"), tier: tierLabel(get("saturation")), trend: spark(get("saturation")), color: dimColor(get("saturation")), icon: "◉" },
+      { key: "conflict_risk", label: "Conflict Risk", value: get("conflict_risk"), tier: tierLabel(get("conflict_risk")), trend: spark(get("conflict_risk")), color: dimColor(get("conflict_risk")), icon: "▲" },
+      { key: "feasibility", label: "Feasibility", value: get("feasibility"), tier: tierLabel(get("feasibility")), trend: spark(get("feasibility")), color: dimColor(get("feasibility")), icon: "⚙" },
+      { key: "volume", label: "Volume", value: get("volume"), tier: tierLabel(get("volume")), trend: spark(get("volume")), color: dimColor(get("volume")), icon: "▮" },
+      { key: "velocity", label: "Velocity", value: get("velocity"), tier: tierLabel(get("velocity")), trend: spark(get("velocity")), color: dimColor(get("velocity")), icon: "↗" },
+      { key: "reach", label: "Reach", value: get("reach"), tier: tierLabel(get("reach")), trend: spark(get("reach")), color: dimColor(get("reach")), icon: "◎" },
+      { key: "depth", label: "Depth", value: get("depth"), tier: tierLabel(get("depth")), trend: spark(get("depth")), color: dimColor(get("depth")), icon: "▼" },
+      { key: "disruption", label: "Disruption", value: get("disruption"), tier: tierLabel(get("disruption")), trend: spark(get("disruption")), color: dimColor(get("disruption")), icon: "⚡" },
+      { key: "translation", label: "Translation", value: get("translation"), tier: tierLabel(get("translation")), trend: spark(get("translation")), color: dimColor(get("translation")), icon: "⇄" },
     ],
     evidenceQuality: {
       score: get("evidence_quality"),
@@ -568,6 +568,12 @@ function tierLabel(v: number) {
   if (v >= 55) return "Moderate";
   if (v >= 35) return "Low";
   return "Very Low";
+}
+
+function dimColor(v: number) {
+  if (v >= 65) return "#16a34a"; // green
+  if (v >= 45) return "#9ca3af"; // neutral gray
+  return "#6b7280"; // dim gray
 }
 
 function spark(seed: number): number[] {
@@ -601,12 +607,12 @@ function buildProjections(
 
 function buildClusters(state: DemoState) {
   const labels = [
-    { name: "Robotics", color: "#0071e3" },
-    { name: "Machine Learning", color: "#5e5ce6" },
-    { name: "Cognitive Science", color: "#af52de" },
-    { name: "Control Theory", color: "#34c759" },
-    { name: "Materials Science", color: "#ff9f0a" },
-    { name: "Other", color: "#86868b" },
+    { name: "Robotics", color: "#1d1d1f" },
+    { name: "Machine Learning", color: "#525252" },
+    { name: "Cognitive Science", color: "#737373" },
+    { name: "Control Theory", color: "#a3a3a3" },
+    { name: "Materials Science", color: "#d4d4d4" },
+    { name: "Other", color: "#e5e5e5" },
   ];
   const papers = state.papers ?? [];
   const counts = labels.map((l, i) => ({

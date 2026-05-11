@@ -450,8 +450,8 @@ export function ImpactProjections({
         />
         <path
           d={lineFor("vel")}
-          stroke="#af52de"
-          strokeWidth="1.8"
+          stroke="#9ca3af"
+          strokeWidth="1.5"
           fill="none"
         />
         <path
@@ -460,8 +460,8 @@ export function ImpactProjections({
         />
         <path
           d={lineFor("total")}
-          stroke="#0071e3"
-          strokeWidth="2"
+          stroke="#1d1d1f"
+          strokeWidth="1.8"
           fill="none"
         />
         {data.map((d, i) => (
@@ -479,8 +479,8 @@ export function ImpactProjections({
       </svg>
       <div className="flex flex-col gap-2 justify-center text-[11.5px] min-w-[110px]">
         <div>
-          <div className="flex items-center gap-1.5 text-[color:var(--color-blue)]">
-            <span className="w-2 h-2 rounded-full bg-[color:var(--color-blue)]" />
+          <div className="flex items-center gap-1.5 text-[color:var(--color-ink)]">
+            <span className="w-2 h-2 rounded-full bg-[color:var(--color-ink)]" />
             Total (5Y)
           </div>
           <div className="text-[color:var(--color-green)] text-[11px] ml-3.5">
@@ -491,8 +491,8 @@ export function ImpactProjections({
           </div>
         </div>
         <div>
-          <div className="flex items-center gap-1.5 text-[color:var(--color-purple)]">
-            <span className="w-2 h-2 rounded-full bg-[color:var(--color-purple)]" />
+          <div className="flex items-center gap-1.5 text-[color:var(--color-muted)]">
+            <span className="w-2 h-2 rounded-full bg-[color:var(--color-muted)]" />
             Velocity (24m)
           </div>
           <div className="text-[color:var(--color-green)] text-[11px] ml-3.5">
@@ -591,13 +591,13 @@ export function SimilarLandscape({
     <div className="flex flex-col gap-2.5">
       {items.map((it, i) => (
         <div key={i} className="flex items-start gap-2">
-          <div className="w-1 h-1 rounded-full bg-[color:var(--color-blue)] mt-2" />
+          <div className="w-1 h-1 rounded-full bg-[color:var(--color-muted)] mt-2" />
           <div className="flex-1 min-w-0">
             <div className="text-[12px] text-[color:var(--color-ink)] leading-tight truncate">
               {it.title}
             </div>
           </div>
-          <div className="text-[12px] text-mono text-[color:var(--color-blue)] font-semibold">
+          <div className="text-[12px] text-mono text-[color:var(--color-ink)] font-semibold">
             {it.similarity}%
           </div>
         </div>
