@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import json
 import os
+from pathlib import Path
 from typing import Any, TypeVar
 
 from pydantic import BaseModel
@@ -50,7 +51,7 @@ def _complete_structured_sync(
     response_model: type[T],
     temperature: float,
 ) -> T:
-    if not os.getenv("OPENAI_API_KEY"):
+    if not _ensure_openai_api_key():
         raise LLMUnavailable("OPENAI_API_KEY is not set")
 
     try:
@@ -100,6 +101,53 @@ def _complete_structured_sync(
         return parsed
 
     raise LLMUnavailable("OpenAI structured output call failed: " + " | ".join(errors))
+
+
+def _ensure_openai_api_key() -> str:
+    key = os.getenv("OPENAI_API_KEY", "").strip()
+    if key:
+        return key
+
+    for candidate in (_read_dotenv_api_key(), _read_key_file(Path.home() / ".openai_api_key")):
+        if candidate:
+            os.environ["OPENAI_API_KEY"] = candidate
+            return candidate
+    return ""
+
+
+def _read_dotenv_api_key() -> str:
+    env_path = Path(__file__).resolve().parents[1] / ".env"
+    if not env_path.exists():
+        return ""
+
+    try:
+        lines = env_path.read_text(encoding="utf-8").splitlines()
+    except OSError:
+        return ""
+
+    for line in lines:
+        stripped = line.strip()
+        if not stripped or stripped.startswith("#"):
+            continue
+        if stripped.startswith("export "):
+            stripped = stripped[len("export ") :].lstrip()
+        name, separator, value = stripped.partition("=")
+        if separator and name.strip() == "OPENAI_API_KEY":
+            return _strip_env_quotes(value.strip())
+    return ""
+
+
+def _read_key_file(path: Path) -> str:
+    try:
+        return _strip_env_quotes(path.read_text(encoding="utf-8").strip())
+    except OSError:
+        return ""
+
+
+def _strip_env_quotes(value: str) -> str:
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in {"'", '"'}:
+        return value[1:-1].strip()
+    return value
 
 
 def _call_chat_parse(
