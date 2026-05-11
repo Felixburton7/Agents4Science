@@ -66,7 +66,13 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
           conflicts: data.conflicts ?? prev.conflicts,
           overlaps: data.overlaps ?? prev.overlaps,
           forecast: data.forecast ?? prev.forecast,
-          variants: data.variants ?? prev.variants,
+          metric_scores: data.metric_scores ?? prev.metric_scores,
+          scorecard: data.scorecard ?? prev.scorecard,
+          variants:
+            data.ranked_variants && data.ranked_variants.length > 0
+              ? data.ranked_variants
+              : data.variants ?? prev.variants,
+          ranked_variants: data.ranked_variants ?? prev.ranked_variants,
           final_memo: data.final_memo ?? prev.final_memo,
         }));
       }

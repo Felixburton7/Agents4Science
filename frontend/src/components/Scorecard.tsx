@@ -89,9 +89,10 @@ export function DimensionRadar({
 }: {
   dimensions: { label: string; value: number }[];
 }) {
-  const size = 230;
-  const cx = size / 2;
-  const cy = size / 2;
+  const width = 280;
+  const height = 240;
+  const cx = width / 2;
+  const cy = height / 2;
   const radius = 78;
   const n = dimensions.length;
 
@@ -106,8 +107,13 @@ export function DimensionRadar({
       .join(" ") + " Z";
 
   return (
-    <div className="relative" style={{ width: size, height: size }}>
-      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+    <div className="relative" style={{ width, height }}>
+      <svg
+        width={width}
+        height={height}
+        viewBox={`0 0 ${width} ${height}`}
+        style={{ overflow: "visible" }}
+      >
         <defs>
           <linearGradient id="radar-fill" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stopColor="#1d1d1f" stopOpacity="0.12" />
@@ -156,18 +162,22 @@ export function DimensionRadar({
         ))}
         {dimensions.map((d, i) => {
           const angle = (i / n) * Math.PI * 2 - Math.PI / 2;
-          const lr = radius + 16;
+          const lr = radius + 18;
           const x = cx + Math.cos(angle) * lr;
           const y = cy + Math.sin(angle) * lr;
+          const cosA = Math.cos(angle);
+          const anchor =
+            cosA > 0.3 ? "start" : cosA < -0.3 ? "end" : "middle";
+          const dx = anchor === "start" ? 2 : anchor === "end" ? -2 : 0;
           return (
             <text
               key={i}
-              x={x}
+              x={x + dx}
               y={y}
-              textAnchor="middle"
+              textAnchor={anchor}
               dominantBaseline="middle"
-              fontSize="9.5"
-              fill="#6e6e73"
+              fontSize="10"
+              fill="#5e6770"
               fontWeight="500"
             >
               {d.label}

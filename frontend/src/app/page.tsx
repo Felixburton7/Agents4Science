@@ -44,43 +44,50 @@ function Hero({ isRunning }: { isRunning: boolean }) {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <div className="flex-1 flex flex-col items-center justify-center px-6 py-14">
-        <div className="w-full max-w-[680px] flex flex-col items-center">
-          <h1 className="display-tight text-[120px] sm:text-[160px] leading-[0.9] text-[color:var(--color-ink)] text-center">
+      <div className="flex-1 grid grid-cols-12 gap-10 px-10 sm:px-16 py-16 items-center">
+        <div className="col-span-6 flex flex-col items-start justify-center">
+          <h1 className="display-tight text-[128px] xl:text-[176px] leading-[0.88] text-[color:var(--color-ink)]">
             Q-H8R
           </h1>
-          <h2 className="heading mt-8 text-[22px] sm:text-[26px] text-[color:var(--color-ink)] text-center leading-[1.15] max-w-[560px]">
+          <h2 className="heading mt-10 text-[28px] xl:text-[34px] text-[color:var(--color-ink)] leading-[1.12] max-w-[620px]">
             Quantitative idea-hating for AI-generated science.
           </h2>
-          <p className="mt-4 text-[14px] text-[color:var(--color-muted)] text-center leading-relaxed">
+          <p className="mt-5 text-[15px] text-[color:var(--color-muted)] leading-[1.6]">
             Denario writes the paper.
             <br />
             Q-H8R decides which hypothesis is worth writing.
           </p>
+        </div>
 
-          <div className="w-full mt-12">
-            <div className="relative bg-white/70 border border-white/80 rounded-xl shadow-[0_1px_2px_rgba(40,50,65,0.04)] focus-within:border-[color:var(--color-ink)] transition-colors backdrop-blur-md">
-              <textarea
-                value={hypothesis}
-                onChange={(e) => setHypothesis(e.target.value.slice(0, max))}
-                placeholder="e.g. Sparse autoencoders trained on residual streams of frontier language models will reveal monosemantic features predictive of out-of-distribution generalization."
-                className="w-full h-44 bg-transparent text-[15px] text-[color:var(--color-ink)] placeholder:text-[color:var(--color-muted-2)] resize-none outline-none scrollbar-thin leading-relaxed px-5 pt-4 pb-2"
-                maxLength={max}
-              />
-              <div className="flex items-center justify-end px-3 pb-3">
-                <button
-                  onClick={run}
-                  disabled={!canSubmit}
-                  className="btn-primary text-[13px] px-4 py-1.5"
-                >
-                  {isRunning ? "Analyzing…" : "Analyze"}
-                </button>
-              </div>
+        <div className="col-span-6 flex flex-col justify-center gap-5">
+          <div className="text-[11px] uppercase tracking-[0.18em] text-[color:var(--color-muted)] font-semibold">
+            Your hypothesis
+          </div>
+          <div className="relative bg-white/70 border border-white/80 rounded-2xl shadow-[0_2px_12px_rgba(40,50,65,0.04)] focus-within:border-[color:var(--color-ink)] focus-within:shadow-[0_4px_18px_rgba(40,50,65,0.08)] transition-all backdrop-blur-md flex flex-col">
+            <textarea
+              value={hypothesis}
+              onChange={(e) => setHypothesis(e.target.value.slice(0, max))}
+              placeholder="e.g. Sparse autoencoders trained on residual streams of frontier language models will reveal monosemantic features predictive of out-of-distribution generalization."
+              className="w-full h-52 bg-transparent text-[16px] text-[color:var(--color-ink)] placeholder:text-[color:var(--color-muted-2)] resize-none outline-none scrollbar-thin leading-relaxed px-6 pt-5 pb-3"
+              maxLength={max}
+            />
+            <div className="flex items-center justify-between px-4 pb-4">
+              <span className="text-[11px] text-[color:var(--color-muted-2)] text-mono pl-2">
+                {count > 0 ? `${count} chars` : "Paste a single claim."}
+              </span>
+              <button
+                onClick={run}
+                disabled={!canSubmit}
+                className="btn-primary text-[14px] px-6 py-3 flex items-center gap-2 group"
+              >
+                {isRunning ? "Analyzing…" : "Analyze"}
+                <span className="transition-transform group-hover:translate-x-0.5">→</span>
+              </button>
             </div>
           </div>
 
           {isRunning && (
-            <div className="mt-10 flex gap-1.5">
+            <div className="flex gap-1.5 ml-1">
               {[0, 1, 2].map((i) => (
                 <span
                   key={i}
@@ -171,15 +178,15 @@ function Scorecard() {
           </p>
         </header>
 
-        <section className="panel p-8 mb-4">
-          <div className="grid grid-cols-12 gap-8 items-center">
-            <div className="col-span-4 flex flex-col items-center">
+        <section className="panel px-8 py-7 mb-4">
+          <div className="grid grid-cols-12 gap-10 items-center">
+            <div className="col-span-3 flex flex-col items-center">
               <CircularGauge value={scorecardData.overall} label="Overall Signal" />
               <p className="mt-3 text-[13px] text-[color:var(--color-muted)]">
                 {scorecardData.tier}
               </p>
             </div>
-            <div className="col-span-4">
+            <div className="col-span-5">
               <h3 className="text-[16px] font-bold text-[color:var(--color-ink)] mb-2 tracking-tight">
                 Takeaway
               </h3>
@@ -205,7 +212,7 @@ function Scorecard() {
                 </div>
               </div>
             </div>
-            <div className="col-span-4">
+            <div className="col-span-4 flex items-center justify-center">
               <DimensionRadar dimensions={scorecardData.radar} />
             </div>
           </div>
@@ -246,25 +253,9 @@ function Scorecard() {
 
         <div className="grid grid-cols-12 gap-4 mb-4">
           <section className="col-span-7 panel p-5">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-[13px] font-bold text-[color:var(--color-ink)] tracking-tight">
-                Impact projections
-              </h3>
-              <div className="flex gap-1 bg-[color:var(--color-canvas-2)] rounded-full p-0.5">
-                {["5Y", "3Y", "1Y"].map((y, i) => (
-                  <button
-                    key={y}
-                    className={`px-2.5 py-0.5 text-[11px] rounded-full font-medium ${
-                      i === 0
-                        ? "bg-white text-[color:var(--color-ink)] shadow-sm"
-                        : "text-[color:var(--color-muted)]"
-                    }`}
-                  >
-                    {y}
-                  </button>
-                ))}
-              </div>
-            </div>
+            <h3 className="text-[13px] font-bold text-[color:var(--color-ink)] tracking-tight mb-3">
+              Impact projections
+            </h3>
             <ImpactProjections data={scorecardData.projections} />
           </section>
           <section className="col-span-5 panel p-5">
@@ -603,26 +594,40 @@ function DownloadIcon() {
 
 // ---------- derivation ----------
 
+const SCORE_MAX = 95;
+const capScore = (v: number) => Math.max(0, Math.min(SCORE_MAX, Math.round(v)));
+
 function deriveScorecard(state: DemoState) {
   const metricByKey = new Map<string, number>();
+  const setMetric = (k: string, v: number) => metricByKey.set(k, capScore(v));
+
+  // Prefer the authoritative backend scorecard if present.
+  if (state.scorecard?.metric_scores?.length) {
+    for (const m of state.scorecard.metric_scores) {
+      setMetric(m.name, m.score);
+    }
+  }
+
   if (state.forecast) {
-    metricByKey.set("volume", state.forecast.volume.score);
-    metricByKey.set("velocity", state.forecast.velocity.score);
-    metricByKey.set("reach", state.forecast.reach.score);
-    metricByKey.set("depth", state.forecast.depth.score);
-    metricByKey.set("disruption", state.forecast.disruption.score);
-    metricByKey.set("translation", state.forecast.translation.score);
+    if (!metricByKey.has("volume")) setMetric("volume", state.forecast.volume.score);
+    if (!metricByKey.has("velocity")) setMetric("velocity", state.forecast.velocity.score);
+    if (!metricByKey.has("reach")) setMetric("reach", state.forecast.reach.score);
+    if (!metricByKey.has("depth")) setMetric("depth", state.forecast.depth.score);
+    if (!metricByKey.has("disruption")) setMetric("disruption", state.forecast.disruption.score);
+    if (!metricByKey.has("translation")) setMetric("translation", state.forecast.translation.score);
   }
-  if (state.overlaps) {
-    metricByKey.set("saturation", state.overlaps.crowding_score);
+  if (!metricByKey.has("saturation") && state.overlaps) {
+    setMetric("saturation", 100 - state.overlaps.crowding_score);
   }
-  if (state.conflicts && state.conflicts.length > 0) {
-    const avgSev =
-      state.conflicts.reduce((acc, c) => acc + c.severity, 0) /
-      state.conflicts.length;
-    metricByKey.set("conflict_risk", Math.round((1 - avgSev) * 100));
-  } else {
-    metricByKey.set("conflict_risk", 50);
+  if (!metricByKey.has("conflict_risk")) {
+    if (state.conflicts && state.conflicts.length > 0) {
+      const avgSev =
+        state.conflicts.reduce((acc, c) => acc + c.severity, 0) /
+        state.conflicts.length;
+      setMetric("conflict_risk", (1 - avgSev) * 100);
+    } else {
+      setMetric("conflict_risk", 50);
+    }
   }
   if (!metricByKey.has("novelty")) {
     const avgRel =
@@ -630,25 +635,26 @@ function deriveScorecard(state: DemoState) {
         ? state.papers.reduce((a, p) => a + (p.relevance_score || 0), 0) /
           state.papers.length
         : 0.4;
-    metricByKey.set("novelty", Math.round((1 - avgRel) * 100));
+    setMetric("novelty", (1 - avgRel) * 100);
   }
-  if (!metricByKey.has("feasibility")) metricByKey.set("feasibility", 75);
-  if (!metricByKey.has("evidence_quality")) metricByKey.set("evidence_quality", 76);
+  if (!metricByKey.has("feasibility")) setMetric("feasibility", 75);
+  if (!metricByKey.has("evidence_quality")) setMetric("evidence_quality", 76);
 
   const get = (k: string, def = 50) => metricByKey.get(k) ?? def;
 
-  const overall = Math.round(
-    get("novelty") * 0.14 +
-      get("saturation") * 0.12 +
-      get("conflict_risk") * 0.12 +
-      get("feasibility") * 0.12 +
-      get("volume") * 0.07 +
-      get("velocity") * 0.07 +
-      get("reach") * 0.07 +
-      get("depth") * 0.07 +
-      get("disruption") * 0.07 +
-      get("translation") * 0.07 +
-      get("evidence_quality") * 0.08,
+  const overall = capScore(
+    state.scorecard?.composite_score ??
+      get("novelty") * 0.14 +
+        get("saturation") * 0.12 +
+        get("conflict_risk") * 0.12 +
+        get("feasibility") * 0.12 +
+        get("volume") * 0.07 +
+        get("velocity") * 0.07 +
+        get("reach") * 0.07 +
+        get("depth") * 0.07 +
+        get("disruption") * 0.07 +
+        get("translation") * 0.07 +
+        get("evidence_quality") * 0.08,
   );
 
   const tier =
@@ -669,6 +675,7 @@ function deriveScorecard(state: DemoState) {
 
   const takeaway =
     state.final_memo?.executive_summary ||
+    state.final_memo?.recommendation ||
     `Promising idea with room to sharpen. Strong on ${prettify(topName).toLowerCase()}, but faces ${lowTwo.join(" and ").toLowerCase()} challenges. Focus on de-risking the core claim and strengthening evidence.`;
 
   return {
@@ -680,12 +687,12 @@ function deriveScorecard(state: DemoState) {
     radar: [
       { label: "Novelty", value: get("novelty") },
       { label: "Saturation", value: get("saturation") },
-      { label: "Conflict Risk", value: get("conflict_risk") },
+      { label: "Conflict", value: get("conflict_risk") },
       { label: "Feasibility", value: get("feasibility") },
-      { label: "Evidence Quality", value: get("evidence_quality") },
+      { label: "Evidence", value: get("evidence_quality") },
       {
         label: "Impact",
-        value: Math.round((get("volume") + get("velocity") + get("reach")) / 3),
+        value: capScore((get("volume") + get("velocity") + get("reach")) / 3),
       },
     ],
     dimensions: [
@@ -704,10 +711,10 @@ function deriveScorecard(state: DemoState) {
       score: get("evidence_quality"),
       tier: tierLabel(get("evidence_quality")),
       submetrics: [
-        { label: "Retrieval coverage", value: Math.min(100, get("evidence_quality") + 6) },
-        { label: "Source agreement", value: Math.max(40, get("evidence_quality") - 2) },
-        { label: "Recency balance", value: Math.max(40, get("evidence_quality") - 5) },
-        { label: "Confidence calibration", value: Math.min(100, get("evidence_quality") + 1) },
+        { label: "Retrieval coverage", value: capScore(get("evidence_quality") + 6) },
+        { label: "Source agreement", value: capScore(Math.max(40, get("evidence_quality") - 2)) },
+        { label: "Recency balance", value: capScore(Math.max(40, get("evidence_quality") - 5)) },
+        { label: "Confidence calibration", value: capScore(get("evidence_quality") + 1) },
       ],
     },
     projections: buildProjections(overall, get("velocity"), get("volume")),
@@ -871,14 +878,31 @@ const METRIC_KEYS: { key: string; label: string }[] = [
 ];
 
 function buildSuggestions(state: DemoState, baseline: number) {
-  const variants = state.variants ?? [];
-  if (variants.length > 0) {
-    return variants.slice(0, 4).map((v, i) => {
+  const variants = state.ranked_variants ?? state.variants ?? [];
+  const ordered =
+    variants.length > 0 && variants.some((v) => typeof v.rank === "number")
+      ? [...variants].sort((a, b) => (a.rank ?? 99) - (b.rank ?? 99))
+      : variants;
+  if (ordered.length > 0) {
+    return ordered.slice(0, 4).map((v, i) => {
       const impact = (v.impact_scores ?? {}) as Record<string, number>;
-      const score = Math.max(baseline + 3, impact.composite ?? baseline + 5 + (4 - i) * 2);
+      // Prefer the variant's scorecard.metric_scores if present (backend authority).
+      const scorecardMap = new Map<string, number>();
+      v.scorecard?.metric_scores?.forEach((m) => scorecardMap.set(m.name, m.score));
+      const lookup = (k: string) =>
+        capScore(
+          scorecardMap.get(k) ?? impact[k] ?? 50 + Math.sin(i + k.length) * 18 + 5,
+        );
+
+      const score = capScore(
+        typeof v.composite_score === "number" && v.composite_score > 0
+          ? v.composite_score
+          : Math.max(baseline + 3, impact.composite ?? baseline + 5 + (4 - i) * 2),
+      );
+
       const metrics = METRIC_KEYS.map(({ key, label }) => ({
         label,
-        value: impact[key] ?? Math.round(50 + Math.sin(i + key.length) * 18 + 5),
+        value: lookup(key),
       }));
       const radar = [
         metrics[0].value,
@@ -905,10 +929,10 @@ function buildSuggestions(state: DemoState, baseline: number) {
     "Causal world models with intervention policies will improve safety in open-world robots.",
   ];
   return fallback.map((text, i) => {
-    const score = 81 - i * 3;
+    const score = capScore(81 - i * 3);
     const metrics = METRIC_KEYS.map(({ label }, mi) => ({
       label,
-      value: Math.max(35, Math.min(92, score + Math.round(Math.sin(i * 3 + mi) * 14))),
+      value: capScore(Math.max(35, score + Math.sin(i * 3 + mi) * 14)),
     }));
     return {
       text,

@@ -19,6 +19,10 @@ export interface Paper {
   citation_count: number;
   relevance_score: number;
   cluster: string;
+  doi?: string;
+  openalex_id?: string;
+  semantic_scholar_id?: string;
+  source_provenance?: string[];
 }
 
 export interface Conflict {
@@ -101,14 +105,42 @@ export const IMPACT_DIMENSIONS: ImpactDimensionKey[] = [
   "translation",
 ];
 
+export interface MetricScore {
+  name: string;
+  metric_name?: string;
+  score: number;
+  confidence_low: number;
+  confidence_high: number;
+  rationale: string;
+  evidence_ids: string[];
+  evidence?: string[];
+  method?: string;
+  weakness?: string;
+}
+
+export interface Scorecard {
+  composite_score: number;
+  verdict: string;
+  metric_scores: MetricScore[];
+  strengths: string[];
+  weaknesses: string[];
+  evidence_summary: string;
+  metric_weights?: Record<string, number>;
+  weighted_contributions?: Record<string, number>;
+}
+
 export interface Variant {
   variant_id: string;
   hypothesis_text: string;
   operator: string;
   rationale: string;
-  impact_scores: Partial<Record<ImpactDimensionKey, number>>;
+  impact_scores: Record<string, number>;
   is_pareto_selected: boolean;
   dominance_explanation: string;
+  composite_score?: number;
+  rank?: number | null;
+  scorecard?: Scorecard | null;
+  impact_forecast?: ImpactForecast | null;
 }
 
 export interface GroundednessCheck {
@@ -122,10 +154,18 @@ export interface GroundednessCheck {
 export interface StrategyMemo {
   recommendation: string;
   executive_summary: string;
+  recommended_hypothesis_text?: string;
+  recommended_variant_id?: string | null;
+  original_verdict?: string | null;
+  recommended_verdict?: string | null;
+  scorecard_summary?: string[];
   key_findings: string[];
   selected_variants: string[];
+  trade_offs?: string[];
+  evidence_trail?: string[];
   risks: string[];
   next_steps: string[];
+  denario_next_actions?: string[];
 }
 
 // Mirrors backend.pipeline.PipelineState. Frontend-only display extras
@@ -141,7 +181,10 @@ export interface PipelineState {
   emulator_outputs: EmulatorOutput[];
   scenarios: Scenario[];
   forecast?: ImpactForecast;
+  metric_scores?: MetricScore[];
+  scorecard?: Scorecard;
   variants: Variant[];
+  ranked_variants?: Variant[];
   groundedness_checks: GroundednessCheck[];
   final_memo?: StrategyMemo;
 }
