@@ -15,8 +15,8 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from backend.agents.impact_forecaster import impact_forecaster
 from backend.config import MAX_API_TIMEOUT, OPENALEX_EMAIL
+from backend.impact_forecaster import impact_forecaster
 from backend.llm_client import LLMUnavailable, complete_structured
 from backend.schemas import ImpactForecast, Paper, ParsedHypothesis
 from backend.tools.api_cache import cached_get_json

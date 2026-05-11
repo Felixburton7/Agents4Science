@@ -74,7 +74,7 @@ async def _call_agent(
 
 def _load_agent(agent_name: str, fallback: AgentFn, aliases: tuple[str, ...] = ()) -> AgentFn:
     for candidate in (agent_name, *aliases):
-        module_name = f"backend.agents.{candidate}"
+        module_name = f"backend.{candidate}"
         try:
             module = importlib.import_module(module_name)
         except ModuleNotFoundError as exc:
