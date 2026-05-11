@@ -1,10 +1,8 @@
 # MAgent4Science
 
-Group 13
-Team Name: MAGA (Make Agents Great Again)
-Team Members:
+Team 17: MAGA (Make Agents Great Again)
 - Basia Koch
 - Baron Gracias
 - Felix Burton
 - Fred Lawrence
-- Harvey Berminghams
+- Harvey Bermingham
