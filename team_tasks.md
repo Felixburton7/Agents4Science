@@ -253,7 +253,7 @@ end-to-end on one hypothesis before parallelising.
 ## Basia — Impact Forecaster & Mutation Lead
 
 **Tasks**
-- Pull 30-paper historical backtest dataset from 2018 with 2024 ground truth
+- Pull 30-paper historical backtest dataset from 2018 with 2024 ground truth - papers should be about AI - CNNs, Transformers, Diffusion Models etc.
 - Build Impact Forecaster (6 dimensions, structured output)
 - Build Mutator with 7 operators
 - Build Pareto Curator (non-dominated set + dominance explanations)
