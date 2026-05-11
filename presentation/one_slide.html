@@ -118,7 +118,7 @@
       position: absolute;
       left: 5.5%;
       right: 50%;
-      top: 67%;
+      top: 65%;
       z-index: 1;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -144,6 +144,19 @@
       font-size: clamp(9px, 0.82vw, 15px);
       line-height: 1.3;
       font-weight: 520;
+    }
+
+    /* ── numbers strip ───────────────────────────────── */
+    .numbers {
+      position: absolute;
+      left: 5.5%;
+      top: 80%;
+      z-index: 1;
+      color: var(--muted);
+      font-size: clamp(9px, 0.80vw, 15px);
+      font-weight: 640;
+      letter-spacing: 0.07em;
+      white-space: nowrap;
     }
 
     /* ── schematic panel (right half) ────────────────── */
@@ -204,6 +217,7 @@
       .headline  { margin-top: 40px; }
       .subhead   { margin-top: 16px; }
       .workflow  { margin-top: 44px; grid-template-columns: 1fr; right: 24px; }
+      .numbers   { margin-top: 28px; white-space: normal; }
       .schematic { margin-top: 40px; min-height: 320px; border-radius: 8px; }
       .footer    { margin-top: 36px; display: grid; padding-bottom: 32px; }
     }
@@ -562,6 +576,10 @@
         </g>
       </svg>
     </div><!-- /.schematic -->
+
+    <div class="numbers">
+      11 scored metrics &nbsp;&middot;&nbsp; 7 mutation operators &nbsp;&middot;&nbsp; 2 literature sources
+    </div>
 
     <div class="footer">
       <span>Live case: accepted Denario cosmology paper</span>
