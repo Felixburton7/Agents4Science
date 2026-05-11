@@ -15,9 +15,9 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Hypothesis Steering Engine",
+  title: "Hypothesis Hater",
   description:
-    "Map a hypothesis onto the live literature, predict its impact, simulate how research groups respond, and mutate it into Pareto-optimal variants.",
+    "Paste your hypothesis. We'll analyze it. Brutally. A multi-dimensional reality check across novelty, saturation, conflict, feasibility, and impact.",
 };
 
 export default function RootLayout({

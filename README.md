@@ -142,6 +142,37 @@ visually and conceptually separate from the validated Idea Hater scorecard.
 | Cache | Local SQLite keyed by query hash |
 | Dashboard | Streamlit, Plotly, cytoscape.js |
 
+## Running The Integrated Demo
+
+The backend exposes an HTTP API in [backend/api.py](backend/api.py) and the
+Next.js dashboard in [frontend/](frontend/) calls it from
+[frontend/src/lib/demoContext.tsx](frontend/src/lib/demoContext.tsx). Start each
+service in its own terminal.
+
+```bash
+# Terminal 1 — backend (port 8000)
+pip install -r requirements.txt
+uvicorn backend.api:app --reload --port 8000
+
+# Terminal 2 — frontend (port 3000)
+cd frontend
+pnpm install
+pnpm dev
+```
+
+Then open http://localhost:3000 and click **Run**. The staged animation runs as
+before; in parallel the frontend POSTs the hypothesis to
+`http://localhost:8000/api/run` and merges the resulting `PipelineState` into
+the dashboard. If the backend is offline, the demo falls back to mock data and
+logs a warning to the browser console.
+
+To point the frontend at a different host, copy
+[frontend/.env.local.example](frontend/.env.local.example) to
+`frontend/.env.local` and edit `NEXT_PUBLIC_API_BASE`.
+
+`OPENAI_API_KEY` is required for non-stubbed agents. All agents currently run as
+stubs, so the integrated demo works without keys.
+
 ## Repository Status
 
 The repo now contains a backend skeleton under `backend/`, including pipeline

@@ -35,6 +35,14 @@ const WORLD_VIEW = {
 
 const ORIGIN_POSITION: [number, number] = [ORIGIN.lon, ORIGIN.lat];
 
+// Institutions that share the origin city (Cambridge UK) — keep them in
+// INSTITUTIONS for the literature graph but skip them on the world map so we
+// don't render two Cambridge pins on top of each other.
+const COLOCATED_WITH_ORIGIN = new Set<string>(["cambridge_group"]);
+const MAPPED_INSTITUTIONS = INSTITUTIONS.filter(
+  (i) => !COLOCATED_WITH_ORIGIN.has(i.id),
+);
+
 // User wanted "a bit more time when it zooms into each place so we can read it"
 // and "slightly less places it goes to".
 const ZOOM_SEGMENT_MS = 5500;
@@ -64,7 +72,7 @@ export default function WorldMap() {
     const byId = new Map<string, EmulatorOutput>(
       state.emulator_outputs.map((o) => [o.group_id, o]),
     );
-    return INSTITUTIONS.map((inst) => ({
+    return MAPPED_INSTITUTIONS.map((inst) => ({
       groupId: inst.id,
       source: ORIGIN_POSITION,
       target: [inst.lon, inst.lat] as [number, number],
@@ -189,7 +197,7 @@ export default function WorldMap() {
         id: "pins",
         data: [
           { position: ORIGIN_POSITION, id: ORIGIN.id },
-          ...INSTITUTIONS.map((i) => ({
+          ...MAPPED_INSTITUTIONS.map((i) => ({
             position: [i.lon, i.lat] as [number, number],
             id: i.id,
           })),
@@ -208,7 +216,7 @@ export default function WorldMap() {
         id: "labels",
         data: [
           { position: ORIGIN_POSITION, text: ORIGIN.city, id: ORIGIN.id },
-          ...INSTITUTIONS.map((i) => ({
+          ...MAPPED_INSTITUTIONS.map((i) => ({
             position: [i.lon, i.lat] as [number, number],
             text: i.name,
             id: i.id,
