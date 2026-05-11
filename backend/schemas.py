@@ -76,6 +76,10 @@ class ImpactDimension(BaseModel):
     confidence_low: int = Field(ge=0, le=100)
     confidence_high: int = Field(ge=0, le=100)
     rationale: str
+    predicted_value: Optional[float] = None
+    predicted_low: Optional[float] = None
+    predicted_high: Optional[float] = None
+    units: str = ""
 
 
 class ImpactForecast(BaseModel):
@@ -94,6 +98,7 @@ class Variant(BaseModel):
     operator: str
     rationale: str
     impact_scores: Dict[str, int] = Field(default_factory=dict)
+    impact_forecast: Optional[ImpactForecast] = None
     is_pareto_selected: bool = False
     dominance_explanation: str = ""
 
