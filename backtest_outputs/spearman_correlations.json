@@ -1,0 +1,38 @@
+{
+  "depth": {
+    "citation_1y": 0.8304029311468926,
+    "forecaster": -0.0338530276716374,
+    "linear_regression": 0.6783092324805341,
+    "single_call": -0.02832301118342245
+  },
+  "disruption": {
+    "citation_1y": -0.5451609614899207,
+    "forecaster": -0.132475871042121,
+    "linear_regression": 0.4049873210010051,
+    "single_call": -0.13115150025660932
+  },
+  "reach": {
+    "citation_1y": 0.583797075421683,
+    "forecaster": -0.05919413018357151,
+    "linear_regression": 0.3276974416017798,
+    "single_call": -0.05919413018357151
+  },
+  "translation": {
+    "citation_1y": -0.06428971314745494,
+    "forecaster": 0.5305034717543647,
+    "linear_regression": -0.053458108942853834,
+    "single_call": 0.5312672777158379
+  },
+  "velocity": {
+    "citation_1y": 1.0000000000000002,
+    "forecaster": 0.3334075806520699,
+    "linear_regression": 0.9995549621497439,
+    "single_call": 0.3230512329564645
+  },
+  "volume": {
+    "citation_1y": 0.9143112412627807,
+    "forecaster": 0.17756507423538045,
+    "linear_regression": 0.6204671857619578,
+    "single_call": 0.16321110803212713
+  }
+}

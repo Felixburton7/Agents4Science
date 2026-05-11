@@ -76,6 +76,10 @@ class ImpactDimension(BaseModel):
     confidence_low: int = Field(ge=0, le=100)
     confidence_high: int = Field(ge=0, le=100)
     rationale: str
+    predicted_value: Optional[float] = None
+    predicted_low: Optional[float] = None
+    predicted_high: Optional[float] = None
+    units: str = ""
 
 
 class ImpactForecast(BaseModel):
@@ -88,12 +92,38 @@ class ImpactForecast(BaseModel):
     overall_summary: str
 
 
+class MetricScore(BaseModel):
+    metric_name: str
+    score: int = Field(ge=0, le=100)
+    confidence_low: int = Field(ge=0, le=100)
+    confidence_high: int = Field(ge=0, le=100)
+    rationale: str
+    evidence: List[str] = Field(default_factory=list)
+    weakness: str = ""
+
+
+class Scorecard(BaseModel):
+    composite_score: int = Field(ge=0, le=100)
+    verdict: str
+    metric_scores: List[MetricScore] = Field(default_factory=list)
+    strengths: List[str] = Field(default_factory=list)
+    weaknesses: List[str] = Field(default_factory=list)
+    evidence_summary: str
+
+
 class Variant(BaseModel):
     variant_id: str
     hypothesis_text: str
     operator: str
     rationale: str
     impact_scores: Dict[str, int] = Field(default_factory=dict)
+
+    impact_forecast: Optional[ImpactForecast] = None
+
+    composite_score: int = Field(default=0, ge=0, le=100)
+    scorecard: Optional[Scorecard] = None
+    rank: Optional[int] = None
+
     is_pareto_selected: bool = False
     dominance_explanation: str = ""
 

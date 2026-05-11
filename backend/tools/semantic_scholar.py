@@ -4,13 +4,17 @@ Pattern borrowed from Denario's literature.py SSAPI() function.
 """
 
 import time
+from urllib.parse import quote
+
 import requests
 
 from backend.config import MAX_API_TIMEOUT, SEMANTIC_SCHOLAR_KEY
 from backend.tools.api_cache import get_api_cache
 
 BASE_URL = "https://api.semanticscholar.org/graph/v1/paper/search"
+PAPER_URL = "https://api.semanticscholar.org/graph/v1/paper"
 FIELDS = "title,authors,year,abstract,url,citationCount,externalIds"
+CITATION_FIELDS = "title,authors,year,abstract,url,citationCount,venue,externalIds,fieldsOfStudy,s2FieldsOfStudy"
 
 
 def search_papers(query: str, limit: int = 8) -> tuple[str, list[dict]]:
@@ -71,6 +75,62 @@ def search_papers(query: str, limit: int = 8) -> tuple[str, list[dict]]:
             break
 
     return f"**Semantic Scholar search failed** for '{query}': {last_error}. Try again later.", []
+
+
+def get_paper_citations(paper_id: str, limit: int = 100, year_to: int | None = None) -> list[dict]:
+    """Return citing papers for a Semantic Scholar paper id, DOI:..., or ARXIV:... id.
+
+    This is used as a citation fallback for the historical backtest. When
+    ``year_to`` is provided, post-cutoff citing papers are filtered out before
+    returning results.
+    """
+
+    safe_id = quote(paper_id, safe="")
+    endpoint = f"{PAPER_URL}/{safe_id}/citations"
+    params = {
+        "fields": CITATION_FIELDS,
+        "limit": min(limit, 1000),
+        "offset": 0,
+    }
+    headers = {}
+    if SEMANTIC_SCHOLAR_KEY:
+        headers["x-api-key"] = SEMANTIC_SCHOLAR_KEY
+
+    cache = get_api_cache()
+    cached = cache.get("semantic_scholar", endpoint, params)
+    if cached is None:
+        last_error = ""
+        for attempt in range(5):
+            try:
+                resp = requests.get(
+                    endpoint,
+                    params=params,
+                    headers=headers if headers else None,
+                    timeout=MAX_API_TIMEOUT,
+                )
+                if resp.status_code == 200:
+                    cached = resp.json()
+                    cache.set("semantic_scholar", endpoint, params, cached)
+                    break
+                if resp.status_code == 429:
+                    last_error = "Rate limited (429)"
+                    time.sleep(1.0 * (attempt + 1))
+                    continue
+                last_error = f"HTTP {resp.status_code}: {resp.text[:200]}"
+                time.sleep(0.5)
+            except requests.RequestException as exc:
+                last_error = str(exc)
+                time.sleep(0.5)
+        if cached is None:
+            raise RuntimeError(f"Semantic Scholar citation lookup failed for {paper_id}: {last_error}")
+
+    citations = []
+    for item in cached.get("data", []):
+        citing = item.get("citingPaper") or {}
+        if year_to is not None and citing.get("year") and int(citing["year"]) > year_to:
+            continue
+        citations.append(citing)
+    return citations
 
 
 def _format_results(data: dict, query: str) -> tuple[str, list[dict]]:

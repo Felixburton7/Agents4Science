@@ -163,6 +163,16 @@ Tone: serious, research-focused, concrete, not VC-style.
 
 ## Fred - Orchestration And Pipeline Refactor
 
+The new product is a quantitative Idea Hater for a pipeline like Denario. It takes a hypothesis, retrieves literature, scores the idea across quantitative metrics, generates variants, re-scores variants, ranks them, and returns a strategy memo.
+
+Refactor backend/pipeline.py so the critical path is:
+parser -> cartographer -> parallel metric scorers -> score_aggregator ->
+mutator -> variant re-scoring -> ranker/pareto_curator -> strategist.
+(see the structure in architecture.md)
+
+Use mock stubs where real agents are missing. Keep async execution, LangGraph,
+and Langfuse tracing. Do not include group emulation on the critical path.
+
 **Owner outcome:** `python run.py "hypothesis"` executes the quantitative Idea
 Hater pipeline end to end with mock data first, then real agents as they land.
 
@@ -192,24 +202,9 @@ Hater pipeline end to end with mock data first, then real agents as they land.
 - Leave group-emulator files behind an experimental flag only if Felix/Harvey need them for frontend proof of concept.
 - Own cache warming and demo-run reliability.
 
-**Prompt for your AI**
-
-```text
 I am refactoring a LangGraph pipeline for MAgent4Science. The old pipeline
 included group identification and group emulation. That is no longer the core
 architecture.
-
-The new product is a quantitative Idea Hater for Denario. It takes a hypothesis,
-retrieves literature, scores the idea across quantitative metrics, generates
-variants, re-scores variants, ranks them, and returns a strategy memo.
-
-Refactor backend/pipeline.py so the critical path is:
-parser -> cartographer -> parallel metric scorers -> score_aggregator ->
-mutator -> variant re-scoring -> ranker/pareto_curator -> strategist.
-
-Use mock stubs where real agents are missing. Keep async execution, LangGraph,
-and Langfuse tracing. Do not include group emulation on the critical path.
-```
 
 ---
 
@@ -329,6 +324,11 @@ possible and use the LLM to explain or classify when needed.
 variant improvements are backtested.
 
 **Tasks**
+- Pull 30-paper historical backtest dataset from 2018 with 2024 ground truth - papers should be about AI - CNNs, Transformers, Diffusion Models etc.
+- Build Impact Forecaster (6 dimensions, structured output)
+- Build Mutator with 7 operators
+- Build Pareto Curator (non-dominated set + dominance explanations)
+- Run backtest, compute Spearman correlations, produce the scatter plot
 
 - Refactor `impact_forecaster` around the scorecard:
   - Volume

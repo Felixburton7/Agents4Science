@@ -2,3 +2,6 @@ pydantic>=2
 langgraph
 langfuse
 requests
+openai
+numpy
+matplotlib

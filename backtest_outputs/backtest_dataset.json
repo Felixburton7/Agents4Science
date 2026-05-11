@@ -1,0 +1,1793 @@
+[
+  {
+    "date_filtering": "Prediction inputs include only title, abstract, authors, venue, concepts, and references available in 2018. Citation outcomes are stored separately and are not passed to the forecaster.",
+    "ground_truth": {
+      "citations_at_1y": 1729,
+      "citations_by_year": {
+        "2012": 2,
+        "2013": 1,
+        "2016": 1,
+        "2017": 7,
+        "2018": 35,
+        "2019": 1694,
+        "2020": 4403,
+        "2021": 7234,
+        "2022": 8074,
+        "2023": 11164,
+        "2024": 8088
+      },
+      "citations_first_24_months": 1729,
+      "citing_paper_h_index_proxy": 119,
+      "citing_review_count": 28,
+      "citing_works_sampled": 120,
+      "depth_proxy": 175,
+      "disruption_proxy": -0.5166666666666667,
+      "distinct_citing_concepts": 483,
+      "total_citations_2024": 40703,
+      "translation_citation_proxy": 9
+    },
+    "ground_truth_year": 2024,
+    "metadata": {
+      "abstract": "Although geospatial question answering systems have received increasing attention in recent years, existing prototype systems struggle to properly answer qualitative spatial questions. In this work, we propose a unique framework for answering qualitative spatial questions, which comprises three main components: a geoparser that takes the input questions and extracts place semantic information from text, a reasoning system which is embedded with a crisp reasoner, and finally, answer extraction, which refines the solution space and generates final answers. We present an experimental design to evaluate our framework for point-based cardinal direction calculus (CDC) relations by developing an automated approach for generating three types of synthetic qualitative spatial questions. The initial evaluations of generated answers in our system are promising because a high proportion of answers were labelled correct.",
+      "area": "cs",
+      "authors": [
+        "Holter, Ole Magnus",
+        "Ell, Basil"
+      ],
+      "concepts": [
+        "Transformer",
+        "Computer science",
+        "Training (meteorology)",
+        "Artificial intelligence",
+        "Electrical engineering",
+        "Engineering",
+        "Geography",
+        "Voltage",
+        "Meteorology",
+        "Topic Modeling",
+        "Natural Language Processing Techniques",
+        "Speech Recognition and Synthesis"
+      ],
+      "doi": "10.4230/lipics.cosit.2022.18",
+      "openalex_key": "W2896457183",
+      "paper_id": "https://openalex.org/W2896457183",
+      "publication_date": "2018-10-11",
+      "referenced_works_count": 55,
+      "selection_query": "transformer attention deep learning",
+      "title": "AI-Assisted Pipeline for Dynamic Generation of Trustworthy Health Supplement Content at Scale",
+      "venue": "DROPS (Schloss Dagstuhl \u2013 Leibniz Center for Informatics)",
+      "year": 2018
+    },
+    "prediction_cutoff_year": 2018
+  },
+  {
+    "date_filtering": "Prediction inputs include only title, abstract, authors, venue, concepts, and references available in 2018. Citation outcomes are stored separately and are not passed to the forecaster.",
+    "ground_truth": {
+      "citations_at_1y": 51,
+      "citations_by_year": {
+        "2018": 4,
+        "2019": 47,
+        "2020": 45,
+        "2021": 30,
+        "2022": 33,
+        "2023": 19,
+        "2024": 11
+      },
+      "citations_first_24_months": 51,
+      "citing_paper_h_index_proxy": 42,
+      "citing_review_count": 9,
+      "citing_works_sampled": 120,
+      "depth_proxy": 60,
+      "disruption_proxy": -0.9333333333333333,
+      "distinct_citing_concepts": 386,
+      "total_citations_2024": 189,
+      "translation_citation_proxy": 5
+    },
+    "ground_truth_year": 2024,
+    "metadata": {
+      "abstract": "Crowd counting from unconstrained scene images is a crucial task in many real-world applications like urban surveillance and management, but it is greatly challenged by the camera\u2019s perspective that causes huge appearance variations in people\u2019s scales and rotations. Conventional methods address such challenges by resorting to fixed multi-scale architectures that are often unable to cover the largely varied scales while ignoring the rotation variations. In this paper, we propose a unified neural network framework, named Deep Recurrent Spatial-Aware Network, which adaptively addresses the two issues in a learnable spatial transform module with a region-wise refinement process. Specifically, our framework incorporates a Recurrent Spatial-Aware Refinement (RSAR) module iteratively conducting two components: i) a Spatial Transformer Network that dynamically locates an attentional region from the crowd density map and transforms it to the suitable scale and rotation for optimal crowd estimation; ii) a Local Refinement Network that refines the density map of the attended region with residual learning. Extensive experiments on four challenging benchmarks show the effectiveness of our approach. Specifically, comparing with the existing best-performing methods, we achieve an improvement of 12\\% on the largest dataset WorldExpo\u201910 and 22.8\\% on the most challenging dataset UCF\\_CC\\_50",
+      "area": "cs",
+      "authors": [
+        "Lingbo Liu",
+        "Hongjun Wang",
+        "Guanbin Li",
+        "Wanli Ouyang",
+        "Liang Lin"
+      ],
+      "concepts": [
+        "Computer science",
+        "Artificial intelligence",
+        "Residual",
+        "Rotation (mathematics)",
+        "Scale (ratio)",
+        "Deep learning",
+        "Process (computing)",
+        "Artificial neural network",
+        "Perspective (graphical)",
+        "Pattern recognition (psychology)",
+        "Machine learning",
+        "Data mining"
+      ],
+      "doi": "10.24963/ijcai.2018/118",
+      "openalex_key": "W2808519136",
+      "paper_id": "https://openalex.org/W2808519136",
+      "publication_date": "2018-07-01",
+      "referenced_works_count": 25,
+      "selection_query": "transformer attention deep learning",
+      "title": "Crowd Counting using Deep Recurrent Spatial-Aware Network",
+      "venue": "",
+      "year": 2018
+    },
+    "prediction_cutoff_year": 2018
+  },
+  {
+    "date_filtering": "Prediction inputs include only title, abstract, authors, venue, concepts, and references available in 2018. Citation outcomes are stored separately and are not passed to the forecaster.",
+    "ground_truth": {
+      "citations_at_1y": 84,
+      "citations_by_year": {
+        "2018": 11,
+        "2019": 73,
+        "2020": 206,
+        "2021": 406,
+        "2022": 486,
+        "2023": 574,
+        "2024": 495
+      },
+      "citations_first_24_months": 84,
+      "citing_paper_h_index_proxy": 59,
+      "citing_review_count": 9,
+      "citing_works_sampled": 120,
+      "depth_proxy": 77,
+      "disruption_proxy": 0.21666666666666667,
+      "distinct_citing_concepts": 833,
+      "total_citations_2024": 2251,
+      "translation_citation_proxy": 29
+    },
+    "ground_truth_year": 2024,
+    "metadata": {
+      "abstract": "The Rectified Linear Unit (ReLU) is a foundational activation function in artficial neural networks. Recent literature frequently misattributes its origin to the 2018 (initial) version of this paper, which exclusively investigated ReLU at the classification layer. This paper formally corrects the citation record by tracing the mathematical lineage of piecewise linear functions from early biological models to their definitive integration into deep learning by Nair &amp; Hinton (2010). Alongside this historical rectification, we present a comprehensive empirical comparison of the ReLU, Hyperbolic Tangent (Tanh), and Logistic (Sigmoid) activation functions across image classification, text classification, and image reconstruction tasks. To ensure statistical robustness, we evaluated these functions using 10 independent randomized trials and assessed significance using the non-parametric Kruskal-Wallis $H$ test. The empirical data validates the theoretical limitations of saturating functions. Sigmoid failed to converge in deep convolutional vision tasks due to the vanishing gradient problem, thus yielding accuracies equivalent to random probability. Conversely, ReLU and Tanh exhibited stable convergence. ReLU achieved the highest mean accuracy and F1-score on image classification and text classification tasks, while Tanh yielded the highest peak signal to noise ratio in image reconstruction. Ultimately, this study confirms a statistically significant performance variance among activations, thus reaffirming the necessity of non-saturating functions in deep architectures, and restores proper historical attribution to prior literature.",
+      "area": "cs",
+      "authors": [
+        "Abien Fred Agarap"
+      ],
+      "concepts": [
+        "Softmax function",
+        "Activation function",
+        "Artificial neural network",
+        "Function (biology)",
+        "Artificial intelligence",
+        "Class (philosophy)",
+        "Pattern recognition (psychology)",
+        "Computer science",
+        "Deep neural networks",
+        "Mathematics",
+        "Algorithm",
+        "Biology"
+      ],
+      "doi": "10.48550/arxiv.1803.08375",
+      "openalex_key": "W2792643794",
+      "paper_id": "https://openalex.org/W2792643794",
+      "publication_date": "2018-03-22",
+      "referenced_works_count": 13,
+      "selection_query": "transformer attention deep learning",
+      "title": "Deep Learning using Rectified Linear Units (ReLU)",
+      "venue": "arXiv (Cornell University)",
+      "year": 2018
+    },
+    "prediction_cutoff_year": 2018
+  },
+  {
+    "date_filtering": "Prediction inputs include only title, abstract, authors, venue, concepts, and references available in 2018. Citation outcomes are stored separately and are not passed to the forecaster.",
+    "ground_truth": {
+      "citations_at_1y": 47,
+      "citations_by_year": {
+        "2018": 1,
+        "2019": 46,
+        "2020": 151,
+        "2021": 281,
+        "2022": 254,
+        "2023": 392,
+        "2024": 353
+      },
+      "citations_first_24_months": 47,
+      "citing_paper_h_index_proxy": 75,
+      "citing_review_count": 15,
+      "citing_works_sampled": 120,
+      "depth_proxy": 105,
+      "disruption_proxy": -0.7833333333333333,
+      "distinct_citing_concepts": 371,
+      "total_citations_2024": 1478,
+      "translation_citation_proxy": 5
+    },
+    "ground_truth_year": 2024,
+    "metadata": {
+      "abstract": "We present a new dataset of image caption annotations, Conceptual Captions, which contains an order of magnitude more images than the MS-COCO dataset We achieve this by extracting and filtering image caption annotations from billions of webpages. We also present quantitative evaluations of a number of image captioning models and show that a model architecture based on Inception- ResNet-v2 (Szegedy et al., 2016) for image-feature extraction and Transformer",
+      "area": "cs",
+      "authors": [
+        "Piyush Sharma",
+        "Nan Ding",
+        "Sebastian Goodman",
+        "Radu Soricut"
+      ],
+      "concepts": [
+        "Closed captioning",
+        "Computer science",
+        "Image (mathematics)",
+        "Artificial intelligence",
+        "Feature extraction",
+        "Feature (linguistics)",
+        "Information retrieval",
+        "Pattern recognition (psychology)",
+        "Natural language processing",
+        "Linguistics",
+        "Philosophy",
+        "Multimodal Machine Learning Applications"
+      ],
+      "doi": "10.18653/v1/p18-1238",
+      "openalex_key": "W2886641317",
+      "paper_id": "https://openalex.org/W2886641317",
+      "publication_date": "2018-01-01",
+      "referenced_works_count": 38,
+      "selection_query": "transformer attention deep learning",
+      "title": "Conceptual Captions: A Cleaned, Hypernymed, Image Alt-text Dataset For Automatic Image Captioning",
+      "venue": "",
+      "year": 2018
+    },
+    "prediction_cutoff_year": 2018
+  },
+  {
+    "date_filtering": "Prediction inputs include only title, abstract, authors, venue, concepts, and references available in 2018. Citation outcomes are stored separately and are not passed to the forecaster.",
+    "ground_truth": {
+      "citations_at_1y": 7,
+      "citations_by_year": {
+        "2019": 7,
+        "2020": 4,
+        "2021": 7,
+        "2022": 8,
+        "2023": 8,
+        "2024": 6
+      },
+      "citations_first_24_months": 7,
+      "citing_paper_h_index_proxy": 7,
+      "citing_review_count": 0,
+      "citing_works_sampled": 40,
+      "depth_proxy": 7,
+      "disruption_proxy": -0.25,
+      "distinct_citing_concepts": 252,
+      "total_citations_2024": 40,
+      "translation_citation_proxy": 1
+    },
+    "ground_truth_year": 2024,
+    "metadata": {
+      "abstract": "Multi-emotion sentiment classification is a natural language processing (NLP) problem with valuable use cases on real-world data. We demonstrate that large-scale unsupervised language modeling combined with finetuning offers a practical solution to this task on difficult datasets, including those with label class imbalance and domain-specific context. By training an attention-based Transformer network (Vaswani et al. 2017) on 40GB of text (Amazon reviews) (McAuley et al. 2015) and fine-tuning on the training set, our model achieves a 0.69 F1 score on the SemEval Task 1:E-c multi-dimensional emotion classification problem (Mohammad et al. 2018), based on the Plutchik wheel of emotions (Plutchik 1979). These results are competitive with state of the art models, including strong F1 scores on difficult (emotion) categories such as Fear (0.73), Disgust (0.77) and Anger (0.78), as well as competitive results on rare categories such as Anticipation (0.42) and Surprise (0.37). Furthermore, we demonstrate our application on a real world text classification task. We create a narrowly collected text dataset of real tweets on several topics, and show that our finetuned model outperforms general purpose commercially available APIs for sentiment and multidimensional emotion classification on this dataset by a significant margin. We also perform a variety of additional studies, investigating properties of deep learning architectures, datasets and algorithms for achieving practical multidimensional sentiment classification. Overall, we find that unsupervised language modeling and finetuning is a simple framework for achieving high quality results on real-world sentiment classification.",
+      "area": "cs",
+      "authors": [
+        "Neel Kant",
+        "Raul Puri",
+        "Nikolai Yakovenko",
+        "Bryan Catanzaro"
+      ],
+      "concepts": [
+        "Computer science",
+        "Artificial intelligence",
+        "Sentiment analysis",
+        "SemEval",
+        "Natural language processing",
+        "Machine learning",
+        "Language model",
+        "Task (project management)",
+        "Emotion classification",
+        "Surprise",
+        "Management",
+        "Social psychology"
+      ],
+      "doi": "10.48550/arxiv.1812.01207",
+      "openalex_key": "W2903285529",
+      "paper_id": "https://openalex.org/W2903285529",
+      "publication_date": "2018-12-04",
+      "referenced_works_count": 18,
+      "selection_query": "transformer attention deep learning",
+      "title": "Practical Text Classification With Large Pre-Trained Language Models",
+      "venue": "arXiv (Cornell University)",
+      "year": 2018
+    },
+    "prediction_cutoff_year": 2018
+  },
+  {
+    "date_filtering": "Prediction inputs include only title, abstract, authors, venue, concepts, and references available in 2018. Citation outcomes are stored separately and are not passed to the forecaster.",
+    "ground_truth": {
+      "citations_at_1y": 128,
+      "citations_by_year": {
+        "2018": 16,
+        "2019": 112,
+        "2020": 175,
+        "2021": 222,
+        "2022": 161,
+        "2023": 169,
+        "2024": 156
+      },
+      "citations_first_24_months": 128,
+      "citing_paper_h_index_proxy": 73,
+      "citing_review_count": 15,
+      "citing_works_sampled": 120,
+      "depth_proxy": 103,
+      "disruption_proxy": -1.0,
+      "distinct_citing_concepts": 409,
+      "total_citations_2024": 1011,
+      "translation_citation_proxy": 5
+    },
+    "ground_truth_year": 2024,
+    "metadata": {
+      "abstract": "Recent years have witnessed the unprecedented success of deep convolutional neural networks (CNNs) in single image super-resolution (SISR). However, existing CNN-based SISR methods mostly assume that a low-resolution (LR) image is bicubicly downsampled from a high-resolution (HR) image, thus inevitably giving rise to poor performance when the true degradation does not follow this assumption. Moreover, they lack scalability in learning a single model to nonblindly deal with multiple degradations. To address these issues, we propose a general framework with dimensionality stretching strategy that enables a single convolutional super-resolution network to take two key factors of the SISR degradation process, i.e., blur kernel and noise level, as input. Consequently, the super-resolver can handle multiple and even spatially variant degradations, which significantly improves the practicability. Extensive experimental results on synthetic and real LR images show that the proposed convolutional super-resolution network not only can produce favorable results on multiple degradations but also is computationally efficient, providing a highly effective and scalable solution to practical SISR applications.",
+      "area": "cs",
+      "authors": [
+        "Kai Zhang",
+        "Wangmeng Zuo",
+        "Lei Zhang"
+      ],
+      "concepts": [
+        "Computer science",
+        "Convolutional neural network",
+        "Scalability",
+        "Kernel (algebra)",
+        "Artificial intelligence",
+        "Pattern recognition (psychology)",
+        "Image resolution",
+        "Key (lock)",
+        "Image (mathematics)",
+        "Data mining",
+        "Mathematics",
+        "Computer security"
+      ],
+      "doi": "10.1109/cvpr.2018.00344",
+      "openalex_key": "W2964277374",
+      "paper_id": "https://openalex.org/W2964277374",
+      "publication_date": "2018-06-01",
+      "referenced_works_count": 76,
+      "selection_query": "transformer attention deep learning",
+      "title": "Learning a Single Convolutional Super-Resolution Network for Multiple Degradations",
+      "venue": "",
+      "year": 2018
+    },
+    "prediction_cutoff_year": 2018
+  },
+  {
+    "date_filtering": "Prediction inputs include only title, abstract, authors, venue, concepts, and references available in 2018. Citation outcomes are stored separately and are not passed to the forecaster.",
+    "ground_truth": {
+      "citations_at_1y": 200,
+      "citations_by_year": {
+        "2017": 1,
+        "2018": 55,
+        "2019": 145,
+        "2020": 151,
+        "2021": 135,
+        "2022": 97,
+        "2023": 66,
+        "2024": 54
+      },
+      "citations_first_24_months": 200,
+      "citing_paper_h_index_proxy": 73,
+      "citing_review_count": 14,
+      "citing_works_sampled": 120,
+      "depth_proxy": 101,
+      "disruption_proxy": -0.7666666666666667,
+      "distinct_citing_concepts": 561,
+      "total_citations_2024": 704,
+      "translation_citation_proxy": 9
+    },
+    "ground_truth_year": 2024,
+    "metadata": {
+      "abstract": "Recurrent neural nets (RNN) and convolutional neural nets (CNN) are widely used on NLP tasks to capture the long-term and local dependencies, respectively. Attention mechanisms have recently attracted enormous interest due to their highly parallelizable computation, significantly less training time, and flexibility in modeling dependencies. We propose a novel attention mechanism in which the attention between elements from input sequence(s) is directional and multi-dimensional (i.e., feature-wise). A light-weight neural net, \"Directional Self-Attention Network (DiSAN),\" is then proposed to learn sentence embedding, based solely on the proposed attention without any RNN/CNN structure. DiSAN is only composed of a directional self-attention with temporal order encoded, followed by a multi-dimensional attention that compresses the sequence into a vector representation. Despite its simple form, DiSAN outperforms complicated RNN models on both prediction quality and time efficiency. It achieves the best test accuracy among all sentence encoding methods and improves the most recent best result by 1.02% on the Stanford Natural Language Inference (SNLI) dataset, and shows state-of-the-art test accuracy on the Stanford Sentiment Treebank (SST), Multi-Genre natural language inference (MultiNLI), Sentences Involving Compositional Knowledge (SICK), Customer Review, MPQA, TREC question-type classification and Subjectivity (SUBJ) datasets.",
+      "area": "cs",
+      "authors": [
+        "Tao Shen",
+        "Tianyi Zhou",
+        "Guodong Long",
+        "Jing Jiang",
+        "Shirui Pan",
+        "Chengqi Zhang"
+      ],
+      "concepts": [
+        "Computer science",
+        "Recurrent neural network",
+        "Treebank",
+        "Artificial intelligence",
+        "Language model",
+        "Convolutional neural network",
+        "Inference",
+        "Sentence",
+        "Feature (linguistics)",
+        "Natural language processing",
+        "Machine learning",
+        "Artificial neural network"
+      ],
+      "doi": "10.1609/aaai.v32i1.11941",
+      "openalex_key": "W2964189376",
+      "paper_id": "https://openalex.org/W2964189376",
+      "publication_date": "2018-04-27",
+      "referenced_works_count": 66,
+      "selection_query": "transformer attention deep learning",
+      "title": "DiSAN: Directional Self-Attention Network for RNN/CNN-Free Language Understanding",
+      "venue": "Proceedings of the AAAI Conference on Artificial Intelligence",
+      "year": 2018
+    },
+    "prediction_cutoff_year": 2018
+  },
+  {
+    "date_filtering": "Prediction inputs include only title, abstract, authors, venue, concepts, and references available in 2018. Citation outcomes are stored separately and are not passed to the forecaster.",
+    "ground_truth": {
+      "citations_at_1y": 44,
+      "citations_by_year": {
+        "2018": 12,
+        "2019": 32,
+        "2020": 93,
+        "2021": 135,
+        "2022": 106,
+        "2023": 113,
+        "2024": 81
+      },
+      "citations_first_24_months": 44,
+      "citing_paper_h_index_proxy": 42,
+      "citing_review_count": 21,
+      "citing_works_sampled": 120,
+      "depth_proxy": 84,
+      "disruption_proxy": -0.6833333333333333,
+      "distinct_citing_concepts": 431,
+      "total_citations_2024": 572,
+      "translation_citation_proxy": 9
+    },
+    "ground_truth_year": 2024,
+    "metadata": {
+      "abstract": "Although various techniques have been proposed to generate adversarial samples for white-box attacks on text, little attention has been paid to a black-box attack, which is a more realistic scenario. In this paper, we present a novel algorithm, DeepWordBug, to effectively generate small text perturbations in a black-box setting that forces a deep-learning classifier to misclassify a text input. We develop novel scoring strategies to find the most important words to modify such that the deep classifier makes a wrong prediction. Simple character-level transformations are applied to the highest-ranked words in order to minimize the edit distance of the perturbation. We evaluated DeepWordBug on two real-world text datasets: Enron spam emails and IMDB movie reviews. Our experimental results indicate that DeepWordBug can reduce the classification accuracy from 99% to 40% on Enron and from 87% to 26% on IMDB. Our results strongly demonstrate that the generated adversarial sequences from a deep-learning model can similarly evade other deep models.",
+      "area": "cs",
+      "authors": [
+        "Ji Gao",
+        "Jack Lanchantin",
+        "Mary Lou Soffa",
+        "Yanjun Qi"
+      ],
+      "concepts": [
+        "Adversarial system",
+        "Computer science",
+        "Classifier (UML)",
+        "Artificial intelligence",
+        "Deep learning",
+        "Black box",
+        "Machine learning",
+        "White box",
+        "Natural language processing",
+        "Adversarial Robustness in Machine Learning",
+        "Advanced Malware Detection Techniques",
+        "Anomaly Detection Techniques and Applications"
+      ],
+      "doi": "10.1109/spw.2018.00016",
+      "openalex_key": "W2962818281",
+      "paper_id": "https://openalex.org/W2962818281",
+      "publication_date": "2018-05-01",
+      "referenced_works_count": 39,
+      "selection_query": "transformer attention deep learning",
+      "title": "Black-Box Generation of Adversarial Text Sequences to Evade Deep Learning Classifiers",
+      "venue": "",
+      "year": 2018
+    },
+    "prediction_cutoff_year": 2018
+  },
+  {
+    "date_filtering": "Prediction inputs include only title, abstract, authors, venue, concepts, and references available in 2018. Citation outcomes are stored separately and are not passed to the forecaster.",
+    "ground_truth": {
+      "citations_at_1y": 129,
+      "citations_by_year": {
+        "2017": 3,
+        "2018": 29,
+        "2019": 100,
+        "2020": 138,
+        "2021": 118,
+        "2022": 88,
+        "2023": 55,
+        "2024": 44
+      },
+      "citations_first_24_months": 129,
+      "citing_paper_h_index_proxy": 72,
+      "citing_review_count": 30,
+      "citing_works_sampled": 120,
+      "depth_proxy": 132,
+      "disruption_proxy": -0.7666666666666667,
+      "distinct_citing_concepts": 478,
+      "total_citations_2024": 575,
+      "translation_citation_proxy": 3
+    },
+    "ground_truth_year": 2024,
+    "metadata": {
+      "abstract": "Analyzing people\u2019s opinions and sentiments towards certain aspects is an important task of natural language understanding. In this paper, we propose a novel solution to targeted aspect-based sentiment analysis, which tackles the challenges of both aspect-based sentiment analysis and targeted sentiment analysis by exploiting commonsense knowledge. We augment the long short-term memory (LSTM) network with a hierarchical attention mechanism consisting of a target-level attention and a sentence-level attention. Commonsense knowledge of sentiment-related concepts is incorporated into the end-to-end training of a deep neural network for sentiment classification. In order to tightly integrate the commonsense knowledge into the recurrent encoder, we propose an extension of LSTM, termed Sentic LSTM. We conduct experiments on two publicly released datasets, which show that the combination of the proposed attention architecture and Sentic LSTM can outperform state-of-the-art methods in targeted aspect sentiment tasks.",
+      "area": "cs",
+      "authors": [
+        "Yukun Ma",
+        "Haiyun Peng",
+        "Erik Cambria"
+      ],
+      "concepts": [
+        "Computer science",
+        "Sentiment analysis",
+        "Commonsense knowledge",
+        "Artificial intelligence",
+        "Sentence",
+        "Commonsense reasoning",
+        "Natural language processing",
+        "Embedding",
+        "Deep learning",
+        "Task (project management)",
+        "Encoder",
+        "Machine learning"
+      ],
+      "doi": "10.1609/aaai.v32i1.12048",
+      "openalex_key": "W2788810909",
+      "paper_id": "https://openalex.org/W2788810909",
+      "publication_date": "2018-04-26",
+      "referenced_works_count": 48,
+      "selection_query": "transformer attention deep learning",
+      "title": "Targeted Aspect-Based Sentiment Analysis via Embedding Commonsense Knowledge into an Attentive LSTM",
+      "venue": "Proceedings of the AAAI Conference on Artificial Intelligence",
+      "year": 2018
+    },
+    "prediction_cutoff_year": 2018
+  },
+  {
+    "date_filtering": "Prediction inputs include only title, abstract, authors, venue, concepts, and references available in 2018. Citation outcomes are stored separately and are not passed to the forecaster.",
+    "ground_truth": {
+      "citations_at_1y": 92,
+      "citations_by_year": {
+        "2018": 5,
+        "2019": 87,
+        "2020": 88,
+        "2021": 84,
+        "2022": 52,
+        "2023": 52,
+        "2024": 34
+      },
+      "citations_first_24_months": 92,
+      "citing_paper_h_index_proxy": 44,
+      "citing_review_count": 11,
+      "citing_works_sampled": 120,
+      "depth_proxy": 66,
+      "disruption_proxy": -0.7333333333333333,
+      "distinct_citing_concepts": 541,
+      "total_citations_2024": 402,
+      "translation_citation_proxy": 13
+    },
+    "ground_truth_year": 2024,
+    "metadata": {
+      "abstract": "Contextual word representations derived from pre-trained bidirectional language models (biLMs) have recently been shown to provide significant improvements to the state of the art for a wide range of NLP tasks. However, many questions remain as to how and why these models are so effective. In this paper, we present a detailed empirical study of how the choice of neural architecture (e.g. LSTM, CNN, or self attention) influences both end task accuracy and qualitative properties of the representations that are learned. We show there is a tradeoff between speed and accuracy, but all architectures learn high quality contextual representations that outperform word embeddings for four challenging NLP tasks. Additionally, all architectures learn representations that vary with network depth, from exclusively morphological based at the word embedding layer through local syntax based in the lower contextual layers to longer range semantics such coreference at the upper layers. Together, these results suggest that unsupervised biLMs, independent of architecture, are learning much more about the structure of language than previously appreciated.",
+      "area": "cs",
+      "authors": [
+        "Matthew E. Peters",
+        "Mark E Neumann",
+        "Luke Zettlemoyer",
+        "Wen-tau Yih"
+      ],
+      "concepts": [
+        "Computer science",
+        "Coreference",
+        "Natural language processing",
+        "Artificial intelligence",
+        "Word (group theory)",
+        "Semantics (computer science)",
+        "Word embedding",
+        "Representation (politics)",
+        "Embedding",
+        "Syntax",
+        "Task (project management)",
+        "Architecture"
+      ],
+      "doi": "10.18653/v1/d18-1179",
+      "openalex_key": "W2888329843",
+      "paper_id": "https://openalex.org/W2888329843",
+      "publication_date": "2018-01-01",
+      "referenced_works_count": 66,
+      "selection_query": "transformer attention deep learning",
+      "title": "Dissecting Contextual Word Embeddings: Architecture and Representation",
+      "venue": "",
+      "year": 2018
+    },
+    "prediction_cutoff_year": 2018
+  },
+  {
+    "date_filtering": "Prediction inputs include only title, abstract, authors, venue, concepts, and references available in 2018. Citation outcomes are stored separately and are not passed to the forecaster.",
+    "ground_truth": {
+      "citations_at_1y": 37,
+      "citations_by_year": {
+        "2018": 6,
+        "2019": 31,
+        "2020": 62,
+        "2021": 105,
+        "2022": 106,
+        "2023": 117,
+        "2024": 144
+      },
+      "citations_first_24_months": 37,
+      "citing_paper_h_index_proxy": 61,
+      "citing_review_count": 33,
+      "citing_works_sampled": 120,
+      "depth_proxy": 127,
+      "disruption_proxy": -0.8166666666666667,
+      "distinct_citing_concepts": 345,
+      "total_citations_2024": 571,
+      "translation_citation_proxy": 113
+    },
+    "ground_truth_year": 2024,
+    "metadata": {
+      "abstract": "Motivation: Structure based ligand discovery is one of the most successful approaches for augmenting the drug discovery process. Currently, there is a notable shift towards machine learning (ML) methodologies to aid such procedures. Deep learning has recently gained considerable attention as it allows the model to 'learn' to extract features that are relevant for the task at hand. Results: We have developed a novel deep neural network estimating the binding affinity of ligand-receptor complexes. The complex is represented with a 3D grid, and the model utilizes a 3D convolution to produce a feature map of this representation, treating the atoms of both proteins and ligands in the same manner. Our network was tested on the CASF-2013 'scoring power' benchmark and Astex Diverse Set and outperformed classical scoring functions. Availability and implementation: The model, together with usage instructions and examples, is available as a git repository at http://gitlab.com/cheminfIBB/pafnucy. Supplementary information: Supplementary data are available at Bioinformatics online.",
+      "area": "bio",
+      "authors": [
+        "Marta M. Stepniewska-Dziubinska",
+        "Piotr Zielenkiewicz",
+        "Pawe\u0142 Siedlecki"
+      ],
+      "concepts": [
+        "Computer science",
+        "Benchmark (surveying)",
+        "Deep learning",
+        "Artificial intelligence",
+        "Drug discovery",
+        "Machine learning",
+        "Process (computing)",
+        "Set (abstract data type)",
+        "Feature (linguistics)",
+        "Task (project management)",
+        "Data mining",
+        "Bioinformatics"
+      ],
+      "doi": "10.1093/bioinformatics/bty374",
+      "openalex_key": "W2781821160",
+      "paper_id": "https://openalex.org/W2781821160",
+      "publication_date": "2018-05-04",
+      "referenced_works_count": 46,
+      "selection_query": "deep learning protein prediction",
+      "title": "Development and evaluation of a deep learning model for protein\u2013ligand binding affinity prediction",
+      "venue": "Bioinformatics",
+      "year": 2018
+    },
+    "prediction_cutoff_year": 2018
+  },
+  {
+    "date_filtering": "Prediction inputs include only title, abstract, authors, venue, concepts, and references available in 2018. Citation outcomes are stored separately and are not passed to the forecaster.",
+    "ground_truth": {
+      "citations_at_1y": 24,
+      "citations_by_year": {
+        "2018": 10,
+        "2019": 14,
+        "2020": 26,
+        "2021": 40,
+        "2022": 22,
+        "2023": 41,
+        "2024": 44
+      },
+      "citations_first_24_months": 24,
+      "citing_paper_h_index_proxy": 38,
+      "citing_review_count": 30,
+      "citing_works_sampled": 120,
+      "depth_proxy": 98,
+      "disruption_proxy": -0.4166666666666667,
+      "distinct_citing_concepts": 547,
+      "total_citations_2024": 197,
+      "translation_citation_proxy": 44
+    },
+    "ground_truth_year": 2024,
+    "metadata": {
+      "abstract": "Motivation: Protein solubility plays a vital role in pharmaceutical research and production yield. For a given protein, the extent of its solubility can represent the quality of its function, and is ultimately defined by its sequence. Thus, it is imperative to develop novel, highly accurate in silico sequence-based protein solubility predictors. In this work we propose, DeepSol, a novel Deep Learning-based protein solubility predictor. The backbone of our framework is a convolutional neural network that exploits k-mer structure and additional sequence and structural features extracted from the protein sequence. Results: DeepSol outperformed all known sequence-based state-of-the-art solubility prediction methods and attained an accuracy of 0.77 and Matthew's correlation coefficient of 0.55. The superior prediction accuracy of DeepSol allows to screen for sequences with enhanced production capacity and can more reliably predict solubility of novel proteins. Availability and implementation: DeepSol's best performing models and results are publicly deposited at https://doi.org/10.5281/zenodo.1162886 (Khurana and Mall, 2018). Supplementary information: Supplementary data are available at Bioinformatics online.",
+      "area": "bio",
+      "authors": [
+        "Sameer Khurana",
+        "Reda Rawi",
+        "Khalid Kunji",
+        "Gwo\u2010Yu Chuang",
+        "Halima Bensmail",
+        "Raghvendra Mall"
+      ],
+      "concepts": [
+        "Solubility",
+        "Sequence (biology)",
+        "Computer science",
+        "Convolutional neural network",
+        "Protein sequencing",
+        "Deep learning",
+        "Artificial intelligence",
+        "Protein structure prediction",
+        "In silico",
+        "Data mining",
+        "Machine learning",
+        "Peptide sequence"
+      ],
+      "doi": "10.1093/bioinformatics/bty166",
+      "openalex_key": "W2794004073",
+      "paper_id": "https://openalex.org/W2794004073",
+      "publication_date": "2018-03-15",
+      "referenced_works_count": 39,
+      "selection_query": "deep learning protein prediction",
+      "title": "DeepSol: a deep learning framework for sequence-based protein solubility prediction",
+      "venue": "Bioinformatics",
+      "year": 2018
+    },
+    "prediction_cutoff_year": 2018
+  },
+  {
+    "date_filtering": "Prediction inputs include only title, abstract, authors, venue, concepts, and references available in 2018. Citation outcomes are stored separately and are not passed to the forecaster.",
+    "ground_truth": {
+      "citations_at_1y": 10,
+      "citations_by_year": {
+        "2019": 10,
+        "2020": 29,
+        "2021": 35,
+        "2022": 35,
+        "2023": 30,
+        "2024": 30
+      },
+      "citations_first_24_months": 10,
+      "citing_paper_h_index_proxy": 31,
+      "citing_review_count": 25,
+      "citing_works_sampled": 120,
+      "depth_proxy": 81,
+      "disruption_proxy": -0.5166666666666667,
+      "distinct_citing_concepts": 457,
+      "total_citations_2024": 169,
+      "translation_citation_proxy": 24
+    },
+    "ground_truth_year": 2024,
+    "metadata": {
+      "abstract": "MOTIVATION: Phosphorylation is the most studied post-translational modification, which is crucial for multiple biological processes. Recently, many efforts have been taken to develop computational predictors for phosphorylation site prediction, but most of them are based on feature selection and discriminative classification. Thus, it is useful to develop a novel and highly accurate predictor that can unveil intricate patterns automatically for protein phosphorylation sites. RESULTS: In this study we present DeepPhos, a novel deep learning architecture for prediction of protein phosphorylation. Unlike multi-layer convolutional neural networks, DeepPhos consists of densely connected convolutional neuron network blocks which can capture multiple representations of sequences to make final phosphorylation prediction by intra block concatenation layers and inter block concatenation layers. DeepPhos can also be used for kinase-specific prediction varying from group, family, subfamily and individual kinase level. The experimental results demonstrated that DeepPhos outperforms competitive predictors in general and kinase-specific phosphorylation site prediction. AVAILABILITY AND IMPLEMENTATION: The source code of DeepPhos is publicly deposited at https://github.com/USTCHIlab/DeepPhos. SUPPLEMENTARY INFORMATION: Supplementary data are available at Bioinformatics online.",
+      "area": "bio",
+      "authors": [
+        "Fenglin Luo",
+        "Minghui Wang",
+        "Yu Liu",
+        "Xing-Ming Zhao",
+        "Ao Li"
+      ],
+      "concepts": [
+        "Concatenation (mathematics)",
+        "Computer science",
+        "Discriminative model",
+        "Phosphorylation",
+        "Block (permutation group theory)",
+        "Convolutional neural network",
+        "Feature (linguistics)",
+        "Artificial intelligence",
+        "Deep learning",
+        "Subfamily",
+        "Pattern recognition (psychology)",
+        "Computational biology"
+      ],
+      "doi": "10.1093/bioinformatics/bty1051",
+      "openalex_key": "W2906946803",
+      "paper_id": "https://openalex.org/W2906946803",
+      "publication_date": "2018-12-28",
+      "referenced_works_count": 51,
+      "selection_query": "deep learning protein prediction",
+      "title": "DeepPhos: prediction of protein phosphorylation sites with deep learning",
+      "venue": "Bioinformatics",
+      "year": 2018
+    },
+    "prediction_cutoff_year": 2018
+  },
+  {
+    "date_filtering": "Prediction inputs include only title, abstract, authors, venue, concepts, and references available in 2018. Citation outcomes are stored separately and are not passed to the forecaster.",
+    "ground_truth": {
+      "citations_at_1y": 20,
+      "citations_by_year": {
+        "2018": 2,
+        "2019": 18,
+        "2020": 22,
+        "2021": 39,
+        "2022": 27,
+        "2023": 19,
+        "2024": 12
+      },
+      "citations_first_24_months": 20,
+      "citing_paper_h_index_proxy": 25,
+      "citing_review_count": 21,
+      "citing_works_sampled": 120,
+      "depth_proxy": 67,
+      "disruption_proxy": -0.6,
+      "distinct_citing_concepts": 477,
+      "total_citations_2024": 139,
+      "translation_citation_proxy": 45
+    },
+    "ground_truth_year": 2024,
+    "metadata": {
+      "abstract": "ComplexContact (http://raptorx2.uchicago.edu/ComplexContact/) is a web server for sequence-based interfacial residue-residue contact prediction of a putative protein complex. Interfacial residue-residue contacts are critical for understanding how proteins form complex and interact at residue level. When receiving a pair of protein sequences, ComplexContact first searches for their sequence homologs and builds two paired multiple sequence alignments (MSA), then it applies co-evolution analysis and a CASP-winning deep learning (DL) method to predict interfacial contacts from paired MSAs and visualizes the prediction as an image. The DL method was originally developed for intra-protein contact prediction and performed the best in CASP12. Our large-scale experimental test further shows that ComplexContact greatly outperforms pure co-evolution methods for inter-protein contact prediction, regardless of the species.",
+      "area": "bio",
+      "authors": [
+        "Hong Zeng",
+        "Sheng Wang",
+        "Tianming Zhou",
+        "Feifeng Zhao",
+        "Xiufeng Li",
+        "Qing Wu",
+        "Jinbo Xu"
+      ],
+      "concepts": [
+        "Web server",
+        "Biology",
+        "CASP",
+        "Protein structure prediction",
+        "Protein methods",
+        "Computational biology",
+        "Residue (chemistry)",
+        "Sequence alignment",
+        "Deep learning",
+        "Bioinformatics",
+        "Peptide sequence",
+        "Protein structure"
+      ],
+      "doi": "10.1093/nar/gky420",
+      "openalex_key": "W2804651207",
+      "paper_id": "https://openalex.org/W2804651207",
+      "publication_date": "2018-05-20",
+      "referenced_works_count": 42,
+      "selection_query": "deep learning protein prediction",
+      "title": "ComplexContact: a web server for inter-protein contact prediction using deep learning",
+      "venue": "Nucleic Acids Research",
+      "year": 2018
+    },
+    "prediction_cutoff_year": 2018
+  },
+  {
+    "date_filtering": "Prediction inputs include only title, abstract, authors, venue, concepts, and references available in 2018. Citation outcomes are stored separately and are not passed to the forecaster.",
+    "ground_truth": {
+      "citations_at_1y": 13,
+      "citations_by_year": {
+        "2018": 2,
+        "2019": 11,
+        "2020": 19,
+        "2021": 34,
+        "2022": 25,
+        "2023": 20,
+        "2024": 22
+      },
+      "citations_first_24_months": 13,
+      "citing_paper_h_index_proxy": 21,
+      "citing_review_count": 9,
+      "citing_works_sampled": 120,
+      "depth_proxy": 39,
+      "disruption_proxy": -0.5333333333333333,
+      "distinct_citing_concepts": 452,
+      "total_citations_2024": 133,
+      "translation_citation_proxy": 60
+    },
+    "ground_truth_year": 2024,
+    "metadata": {
+      "abstract": "BACKGROUND: Protein secondary structure can be regarded as an information bridge that links the primary sequence and tertiary structure. Accurate 8-state secondary structure prediction can significantly give more precise and high resolution on structure-based properties analysis. RESULTS: We present a novel deep learning architecture which exploits an integrative synergy of prediction by a convolutional neural network, residual network, and bidirectional recurrent neural network to improve the performance of protein secondary structure prediction. A local block comprised of convolutional filters and original input is designed for capturing local sequence features. The subsequent bidirectional recurrent neural network consisting of gated recurrent units can capture global context features. Furthermore, the residual network can improve the information flow between the hidden layers and the cascaded recurrent neural network. Our proposed deep network achieved 71.4% accuracy on the benchmark CB513 dataset for the 8-state prediction; and the ensemble learning by our model achieved 74% accuracy. Our model generalization capability is also evaluated on other three independent datasets CASP10, CASP11 and CASP12 for both 8- and 3-state prediction. These prediction performances are superior to the state-of-the-art methods. CONCLUSION: Our experiment demonstrates that it is a valuable method for predicting protein secondary structure, and capturing local and global features concurrently is very useful in deep learning.",
+      "area": "bio",
+      "authors": [
+        "Buzhong Zhang",
+        "Jinyan Li",
+        "Qiang L\u00fc"
+      ],
+      "concepts": [
+        "Computer science",
+        "Artificial intelligence",
+        "Deep learning",
+        "Convolutional neural network",
+        "Benchmark (surveying)",
+        "Recurrent neural network",
+        "Context (archaeology)",
+        "Residual",
+        "Artificial neural network",
+        "Machine learning",
+        "Pattern recognition (psychology)",
+        "Data mining"
+      ],
+      "doi": "10.1186/s12859-018-2280-5",
+      "openalex_key": "W2887029338",
+      "paper_id": "https://openalex.org/W2887029338",
+      "publication_date": "2018-08-03",
+      "referenced_works_count": 43,
+      "selection_query": "deep learning protein prediction",
+      "title": "Prediction of 8-state protein secondary structures by a novel deep learning architecture",
+      "venue": "BMC Bioinformatics",
+      "year": 2018
+    },
+    "prediction_cutoff_year": 2018
+  },
+  {
+    "date_filtering": "Prediction inputs include only title, abstract, authors, venue, concepts, and references available in 2018. Citation outcomes are stored separately and are not passed to the forecaster.",
+    "ground_truth": {
+      "citations_at_1y": 12,
+      "citations_by_year": {
+        "2018": 2,
+        "2019": 10,
+        "2020": 16,
+        "2021": 34,
+        "2022": 18,
+        "2023": 21,
+        "2024": 20
+      },
+      "citations_first_24_months": 12,
+      "citing_paper_h_index_proxy": 23,
+      "citing_review_count": 11,
+      "citing_works_sampled": 116,
+      "depth_proxy": 45,
+      "disruption_proxy": -0.13793103448275862,
+      "distinct_citing_concepts": 442,
+      "total_citations_2024": 121,
+      "translation_citation_proxy": 29
+    },
+    "ground_truth_year": 2024,
+    "metadata": {
+      "abstract": "Motivation: A large number of newly sequenced proteins are generated by the next-generation sequencing technologies and the biochemical function assignment of the proteins is an important task. However, biological experiments are too expensive to characterize such a large number of protein sequences, thus protein function prediction is primarily done by computational modeling methods, such as profile Hidden Markov Model (pHMM) and k-mer based methods. Nevertheless, existing methods have some limitations; k-mer based methods are not accurate enough to assign protein functions and pHMM is not fast enough to handle large number of protein sequences from numerous genome projects. Therefore, a more accurate and faster protein function prediction method is needed. Results: In this paper, we introduce DeepFam, an alignment-free method that can extract functional information directly from sequences without the need of multiple sequence alignments. In extensive experiments using the Clusters of Orthologous Groups (COGs) and G protein-coupled receptor (GPCR) dataset, DeepFam achieved better performance in terms of accuracy and runtime for predicting functions of proteins compared to the state-of-the-art methods, both alignment-free and alignment-based methods. Additionally, we showed that DeepFam has a power of capturing conserved regions to model protein families. In fact, DeepFam was able to detect conserved regions documented in the Prosite database while predicting functions of proteins. Our deep learning method will be useful in characterizing functions of the ever increasing protein sequences. Availability and implementation: Codes are available at https://bhi-kimlab.github.io/DeepFam.",
+      "area": "bio",
+      "authors": [
+        "Seokjun Seo",
+        "Minsik Oh",
+        "Youngjun Park",
+        "\ufeffSun Kim"
+      ],
+      "concepts": [
+        "Computer science",
+        "Hidden Markov model",
+        "Protein function prediction",
+        "Function (biology)",
+        "Multiple sequence alignment",
+        "Artificial intelligence",
+        "Sequence alignment",
+        "Protein function",
+        "Protein family",
+        "Task (project management)",
+        "Machine learning",
+        "Computational biology"
+      ],
+      "doi": "10.1093/bioinformatics/bty275",
+      "openalex_key": "W2807818025",
+      "paper_id": "https://openalex.org/W2807818025",
+      "publication_date": "2018-04-16",
+      "referenced_works_count": 32,
+      "selection_query": "deep learning protein prediction",
+      "title": "DeepFam: deep learning based alignment-free method for protein family modeling and prediction",
+      "venue": "Bioinformatics",
+      "year": 2018
+    },
+    "prediction_cutoff_year": 2018
+  },
+  {
+    "date_filtering": "Prediction inputs include only title, abstract, authors, venue, concepts, and references available in 2018. Citation outcomes are stored separately and are not passed to the forecaster.",
+    "ground_truth": {
+      "citations_at_1y": 37,
+      "citations_by_year": {
+        "2018": 4,
+        "2019": 33,
+        "2020": 27,
+        "2021": 26,
+        "2022": 18,
+        "2023": 16,
+        "2024": 11
+      },
+      "citations_first_24_months": 37,
+      "citing_paper_h_index_proxy": 28,
+      "citing_review_count": 15,
+      "citing_works_sampled": 120,
+      "depth_proxy": 58,
+      "disruption_proxy": -0.6,
+      "distinct_citing_concepts": 449,
+      "total_citations_2024": 135,
+      "translation_citation_proxy": 25
+    },
+    "ground_truth_year": 2024,
+    "metadata": {
+      "abstract": "The interactions between non-coding RNAs (ncRNAs) and proteins play an important role in many biological processes, and their biological functions are primarily achieved by binding with a variety of proteins. High-throughput biological techniques are used to identify protein molecules bound with specific ncRNA, but they are usually expensive and time consuming. Deep learning provides a powerful solution to computationally predict RNA-protein interactions. In this work, we propose the RPI-SAN model by using the deep-learning stacked auto-encoder network to mine the hidden high-level features from RNA and protein sequences and feed them into a random forest (RF) model to predict ncRNA binding proteins. Stacked assembling is further used to improve the accuracy of the proposed method. Four benchmark datasets, including RPI2241, RPI488, RPI1807, and NPInter v2.0, were employed for the unbiased evaluation of five established prediction tools: RPI-Pred, IPMiner, RPISeq-RF, lncPro, and RPI-SAN. The experimental results show that our RPI-SAN model achieves much better performance than other methods, with accuracies of 90.77%, 89.7%, 96.1%, and 99.33%, respectively. It is anticipated that RPI-SAN can be used as an effective computational tool for future biomedical researches and can accurately predict the potential ncRNA-protein interacted pairs, which provides reliable guidance for biological research.",
+      "area": "bio",
+      "authors": [
+        "Hai-Cheng Yi",
+        "Zhu\u2010Hong You",
+        "De-Shuang Huang",
+        "Li Xiao",
+        "Tong-Hai Jiang",
+        "Liping Li"
+      ],
+      "concepts": [
+        "Computer science",
+        "Machine learning",
+        "Benchmark (surveying)",
+        "Non-coding RNA",
+        "Artificial intelligence",
+        "Deep learning",
+        "Random forest",
+        "Autoencoder",
+        "Computational biology",
+        "RNA",
+        "Biology",
+        "Gene"
+      ],
+      "doi": "10.1016/j.omtn.2018.03.001",
+      "openalex_key": "W2793344725",
+      "paper_id": "https://openalex.org/W2793344725",
+      "publication_date": "2018-03-08",
+      "referenced_works_count": 82,
+      "selection_query": "deep learning protein prediction",
+      "title": "A Deep Learning Framework for Robust and Accurate Prediction of ncRNA-Protein Interactions Using Evolutionary Information",
+      "venue": "Molecular Therapy \u2014 Nucleic Acids",
+      "year": 2018
+    },
+    "prediction_cutoff_year": 2018
+  },
+  {
+    "date_filtering": "Prediction inputs include only title, abstract, authors, venue, concepts, and references available in 2018. Citation outcomes are stored separately and are not passed to the forecaster.",
+    "ground_truth": {
+      "citations_at_1y": 11,
+      "citations_by_year": {
+        "2018": 3,
+        "2019": 8,
+        "2020": 18,
+        "2021": 17,
+        "2022": 19,
+        "2023": 15,
+        "2024": 8
+      },
+      "citations_first_24_months": 11,
+      "citing_paper_h_index_proxy": 25,
+      "citing_review_count": 19,
+      "citing_works_sampled": 88,
+      "depth_proxy": 63,
+      "disruption_proxy": -0.4090909090909091,
+      "distinct_citing_concepts": 473,
+      "total_citations_2024": 88,
+      "translation_citation_proxy": 12
+    },
+    "ground_truth_year": 2024,
+    "metadata": {
+      "abstract": "Protein nitration and nitrosylation are essential post-translational modifications (PTMs) involved in many fundamental cellular processes. Recent studies have revealed that excessive levels of nitration and nitrosylation in some critical proteins are linked to numerous chronic diseases. Therefore, the identification of substrates that undergo such modifications in a site-specific manner is an important research topic in the community and will provide candidates for targeted therapy. In this study, we aimed to develop a computational tool for predicting nitration and nitrosylation sites in proteins. We first constructed four types of encoding features, including positional amino acid distributions, sequence contextual dependencies, physicochemical properties, and position-specific scoring features, to represent the modified residues. Based on these encoding features, we established a predictor called DeepNitro using deep learning methods for predicting protein nitration and nitrosylation. Using n-fold cross-validation, our evaluation shows great AUC values for DeepNitro, 0.65 for tyrosine nitration, 0.80 for tryptophan nitration, and 0.70 for cysteine nitrosylation, respectively, demonstrating the robustness and reliability of our tool. Also, when tested in the independent dataset, DeepNitro is substantially superior to other similar tools with a 7%-42% improvement in the prediction performance. Taken together, the application of deep learning method and novel encoding schemes, especially the position-specific scoring feature, greatly improves the accuracy of nitration and nitrosylation site prediction and may facilitate the prediction of other PTM sites. DeepNitro is implemented in JAVA and PHP and is freely available for academic research at http://deepnitro.renlab.org.",
+      "area": "bio",
+      "authors": [
+        "Yubin Xie",
+        "Xiaotong Luo",
+        "Yupeng Li",
+        "Li Chen",
+        "Wenbin Ma",
+        "Junjiu Huang",
+        "Jun Cui",
+        "Yong Zhao",
+        "Yu Xue",
+        "Zhixiang Zuo",
+        "Jian Ren"
+      ],
+      "concepts": [
+        "Nitration",
+        "S-Nitrosylation",
+        "Chemistry",
+        "Computational biology",
+        "Biochemistry",
+        "Biology",
+        "Cysteine",
+        "Organic chemistry",
+        "Enzyme",
+        "Mass Spectrometry Techniques and Applications",
+        "Machine Learning in Bioinformatics",
+        "Advanced Proteomics Techniques and Applications"
+      ],
+      "doi": "10.1016/j.gpb.2018.04.007",
+      "openalex_key": "W2894436452",
+      "paper_id": "https://openalex.org/W2894436452",
+      "publication_date": "2018-08-01",
+      "referenced_works_count": 56,
+      "selection_query": "deep learning protein prediction",
+      "title": "DeepNitro: Prediction of Protein Nitration and Nitrosylation Sites by Deep Learning",
+      "venue": "Genomics Proteomics & Bioinformatics",
+      "year": 2018
+    },
+    "prediction_cutoff_year": 2018
+  },
+  {
+    "date_filtering": "Prediction inputs include only title, abstract, authors, venue, concepts, and references available in 2018. Citation outcomes are stored separately and are not passed to the forecaster.",
+    "ground_truth": {
+      "citations_at_1y": 9,
+      "citations_by_year": {
+        "2018": 1,
+        "2019": 8,
+        "2020": 8,
+        "2021": 9,
+        "2022": 7,
+        "2023": 5,
+        "2024": 8
+      },
+      "citations_first_24_months": 9,
+      "citing_paper_h_index_proxy": 13,
+      "citing_review_count": 3,
+      "citing_works_sampled": 47,
+      "depth_proxy": 19,
+      "disruption_proxy": -0.6170212765957447,
+      "distinct_citing_concepts": 289,
+      "total_citations_2024": 46,
+      "translation_citation_proxy": 19
+    },
+    "ground_truth_year": 2024,
+    "metadata": {
+      "abstract": "MOTIVATION: Protein structure determination has primarily been performed using X-ray crystallography. To overcome the expensive cost, high attrition rate and series of trial-and-error settings, many in-silico methods have been developed to predict crystallization propensities of proteins based on their sequences. However, the majority of these methods build their predictors by extracting features from protein sequences, which is computationally expensive and can explode the feature space. We propose DeepCrystal, a deep learning framework for sequence-based protein crystallization prediction. It uses deep learning to identify proteins which can produce diffraction-quality crystals without the need to manually engineer additional biochemical and structural features from sequence. Our model is based on convolutional neural networks, which can exploit frequently occurring k-mers and sets of k-mers from the protein sequences to distinguish proteins that will result in diffraction-quality crystals from those that will not. RESULTS: Our model surpasses previous sequence-based protein crystallization predictors in terms of recall, F-score, accuracy and Matthew's correlation coefficient (MCC) on three independent test sets. DeepCrystal achieves an average improvement of 1.4, 12.1% in recall, when compared to its closest competitors, Crysalis II and Crysf, respectively. In addition, DeepCrystal attains an average improvement of 2.1, 6.0% for F-score, 1.9, 3.9% for accuracy and 3.8, 7.0% for MCC w.r.t. Crysalis II and Crysf on independent test sets. AVAILABILITY AND IMPLEMENTATION: The standalone source code and models are available at https://github.com/elbasir/DeepCrystal and a web-server is also available at https://deeplearning-protein.qcri.org. SUPPLEMENTARY INFORMATION: Supplementary data are available at Bioinformatics online.",
+      "area": "bio",
+      "authors": [
+        "Abdurrahman Elbasir",
+        "M. Balasubramanian",
+        "Khalid Kunji",
+        "Prasanna R. Kolatkar",
+        "Raghvendra Mall",
+        "Halima Bensmail"
+      ],
+      "concepts": [
+        "Computer science",
+        "Protein crystallization",
+        "Sequence (biology)",
+        "Artificial intelligence",
+        "Deep learning",
+        "Convolutional neural network",
+        "Protein sequencing",
+        "Algorithm",
+        "Machine learning",
+        "Pattern recognition (psychology)",
+        "Crystallization",
+        "Peptide sequence"
+      ],
+      "doi": "10.1093/bioinformatics/bty953",
+      "openalex_key": "W2900903885",
+      "paper_id": "https://openalex.org/W2900903885",
+      "publication_date": "2018-11-17",
+      "referenced_works_count": 55,
+      "selection_query": "deep learning protein prediction",
+      "title": "DeepCrystal: a deep learning framework for sequence-based protein crystallization prediction",
+      "venue": "Bioinformatics",
+      "year": 2018
+    },
+    "prediction_cutoff_year": 2018
+  },
+  {
+    "date_filtering": "Prediction inputs include only title, abstract, authors, venue, concepts, and references available in 2018. Citation outcomes are stored separately and are not passed to the forecaster.",
+    "ground_truth": {
+      "citations_at_1y": 7,
+      "citations_by_year": {
+        "2019": 7,
+        "2020": 5,
+        "2021": 8,
+        "2022": 14,
+        "2023": 1,
+        "2024": 4
+      },
+      "citations_first_24_months": 7,
+      "citing_paper_h_index_proxy": 17,
+      "citing_review_count": 7,
+      "citing_works_sampled": 39,
+      "depth_proxy": 31,
+      "disruption_proxy": -0.3333333333333333,
+      "distinct_citing_concepts": 255,
+      "total_citations_2024": 39,
+      "translation_citation_proxy": 17
+    },
+    "ground_truth_year": 2024,
+    "metadata": {
+      "abstract": "Predicting the protein-protein interactions (PPIs) has played an important role in many applications. Hence, a novel computational method for PPIs prediction is highly desirable. PPIs endow with protein amino acid mutation rate and two physicochemical properties of protein (e.g., hydrophobicity and hydrophilicity). Deep polynomial network (DPN) is well-suited to integrate these modalities since it can represent any function on a finite sample dataset via the supervised deep learning algorithm. We propose a multimodal DPN (MDPN) algorithm to effectively integrate these modalities to enhance prediction performance. MDPN consists of a two-stage DPN, the first stage feeds multiple protein features into DPN encoding to obtain high-level feature representation while the second stage fuses and learns features by cascading three types of high-level features in the DPN encoding. We employ a regularized extreme learning machine to predict PPIs. The proposed method is tested on the public dataset of H. pylori, Human, and Yeast and achieves average accuracies of 97.87%, 99.90%, and 98.11%, respectively. The proposed method also achieves good accuracies on other datasets. Furthermore, we test our method on three kinds of PPI networks and obtain superior prediction results.",
+      "area": "bio",
+      "authors": [
+        "Haijun Lei",
+        "Yuting Wen",
+        "Zhu\u2010Hong You",
+        "Ahmed Elazab",
+        "E.C. Tan",
+        "Yujia Zhao",
+        "Baiying Lei"
+      ],
+      "concepts": [
+        "Computer science",
+        "Artificial intelligence",
+        "Extreme learning machine",
+        "Deep learning",
+        "Encoding (memory)",
+        "Machine learning",
+        "Polynomial",
+        "Feature (linguistics)",
+        "Pattern recognition (psychology)",
+        "Representation (politics)",
+        "Artificial neural network",
+        "Mathematics"
+      ],
+      "doi": "10.1109/jbhi.2018.2845866",
+      "openalex_key": "W2808071711",
+      "paper_id": "https://openalex.org/W2808071711",
+      "publication_date": "2018-06-12",
+      "referenced_works_count": 84,
+      "selection_query": "deep learning protein prediction",
+      "title": "Protein\u2013Protein Interactions Prediction via Multimodal Deep Polynomial Network and Regularized Extreme Learning Machine",
+      "venue": "IEEE Journal of Biomedical and Health Informatics",
+      "year": 2018
+    },
+    "prediction_cutoff_year": 2018
+  },
+  {
+    "date_filtering": "Prediction inputs include only title, abstract, authors, venue, concepts, and references available in 2018. Citation outcomes are stored separately and are not passed to the forecaster.",
+    "ground_truth": {
+      "citations_at_1y": 12,
+      "citations_by_year": {
+        "2019": 12,
+        "2020": 45,
+        "2021": 39,
+        "2022": 53,
+        "2023": 59,
+        "2024": 46
+      },
+      "citations_first_24_months": 12,
+      "citing_paper_h_index_proxy": 55,
+      "citing_review_count": 18,
+      "citing_works_sampled": 120,
+      "depth_proxy": 91,
+      "disruption_proxy": -0.45,
+      "distinct_citing_concepts": 496,
+      "total_citations_2024": 254,
+      "translation_citation_proxy": 119
+    },
+    "ground_truth_year": 2024,
+    "metadata": {
+      "abstract": "We discover many new crystalline solid materials with fast single crystal Li ion conductivity at room temperature, discovered through density functional theory simulations guided by machine learning-based methods. The discovery of new solid Li superionic conductors is of critical importance to the development of safe all-solid-state Li-ion batteries. With a predictive universal structure\u2013property relationship for fast ion conduction not well understood, the search for new solid Li ion conductors has relied largely on trial-and-error computational and experimental searches over the last several decades. In this work, we perform a guided search of materials space with a machine learning (ML)-based prediction model for material selection and density functional theory molecular dynamics (DFT-MD) simulations for calculating ionic conductivity. These materials are screened from over 12 000 experimentally synthesized and characterized candidates with very diverse structures and compositions. When compared to a random search of materials space, we find that the ML-guided search is 2.7 times more likely to identify fast Li ion conductors, with at least a 44 times improvement in the log-average of room temperature Li ion conductivity. The F1 score of the ML-based model is 0.50, 3.5 times better than the F1 score expected from completely random guesswork. In a head-to-head competition against six Ph.D. students working in the field, we find that the ML-based model doubles the F1 score of human experts in its ability to identify fast Li-ion conductors from atomistic structure with a 1000-fold increase in speed, clearly demonstrating the utility of this model for the research community. In addition to having high predicted Li-ion conductivity, all materials reported here lack transition metals to enhance stability against reduction by the Li metal anode and are predicted to exhibit low electronic conduction, high stability against oxidation, and high thermodynamic stability, making them promising candidates for solid-state electrolyte applications on these several essential metrics.",
+      "area": "materials",
+      "authors": [
+        "Austin D. Sendek",
+        "Ekin D. Cubuk",
+        "Evan R. Antoniuk",
+        "Gowoon Cheon",
+        "Yi Cui",
+        "Evan J. Reed"
+      ],
+      "concepts": [
+        "Ion",
+        "Fast ion conductor",
+        "Conductivity",
+        "Electrical conductor",
+        "Materials science",
+        "Ionic conductivity",
+        "Density functional theory",
+        "Ionic bonding",
+        "Chemical physics",
+        "Machine learning",
+        "Nanotechnology",
+        "Computer science"
+      ],
+      "doi": "10.1021/acs.chemmater.8b03272",
+      "openalex_key": "W2901005646",
+      "paper_id": "https://openalex.org/W2901005646",
+      "publication_date": "2018-11-21",
+      "referenced_works_count": 43,
+      "selection_query": "machine learning materials discovery",
+      "title": "Machine Learning-Assisted Discovery of Solid Li-Ion Conducting Materials",
+      "venue": "Chemistry of Materials",
+      "year": 2018
+    },
+    "prediction_cutoff_year": 2018
+  },
+  {
+    "date_filtering": "Prediction inputs include only title, abstract, authors, venue, concepts, and references available in 2018. Citation outcomes are stored separately and are not passed to the forecaster.",
+    "ground_truth": {
+      "citations_at_1y": 19,
+      "citations_by_year": {
+        "2018": 1,
+        "2019": 18,
+        "2020": 39,
+        "2021": 32,
+        "2022": 41,
+        "2023": 51,
+        "2024": 32
+      },
+      "citations_first_24_months": 19,
+      "citing_paper_h_index_proxy": 43,
+      "citing_review_count": 8,
+      "citing_works_sampled": 120,
+      "depth_proxy": 59,
+      "disruption_proxy": -0.36666666666666664,
+      "distinct_citing_concepts": 550,
+      "total_citations_2024": 214,
+      "translation_citation_proxy": 116
+    },
+    "ground_truth_year": 2024,
+    "metadata": {
+      "abstract": "Traditional machine learning (ML) metrics overestimate model performance for materials discovery.",
+      "area": "materials",
+      "authors": [
+        "Bryce Meredig",
+        "Erin Antono",
+        "Carena Church",
+        "Maxwell Hutchinson",
+        "Julia Ling",
+        "Sean Paradiso",
+        "Ben Blaiszik",
+        "Ian Foster",
+        "Brenna M. Gibbons",
+        "Jason Hattrick\u2010Simpers",
+        "Apurva Mehta",
+        "Logan Ward"
+      ],
+      "concepts": [
+        "Extrapolation",
+        "Computer science",
+        "Machine learning",
+        "Data science",
+        "Artificial intelligence",
+        "Mathematics",
+        "Statistics",
+        "Machine Learning in Materials Science",
+        "X-ray Diffraction in Crystallography",
+        "Nuclear Materials and Properties"
+      ],
+      "doi": "10.1039/c8me00012c",
+      "openalex_key": "W2885048850",
+      "paper_id": "https://openalex.org/W2885048850",
+      "publication_date": "2018-01-01",
+      "referenced_works_count": 35,
+      "selection_query": "machine learning materials discovery",
+      "title": "Can machine learning identify the next high-temperature superconductor? Examining extrapolation performance for materials discovery",
+      "venue": "Molecular Systems Design & Engineering",
+      "year": 2018
+    },
+    "prediction_cutoff_year": 2018
+  },
+  {
+    "date_filtering": "Prediction inputs include only title, abstract, authors, venue, concepts, and references available in 2018. Citation outcomes are stored separately and are not passed to the forecaster.",
+    "ground_truth": {
+      "citations_at_1y": 18,
+      "citations_by_year": {
+        "2018": 1,
+        "2019": 17,
+        "2020": 23,
+        "2021": 28,
+        "2022": 27,
+        "2023": 21,
+        "2024": 33
+      },
+      "citations_first_24_months": 18,
+      "citing_paper_h_index_proxy": 34,
+      "citing_review_count": 15,
+      "citing_works_sampled": 120,
+      "depth_proxy": 64,
+      "disruption_proxy": -0.6,
+      "distinct_citing_concepts": 622,
+      "total_citations_2024": 150,
+      "translation_citation_proxy": 118
+    },
+    "ground_truth_year": 2024,
+    "metadata": {
+      "abstract": "Much is being currently written about machine learning applied to materials science, but, what is machine learning? It is certainly not physics, chemistry, or materials science, in which case how do these sciences enter? In this Research Update the authors examine what machine learning is and is not, review several applications of machine learning methods for predicting new materials, noting some of the cases where the predictions have been experimentally validated, and illustrate the spectrum of applications possible. The emphasis is on the broader picture where they discuss some newer methods and more importantly reference their successes. Thus, the paper looks more towards the future than to the past, sharing some of the lessons the authors have learned from their own experience in the field.",
+      "area": "materials",
+      "authors": [
+        "J. E. Gubernatis",
+        "Turab Lookman"
+      ],
+      "concepts": [
+        "Field (mathematics)",
+        "Artificial intelligence",
+        "Machine learning",
+        "Materials science",
+        "Engineering ethics",
+        "Computer science",
+        "Management science",
+        "Nanotechnology",
+        "Engineering",
+        "Mathematics",
+        "Pure mathematics",
+        "Machine Learning in Materials Science"
+      ],
+      "doi": "10.1103/physrevmaterials.2.120301",
+      "openalex_key": "W2905677664",
+      "paper_id": "https://openalex.org/W2905677664",
+      "publication_date": "2018-12-20",
+      "referenced_works_count": 95,
+      "selection_query": "machine learning materials discovery",
+      "title": "Machine learning in materials design and discovery: Examples from the present and suggestions for the future",
+      "venue": "Physical Review Materials",
+      "year": 2018
+    },
+    "prediction_cutoff_year": 2018
+  },
+  {
+    "date_filtering": "Prediction inputs include only title, abstract, authors, venue, concepts, and references available in 2018. Citation outcomes are stored separately and are not passed to the forecaster.",
+    "ground_truth": {
+      "citations_at_1y": 9,
+      "citations_by_year": {
+        "2019": 9,
+        "2020": 19,
+        "2021": 18,
+        "2022": 20,
+        "2023": 16,
+        "2024": 11
+      },
+      "citations_first_24_months": 9,
+      "citing_paper_h_index_proxy": 29,
+      "citing_review_count": 7,
+      "citing_works_sampled": 93,
+      "depth_proxy": 43,
+      "disruption_proxy": -0.8494623655913979,
+      "distinct_citing_concepts": 445,
+      "total_citations_2024": 93,
+      "translation_citation_proxy": 93
+    },
+    "ground_truth_year": 2024,
+    "metadata": {
+      "abstract": "Discovering novel, multicomponent crystalline materials is a complex task owing to the large space of feasible structures. Here we demonstrate a method to significantly accelerate materials discovery by using a machine learning (ML) model trained on density functional theory (DFT) data from the Open Quantum Materials Database (OQMD). Our ML model predicts the stability of a material based on its crystal structure and chemical composition, and we illustrate the effectiveness of the method by application to finding new quaternary Heusler (QH) compounds. Our ML-based approach can find new stable materials at a rate 30 times faster than undirected searches and we use it to predict 55 previously unknown, stable QH compounds. We find the accuracy of our ML model is higher when trained using the diversity of crystal structures available in the OQMD than when training on well-curated datasets which contain only a single family of crystal structures (i.e., QHs). The advantage of using diverse training data shows how large datasets, such as OQMD, are particularly valuable for materials discovery and that we need not train separate ML models to predict each different family of crystal structures. Compared to other proposed ML approaches, we find that our method performs best for small $(&lt;{10}^{3})$ and large $(&gt;{10}^{5})$ training set sizes. The excellent flexibility and accuracy of the approach presented here can be easily generalized to other types of crystals.",
+      "area": "materials",
+      "authors": [
+        "Kyoungdoc Kim",
+        "Logan Ward",
+        "Jiangang He",
+        "Amar Krishna",
+        "Ankit Agrawal",
+        "Chris Wolverton"
+      ],
+      "concepts": [
+        "Flexibility (engineering)",
+        "Materials science",
+        "Stability (learning theory)",
+        "Crystal structure prediction",
+        "Chemical space",
+        "Set (abstract data type)",
+        "Characterization (materials science)",
+        "Crystal (programming language)",
+        "Machine learning",
+        "Throughput",
+        "Task (project management)",
+        "Crystal structure"
+      ],
+      "doi": "10.1103/physrevmaterials.2.123801",
+      "openalex_key": "W2902914368",
+      "paper_id": "https://openalex.org/W2902914368",
+      "publication_date": "2018-12-04",
+      "referenced_works_count": 60,
+      "selection_query": "machine learning materials discovery",
+      "title": "Machine-learning-accelerated high-throughput materials screening: Discovery of novel quaternary Heusler compounds",
+      "venue": "Physical Review Materials",
+      "year": 2018
+    },
+    "prediction_cutoff_year": 2018
+  },
+  {
+    "date_filtering": "Prediction inputs include only title, abstract, authors, venue, concepts, and references available in 2018. Citation outcomes are stored separately and are not passed to the forecaster.",
+    "ground_truth": {
+      "citations_at_1y": 150,
+      "citations_by_year": {
+        "2012": 1,
+        "2018": 21,
+        "2019": 129,
+        "2020": 245,
+        "2021": 343,
+        "2022": 250,
+        "2023": 283,
+        "2024": 269
+      },
+      "citations_first_24_months": 150,
+      "citing_paper_h_index_proxy": 113,
+      "citing_review_count": 47,
+      "citing_works_sampled": 120,
+      "depth_proxy": 207,
+      "disruption_proxy": -0.8,
+      "distinct_citing_concepts": 593,
+      "total_citations_2024": 1541,
+      "translation_citation_proxy": 112
+    },
+    "ground_truth_year": 2024,
+    "metadata": {
+      "abstract": "The discovery of new materials can bring enormous societal and technological progress. In this context, exploring completely the large space of potential materials is computationally intractable. Here, we review methods for achieving inverse design, which aims to discover tailored materials from the starting point of a particular desired functionality. Recent advances from the rapidly growing field of artificial intelligence, mostly from the subfield of machine learning, have resulted in a fertile exchange of ideas, where approaches to inverse molecular design are being proposed and employed at a rapid pace. Among these, deep generative models have been applied to numerous classes of materials: rational design of prospective drugs, synthetic routes to organic compounds, and optimization of photovoltaics and redox flow batteries, as well as a variety of other solid-state materials.",
+      "area": "materials",
+      "authors": [
+        "Benjam\u00edn S\u00e1nchez-Lengeling",
+        "Al\u00e1n Aspuru\u2010Guzik"
+      ],
+      "concepts": [
+        "Generative grammar",
+        "Context (archaeology)",
+        "Computer science",
+        "Variety (cybernetics)",
+        "Pace",
+        "Artificial intelligence",
+        "Generative Design",
+        "Biochemical engineering",
+        "Machine learning",
+        "Engineering",
+        "Biology",
+        "Geography"
+      ],
+      "doi": "10.1126/science.aat2663",
+      "openalex_key": "W2883583109",
+      "paper_id": "https://openalex.org/W2883583109",
+      "publication_date": "2018-07-26",
+      "referenced_works_count": 84,
+      "selection_query": "machine learning materials discovery",
+      "title": "Inverse molecular design using machine learning: Generative models for matter engineering",
+      "venue": "Science",
+      "year": 2018
+    },
+    "prediction_cutoff_year": 2018
+  },
+  {
+    "date_filtering": "Prediction inputs include only title, abstract, authors, venue, concepts, and references available in 2018. Citation outcomes are stored separately and are not passed to the forecaster.",
+    "ground_truth": {
+      "citations_at_1y": 2,
+      "citations_by_year": {
+        "2019": 2,
+        "2020": 4,
+        "2021": 5,
+        "2022": 9,
+        "2023": 5,
+        "2024": 2
+      },
+      "citations_first_24_months": 2,
+      "citing_paper_h_index_proxy": 15,
+      "citing_review_count": 5,
+      "citing_works_sampled": 27,
+      "depth_proxy": 25,
+      "disruption_proxy": 0.18518518518518517,
+      "distinct_citing_concepts": 228,
+      "total_citations_2024": 27,
+      "translation_citation_proxy": 24
+    },
+    "ground_truth_year": 2024,
+    "metadata": {
+      "abstract": "ADVERTISEMENT RETURN TO ISSUEPREVEnergy FocusNEXTMachine Learning Based Approaches to Accelerate Energy Materials Discovery and OptimizationDilip KrishnamurthyDilip KrishnamurthyDepartment of Mechanical Engineering, Carnegie Mellon University, Pittsburgh, Pennsylvania 15213, United StatesWilton E. Scott Institute for Energy Innovation, Carnegie Mellon University, Pittsburgh, Pennsylvania 15213, United StatesMore by Dilip Krishnamurthyhttp://orcid.org/0000-0001-8231-5492, Hasso WeilandHasso WeilandScandium International Mining Corporation, Sparks, Nevada 89431, United StatesMore by Hasso Weiland, Amir Barati FarimaniAmir Barati FarimaniDepartment of Mechanical Engineering, Carnegie Mellon University, Pittsburgh, Pennsylvania 15213, United StatesMore by Amir Barati Farimani, Erin AntonoErin AntonoCitrine Informatics, Redwood City, California 94063, United StatesMore by Erin Antono, Josh GreenJosh GreenCitrine Informatics, Pittsburgh, Pennsylvania 15206, United StatesMore by Josh Green, and Venkatasubramanian Viswanathan*Venkatasubramanian ViswanathanDepartment of Mechanical Engineering, Carnegie Mellon University, Pittsburgh, Pennsylvania 15213, United StatesWilton E. Scott Institute for Energy Innovation, Carnegie Mellon University, Pittsburgh, Pennsylvania 15213, United States*E-mail: [email protected]More by Venkatasubramanian Viswanathanhttp://orcid.org/0000-0003-1060-5495Cite this: ACS Energy Lett. 2019, 4, 1, 187\u2013191Publication Date (Web):December 7, 2018Publication History Received21 November 2018Accepted27 November 2018Published online7 December 2018Published inissue 11 January 2019https://pubs.acs.org/doi/10.1021/acsenergylett.8b02278https://doi.org/10.1021/acsenergylett.8b02278article-commentaryACS PublicationsCopyright \u00a9 2018 American Chemical Society. This publication is available under these Terms of Use. Request reuse permissions This publication is free to access through this site. Learn MoreArticle Views5568Altmetric-Citations24LEARN ABOUT THESE METRICSArticle Views are the COUNTER-compliant sum of full text article downloads since November 2008 (both PDF and HTML) across all institutions and individuals. These metrics are regularly updated to reflect usage leading up to the last few days.Citations are the number of other articles citing this article, calculated by Crossref and updated daily. Find more information about Crossref citation counts.The Altmetric Attention Score is a quantitative measure of the attention that a research article has received online. Clicking on the donut icon will load a page at altmetric.com with additional details about the score and the social media presence for the given article. Find more information on the Altmetric Attention Score and how the score is calculated. Share Add toView InAdd Full Text with ReferenceAdd Description ExportRISCitationCitation and abstractCitation and referencesMore Options Share onFacebookTwitterWechatLinked InRedditEmail PDF (4 MB) Get e-AlertscloseSUBJECTS:Curriculum,Energy,Machine learning,Materials,Optimization Get e-Alerts",
+      "area": "materials",
+      "authors": [
+        "Dilip Krishnamurthy",
+        "Hasso Weiland",
+        "Amir Barati Farimani",
+        "Erin Antono",
+        "Josh Green",
+        "Venkatasubramanian Viswanathan"
+      ],
+      "concepts": [
+        "Computer science",
+        "Energy (signal processing)",
+        "Biochemical engineering",
+        "Process engineering",
+        "Nanotechnology",
+        "Materials science",
+        "Engineering",
+        "Physics",
+        "Quantum mechanics",
+        "Machine Learning in Materials Science",
+        "Advancements in Battery Materials",
+        "Advanced Battery Technologies Research"
+      ],
+      "doi": "10.1021/acsenergylett.8b02278",
+      "openalex_key": "W2904036058",
+      "paper_id": "https://openalex.org/W2904036058",
+      "publication_date": "2018-12-07",
+      "referenced_works_count": 55,
+      "selection_query": "machine learning materials discovery",
+      "title": "Machine Learning Based Approaches to Accelerate Energy Materials Discovery and Optimization",
+      "venue": "ACS Energy Letters",
+      "year": 2018
+    },
+    "prediction_cutoff_year": 2018
+  },
+  {
+    "date_filtering": "Prediction inputs include only title, abstract, authors, venue, concepts, and references available in 2018. Citation outcomes are stored separately and are not passed to the forecaster.",
+    "ground_truth": {
+      "citations_at_1y": 3,
+      "citations_by_year": {
+        "2019": 3,
+        "2020": 5,
+        "2021": 8,
+        "2022": 6,
+        "2023": 2
+      },
+      "citations_first_24_months": 3,
+      "citing_paper_h_index_proxy": 17,
+      "citing_review_count": 2,
+      "citing_works_sampled": 24,
+      "depth_proxy": 21,
+      "disruption_proxy": 0.75,
+      "distinct_citing_concepts": 266,
+      "total_citations_2024": 24,
+      "translation_citation_proxy": 22
+    },
+    "ground_truth_year": 2024,
+    "metadata": {
+      "abstract": "High-throughput computational and experimental design of materials has becoming an increasingly important field in material science overall. However, this area of research has largely been only been emerging in thermal sciences, in part due to the computational and experimental challenges faced in obtaining thermal properties of materials. In this paper, we provide a current overview of some of the recent work and highlight the challenges and opportunities that are ahead of us in this field. In particular, we focus on the use of machine learning and highthroughput methods for screening of thermal conductivity for compounds, composite and alloys and interface conductance. These methods have brought about a feedback mechanism for understanding new correlations and identifying new descriptors, speeding up the discovery of novel thermal materials.",
+      "area": "materials",
+      "authors": [
+        "Hang Zhang",
+        "Kedar Hippalgaonkar",
+        "Tonio Buonassisi",
+        "Ole Martin L\u00f8vvik",
+        "Espen Sagvolden",
+        "Ding Ding"
+      ],
+      "concepts": [
+        "Data science",
+        "Nanotechnology",
+        "Computer science",
+        "Materials science",
+        "Machine Learning in Materials Science",
+        "X-ray Diffraction in Crystallography",
+        "Thermal and Kinetic Analysis"
+      ],
+      "doi": "10.30919/esee8c209",
+      "openalex_key": "W2907087539",
+      "paper_id": "https://openalex.org/W2907087539",
+      "publication_date": "2018-01-01",
+      "referenced_works_count": 9,
+      "selection_query": "machine learning materials discovery",
+      "title": "Machine Learning for Novel Thermal-Materials Discovery: Early Successes, Opportunities, and Challenges",
+      "venue": "ES Energy & Environments",
+      "year": 2018
+    },
+    "prediction_cutoff_year": 2018
+  },
+  {
+    "date_filtering": "Prediction inputs include only title, abstract, authors, venue, concepts, and references available in 2018. Citation outcomes are stored separately and are not passed to the forecaster.",
+    "ground_truth": {
+      "citations_at_1y": 96,
+      "citations_by_year": {
+        "2018": 22,
+        "2019": 74,
+        "2020": 85,
+        "2021": 90,
+        "2022": 60,
+        "2023": 73,
+        "2024": 60
+      },
+      "citations_first_24_months": 96,
+      "citing_paper_h_index_proxy": 72,
+      "citing_review_count": 19,
+      "citing_works_sampled": 120,
+      "depth_proxy": 110,
+      "disruption_proxy": -0.35,
+      "distinct_citing_concepts": 625,
+      "total_citations_2024": 464,
+      "translation_citation_proxy": 118
+    },
+    "ground_truth_year": 2024,
+    "metadata": {
+      "abstract": "With more than a hundred elements in the periodic table, a large number of potential new materials exist to address the technological and societal challenges we face today; however, without some guidance, searching through this vast combinatorial space is frustratingly slow and expensive, especially for materials strongly influenced by processing. We train a machine learning (ML) model on previously reported observations, parameters from physiochemical theories, and make it synthesis method-dependent to guide high-throughput (HiTp) experiments to find a new system of metallic glasses in the Co-V-Zr ternary. Experimental observations are in good agreement with the predictions of the model, but there are quantitative discrepancies in the precise compositions predicted. We use these discrepancies to retrain the ML model. The refined model has significantly improved accuracy not only for the Co-V-Zr system but also across all other available validation data. We then use the refined model to guide the discovery of metallic glasses in two additional previously unreported ternaries. Although our approach of iterative use of ML and HiTp experiments has guided us to rapid discovery of three new glass-forming systems, it has also provided us with a quantitatively accurate, synthesis method-sensitive predictor for metallic glasses that improves performance with use and thus promises to greatly accelerate discovery of many new metallic glasses. We believe that this discovery paradigm is applicable to a wider range of materials and should prove equally powerful for other materials and properties that are synthesis path-dependent and that current physiochemical theories find challenging to predict.",
+      "area": "materials",
+      "authors": [
+        "Fang Ren",
+        "Logan Ward",
+        "Travis Williams",
+        "Kevin J. Laws",
+        "Christopher Wolverton",
+        "Jason Hattrick\u2010Simpers",
+        "Apurva Mehta"
+      ],
+      "concepts": [
+        "Throughput",
+        "Computer science",
+        "Coupling (piping)",
+        "Artificial intelligence",
+        "Amorphous metal",
+        "High-throughput screening",
+        "Amorphous solid",
+        "Machine learning",
+        "Materials science",
+        "Bioinformatics",
+        "Biology",
+        "Chemistry"
+      ],
+      "doi": "10.1126/sciadv.aaq1566",
+      "openalex_key": "W2788500979",
+      "paper_id": "https://openalex.org/W2788500979",
+      "publication_date": "2018-04-06",
+      "referenced_works_count": 41,
+      "selection_query": "machine learning materials discovery",
+      "title": "Accelerated discovery of metallic glasses through iteration of machine learning and high-throughput experiments",
+      "venue": "Science Advances",
+      "year": 2018
+    },
+    "prediction_cutoff_year": 2018
+  },
+  {
+    "date_filtering": "Prediction inputs include only title, abstract, authors, venue, concepts, and references available in 2018. Citation outcomes are stored separately and are not passed to the forecaster.",
+    "ground_truth": {
+      "citations_at_1y": 1,
+      "citations_by_year": {
+        "2019": 1,
+        "2020": 3,
+        "2021": 1
+      },
+      "citations_first_24_months": 1,
+      "citing_paper_h_index_proxy": 4,
+      "citing_review_count": 0,
+      "citing_works_sampled": 5,
+      "depth_proxy": 4,
+      "disruption_proxy": 1.0,
+      "distinct_citing_concepts": 76,
+      "total_citations_2024": 5,
+      "translation_citation_proxy": 4
+    },
+    "ground_truth_year": 2024,
+    "metadata": {
+      "abstract": "We discover many new crystalline solid materials with fast single crystal Li ion conductivity at room temperature, discovered through density functional theory simulations guided by machine learning-based methods. The discovery of new solid Li superionic conductors is of critical importance to the development of safe all-solid-state Li-ion batteries. With a predictive universal structure-property relationship for fast ion conduction not well understood, the search for new solid Li ion conductors has relied largely on trial-and-error computational and experimental searches over the last several decades. In this work, we perform a guided search of materials space with a machine learning (ML)-based prediction model for material selection and density functional theory molecular dynamics (DFT-MD) simulations for calculating ionic conductivity. These materials are screened from over 12,000 experimentally synthesized and characterized candidates with very diverse structures and compositions. When compared to a random search of materials space, we find that the ML-guided search is 2.7 times more likely to identify fast Li ion conductors, with at least a 45x improvement in the log-average of room temperature Li ion conductivity. The F1 score of the ML-based model is 0.50, 3.5 times better than the F1 score expected from completely random guesswork. In a head-to-head competition against six Ph.D. students working in the field, we find that the ML-based model doubles the F1 score of human experts in its ability to identify fast Li-ion conductors from atomistic structure with a thousand- fold increase in speed, clearly demonstrating the utility of this model for the research community. All conducting materials reported here lack transition metals and are predicted to exhibit low electronic conduction, high stability against oxidation, and high thermodynamic stability.",
+      "area": "materials",
+      "authors": [
+        "Austin D. Sendek",
+        "Ekin D. Cubuk",
+        "Evan R. Antoniuk",
+        "Gowoon Cheon",
+        "Yi Cui",
+        "Evan J. Reed"
+      ],
+      "concepts": [
+        "Materials science",
+        "Ion",
+        "Nanotechnology",
+        "Computer science",
+        "Engineering physics",
+        "Engineering",
+        "Chemistry",
+        "Organic chemistry",
+        "Machine Learning in Materials Science",
+        "Advancements in Battery Materials",
+        "Advanced Battery Technologies Research"
+      ],
+      "doi": "10.48550/arxiv.1808.02470",
+      "openalex_key": "W2887965975",
+      "paper_id": "https://openalex.org/W2887965975",
+      "publication_date": "2018-08-07",
+      "referenced_works_count": 11,
+      "selection_query": "machine learning materials discovery",
+      "title": "Machine learning-assisted discovery of many new solid Li-ion conducting materials",
+      "venue": "arXiv (Cornell University)",
+      "year": 2018
+    },
+    "prediction_cutoff_year": 2018
+  },
+  {
+    "date_filtering": "Prediction inputs include only title, abstract, authors, venue, concepts, and references available in 2018. Citation outcomes are stored separately and are not passed to the forecaster.",
+    "ground_truth": {
+      "citations_at_1y": 31,
+      "citations_by_year": {
+        "2018": 4,
+        "2019": 27,
+        "2020": 37,
+        "2021": 62,
+        "2022": 55,
+        "2023": 42,
+        "2024": 36
+      },
+      "citations_first_24_months": 31,
+      "citing_paper_h_index_proxy": 41,
+      "citing_review_count": 21,
+      "citing_works_sampled": 120,
+      "depth_proxy": 83,
+      "disruption_proxy": -0.25,
+      "distinct_citing_concepts": 638,
+      "total_citations_2024": 263,
+      "translation_citation_proxy": 114
+    },
+    "ground_truth_year": 2024,
+    "metadata": {
+      "abstract": "Most discoveries in materials science have been made empirically, typically through one-variable-at-a-time (Edisonian) experimentation. The characteristics of materials-based systems are, however, neither simple nor uncorrelated. In a device such as an organic photovoltaic, for example, the level of complexity is high due to the sheer number of components and processing conditions, and thus, changing one variable can have multiple unforeseen effects due to their interconnectivity. Design of Experiments (DoE) is ideally suited for such multivariable analyses: by planning one's experiments as per the principles of DoE, one can test and optimize several variables simultaneously, thus accelerating the process of discovery and optimization while saving time and precious laboratory resources. When combined with machine learning, the consideration of one's data in this manner provides a different perspective for optimization and discovery, akin to climbing out of a narrow valley of serial (one-variable-at-a-time) experimentation, to a mountain ridge with a 360\u00b0 view in all directions.",
+      "area": "materials",
+      "authors": [
+        "Bing Cao",
+        "Lawrence A. Adutwum",
+        "Anton O. Oliynyk",
+        "Erik J. Luber",
+        "Brian C. Olsen",
+        "Arthur Mar",
+        "Jillian M. Buriak"
+      ],
+      "concepts": [
+        "Interconnectivity",
+        "Variable (mathematics)",
+        "Computer science",
+        "Design of experiments",
+        "Multivariable calculus",
+        "Process (computing)",
+        "Photovoltaics",
+        "Photovoltaic system",
+        "Artificial intelligence",
+        "Machine learning",
+        "Engineering",
+        "Control engineering"
+      ],
+      "doi": "10.1021/acsnano.8b04726",
+      "openalex_key": "W2884258597",
+      "paper_id": "https://openalex.org/W2884258597",
+      "publication_date": "2018-07-20",
+      "referenced_works_count": 69,
+      "selection_query": "machine learning materials discovery",
+      "title": "How To Optimize Materials and Devices <i>via</i> Design of Experiments and Machine Learning: Demonstration Using Organic Photovoltaics",
+      "venue": "ACS Nano",
+      "year": 2018
+    },
+    "prediction_cutoff_year": 2018
+  }
+]
