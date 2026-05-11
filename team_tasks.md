@@ -98,46 +98,57 @@ dashboard.
 
 ## Baron - Presentation, Story, And Demo Narrative
 
-**Owner outcome:** judges understand that this is a quantitative upgrade to
-Denario's Idea Hater, not a generic multi-agent demo.
+**Owner outcome:** judges understand the project in a single slide and a
+two-minute elevator pitch: this is a quantitative upgrade to Denario's Idea
+Hater, not a generic multi-agent demo.
 
 **Tasks**
 
-- Rewrite the 5-minute pitch around the new framing:
-  - Problem: generated research ideas are easy; choosing good ones is hard.
-  - Gap: qualitative idea-hating is not reliable or auditable enough.
-  - Solution: quantitative metric-backed hypothesis steering.
-  - Proof: backtest and evidence trace.
-  - Denario fit: we improve the decision point before paper generation.
-- Build a 7-slide deck:
-  - Title: Quantitative Idea Hater for Denario.
-  - Problem: idea generation without measurable steering.
-  - System: literature-grounded metric scorecard.
-  - Architecture: retrieval, scoring, mutation, ranking.
-  - Demo: original idea gets scored, improved, and re-ranked.
-  - Validation: backtest versus qualitative baselines.
-  - Close: Denario should not just write papers; it should know which paper is worth writing.
-- Rewrite demo voiceover around the scorecard:
-  - Literature map appears.
-  - Metric bars fill.
-  - Weaknesses are traced to papers.
-  - Variants appear.
-  - Original is dominated by improved variants.
-  - Strategy memo recommends the next hypothesis.
+- Build one presentation slide only.
+  - Headline: Quantitative Idea Hater for Denario.
+  - One-line problem: generated research ideas are easy; choosing good ones is hard.
+  - One-line solution: metric-backed hypothesis scoring, improvement, and ranking.
+  - Visual centrepiece: pipeline or dashboard mockup showing scorecard -> variants -> ranked recommendation.
+  - Proof point: backtest against historical papers using only pre-publication evidence.
+  - Closing line: Denario should not just write papers; it should know which paper is worth writing.
+- Write a two-minute elevator pitch.
+  - 0-10s: enter the selected hypothesis from Boris's Denario paper and start the live demo.
+  - 10-30s: hook and problem while the literature retrieval begins.
+  - 30-55s: why qualitative idea-hating is not enough.
+  - 55-90s: explain the quantitative scorecard as metrics populate.
+  - 90-110s: explain mutation and re-ranking as variants appear.
+  - 110-120s: validation and Denario integration close.
+- Select and freeze the demo hypothesis from Boris's Denario paper.
+  - Keep the exact text short enough to paste or pre-fill reliably.
+  - Prepare one backup hypothesis from the same paper.
+  - Warm the cache for the selected hypothesis before presenting.
+  - Keep a screenshot or recording of the completed run in case the live call fails.
+- Prepare a 20-second backup version in case the pitch is cut short.
+- Prepare one concise sentence for each technical pillar:
+  - literature retrieval
+  - metric scorecard
+  - hypothesis mutation
+  - Pareto/ranking
+  - validation
 - Prepare Q&A:
   - "Why is this better than a single LLM review?"
   - "How are the metrics computed?"
   - "How do you avoid Goodhart's law?"
   - "How do you prevent future-data leakage in validation?"
   - "Where does this plug into Denario?"
-- Coordinate with Felix on visual timing and fallback screen recording.
+- Coordinate with Felix on the single slide visual and one screenshot/GIF from the dashboard if available.
 - Make sure group emulation is described only as an optional generator-side frontend concept.
 
 **Prompt for your AI**
 
 ```text
-I am the presentation lead for a hackathon project called MAgent4Science.
-We have refocused the project into a quantitative Idea Hater for Denario.
+I am the presentation lead for a hackathon project called MAgent4Science. We
+now have only one slide and two minutes, so this needs to work as an elevator
+pitch rather than a full deck.
+
+The presentation flow is: take a hypothesis from Boris's Denario paper, start
+the live demo with that hypothesis, then present the single slide while the demo
+runs in the background.
 
 Denario can generate candidate research ideas and papers. Our system sits
 between idea generation and paper generation. It evaluates a hypothesis using
@@ -151,10 +162,11 @@ validate by backtesting historical 2018 papers using only pre-publication data
 and comparing predictions with 2024 outcomes.
 
 Help me write:
-1. A 5-minute pitch script.
-2. A 7-slide deck outline.
-3. A 90-second live demo voiceover.
-4. A Q&A crib sheet for academic judges.
+1. A one-slide layout with exact text and visual structure.
+2. A two-minute pitch script, around 250-300 words, timed around the live demo
+   starting first.
+3. A 20-second backup version.
+4. Five crisp Q&A answers for academic judges.
 
 Tone: serious, research-focused, concrete, not VC-style.
 ```
@@ -220,86 +232,32 @@ metric, rationale, and evidence trail.
   - `saturation_scorer`
   - `conflict_scorer`
   - `evidence_quality_scorer`
-- Standardize each scorer on a shared structured contract:
-  - `score` from 0 to 100
-  - `confidence_low`
-  - `confidence_high`
-  - `rationale`
-  - `evidence_ids`
-  - `method`
 - Reuse existing material where useful:
   - `backend/agents/cartographer.md`
   - `backend/agents/conflict_detector.md`
   - `backend/agents/overlap_auditor.md`
   - `AgentsIdeas.md` for the earlier novelty and literature-coverage concepts
 - Define evidence IDs so every score can point back to papers.
-- Build a shared retrieval-and-normalization layer for the four scorers:
-  - canonical query from parsed hypothesis
-  - OpenAlex result counts and work metadata
-  - Semantic Scholar abstracts and cross-source metadata
-  - DOI-first deduplication
-  - stable source provenance per paper
 - Make novelty and saturation quantitative:
   - closest-paper similarity
   - number of near neighbours
   - recent publication velocity
   - concept overlap
   - named overlapping papers
-- Implement saturation first as the initial deterministic vertical slice:
-  - transform OpenAlex result count into a bounded 0-100 crowding score
-  - adjust by recent publication velocity
-  - attach top overlapping paper IDs as evidence
-  - estimate confidence interval from retrieval-count uncertainty
-- Implement novelty second on top of the same normalized paper set:
-  - inverse saturation contribution
-  - earliest relevant-paper year
-  - author / institution concentration
-  - limited LLM disambiguation only for ambiguous nearest neighbours
-  - estimate confidence interval with bootstrap resampling
 - Make conflict risk quantitative:
   - contradiction count
   - severity-weighted conflict score
   - disagreement dimensions
-- Implement conflict risk as a hybrid metric:
-  - deterministic paper weighting by recency and citations per year
-  - bounded abstract-level classification into support / contradiction / unclear
-  - disagreement labels for mechanism, population, method, or effect direction
-  - confidence interval from weighted support-versus-contradiction uncertainty
 - Make evidence quality quantitative:
   - retrieval coverage
   - source agreement between OpenAlex and Semantic Scholar
   - proportion of papers with abstracts
   - recency balance
-- Implement evidence quality as a trust score over the evidence base:
-  - metadata completeness
-  - identifier availability
-  - citation-normalized paper quality proxy
-  - cross-source agreement
-  - optional lightweight study-type classification for only the most relevant papers
-  - confidence interval from bootstrap variation and missingness penalties
 - Provide realistic mock outputs for Felix's dashboard while real scoring is being built.
 - Keep group emulation as optional frontend-only concept:
   - no critical backend dependency
   - no validation dependency
   - clearly labelled as experimental
-
-**Execution order for Harvey's lane**
-
-1. Extend schema and evidence-ID contract.
-2. Add retrieval normalization notes to the cartographer handoff.
-3. Implement saturation metric specification and mock output.
-4. Implement novelty metric specification and mock output.
-5. Implement conflict-risk metric specification and mock output.
-6. Implement evidence-quality metric specification and mock output.
-7. Review calibration assumptions with Fred and Funmi before code freeze.
-
-**Definition of done**
-
-- Each of the four score modules has a documented deterministic core.
-- Each score returns 0-100, interval, rationale, evidence IDs, and method tag.
-- Every rationale can name the quantities used to compute the score.
-- Evidence IDs resolve back to retrieved paper records.
-- Mock outputs exist for dashboard integration before full implementation lands.
 
 **Prompt for your AI**
 
@@ -324,11 +282,6 @@ possible and use the LLM to explain or classify when needed.
 variant improvements are backtested.
 
 **Tasks**
-- Pull 30-paper historical backtest dataset from 2018 with 2024 ground truth - papers should be about AI - CNNs, Transformers, Diffusion Models etc.
-- Build Impact Forecaster (6 dimensions, structured output)
-- Build Mutator with 7 operators
-- Build Pareto Curator (non-dominated set + dominance explanations)
-- Run backtest, compute Spearman correlations, produce the scatter plot
 
 - Refactor `impact_forecaster` around the scorecard:
   - Volume
