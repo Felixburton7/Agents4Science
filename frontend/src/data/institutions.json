@@ -1,0 +1,167 @@
+{
+  "origin": {
+    "id": "cambridge_uk",
+    "name": "Cambridge",
+    "city": "Cambridge, UK",
+    "lat": 52.2053,
+    "lon": 0.1218,
+    "domain": "cam.ac.uk",
+    "wikipedia_logo": "https://upload.wikimedia.org/wikipedia/en/thumb/c/c3/Coat_of_Arms_of_the_University_of_Cambridge.svg/240px-Coat_of_Arms_of_the_University_of_Cambridge.svg.png"
+  },
+  "institutions": [
+    {
+      "id": "mit",
+      "name": "MIT",
+      "city": "Cambridge, MA",
+      "country": "USA",
+      "lat": 42.3601,
+      "lon": -71.0942,
+      "domain": "mit.edu",
+      "wikipedia_logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/MIT_logo.svg/240px-MIT_logo.svg.png",
+      "pi": {
+        "real": "Aleksander Madry",
+        "display": "Lleksander Tadry"
+      }
+    },
+    {
+      "id": "stanford",
+      "name": "Stanford",
+      "city": "Stanford, CA",
+      "country": "USA",
+      "lat": 37.4275,
+      "lon": -122.1697,
+      "domain": "stanford.edu",
+      "wikipedia_logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Seal_of_Leland_Stanford_Junior_University.svg/240px-Seal_of_Leland_Stanford_Junior_University.svg.png",
+      "pi": {
+        "real": "Chris Manning",
+        "display": "Mhris Tanning"
+      }
+    },
+    {
+      "id": "oxford",
+      "name": "Oxford",
+      "city": "Oxford, UK",
+      "country": "UK",
+      "lat": 51.7548,
+      "lon": -1.2544,
+      "domain": "ox.ac.uk",
+      "wikipedia_logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Oxford-University-Circlet.svg/240px-Oxford-University-Circlet.svg.png",
+      "pi": {
+        "real": "Yarin Gal",
+        "display": "Karin Tal"
+      }
+    },
+    {
+      "id": "toronto",
+      "name": "Toronto",
+      "city": "Toronto, ON",
+      "country": "Canada",
+      "lat": 43.6629,
+      "lon": -79.3957,
+      "domain": "utoronto.ca",
+      "wikipedia_logo": "https://upload.wikimedia.org/wikipedia/en/thumb/0/04/Utoronto_coa.svg/240px-Utoronto_coa.svg.png",
+      "pi": {
+        "real": "Geoff Hinton",
+        "display": "Deoff Trinton"
+      }
+    },
+    {
+      "id": "berkeley",
+      "name": "UC Berkeley",
+      "city": "Berkeley, CA",
+      "country": "USA",
+      "lat": 37.8719,
+      "lon": -122.2585,
+      "domain": "berkeley.edu",
+      "wikipedia_logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Seal_of_University_of_California%2C_Berkeley.svg/240px-Seal_of_University_of_California%2C_Berkeley.svg.png",
+      "pi": {
+        "real": "Pieter Abbeel",
+        "display": "Bieter Ibbeel"
+      }
+    },
+    {
+      "id": "eth",
+      "name": "ETH Zürich",
+      "city": "Zürich",
+      "country": "Switzerland",
+      "lat": 47.3769,
+      "lon": 8.5417,
+      "domain": "ethz.ch",
+      "wikipedia_logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/ETH_Z%C3%BCrich_Logo_black.svg/240px-ETH_Z%C3%BCrich_Logo_black.svg.png",
+      "pi": {
+        "real": "Andreas Krause",
+        "display": "Bndreas Rrause"
+      }
+    },
+    {
+      "id": "tum",
+      "name": "TU München",
+      "city": "Munich",
+      "country": "Germany",
+      "lat": 48.1496,
+      "lon": 11.5677,
+      "domain": "tum.de",
+      "wikipedia_logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Logo_of_the_Technical_University_of_Munich.svg/240px-Logo_of_the_Technical_University_of_Munich.svg.png",
+      "pi": {
+        "real": "Stephan Günnemann",
+        "display": "Brephan Münnemann"
+      }
+    },
+    {
+      "id": "tsinghua",
+      "name": "Tsinghua",
+      "city": "Beijing",
+      "country": "China",
+      "lat": 40.0017,
+      "lon": 116.3261,
+      "domain": "tsinghua.edu.cn",
+      "wikipedia_logo": "https://upload.wikimedia.org/wikipedia/en/thumb/0/05/Tsinghua_University_Logo.svg/240px-Tsinghua_University_Logo.svg.png",
+      "pi": {
+        "real": "Jun Zhu",
+        "display": "Bun Thu"
+      }
+    },
+    {
+      "id": "tokyo",
+      "name": "Tokyo",
+      "city": "Tokyo",
+      "country": "Japan",
+      "lat": 35.7126,
+      "lon": 139.7619,
+      "domain": "u-tokyo.ac.jp",
+      "wikipedia_logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Logo_of_the_University_of_Tokyo.svg/240px-Logo_of_the_University_of_Tokyo.svg.png",
+      "pi": {
+        "real": "Masashi Sugiyama",
+        "display": "Tasashi Bugiyama"
+      }
+    },
+    {
+      "id": "ucl",
+      "name": "UCL",
+      "city": "London",
+      "country": "UK",
+      "lat": 51.5246,
+      "lon": -0.134,
+      "domain": "ucl.ac.uk",
+      "wikipedia_logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/University_College_London_logo.svg/240px-University_College_London_logo.svg.png",
+      "pi": {
+        "real": "Demis Hassabis",
+        "display": "Bemis Trassabis"
+      }
+    },
+    {
+      "id": "cambridge_group",
+      "name": "Cambridge",
+      "city": "Cambridge, UK",
+      "country": "UK",
+      "lat": 52.2120,
+      "lon": 0.0900,
+      "domain": "cam.ac.uk",
+      "wikipedia_logo": "https://upload.wikimedia.org/wikipedia/en/thumb/c/c3/Coat_of_Arms_of_the_University_of_Cambridge.svg/240px-Coat_of_Arms_of_the_University_of_Cambridge.svg.png",
+      "pi": {
+        "real": "Boris Boillet",
+        "display": "Boris Boillet"
+      }
+    }
+  ]
+}
