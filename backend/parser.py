@@ -4,9 +4,9 @@ import json
 import re
 from typing import Any
 
+from backend.evidence_utils import clean_query_text
 from backend.llm_client import LLMUnavailable, complete_structured
 from backend.schemas import ParsedHypothesis
-
 
 FIELD_HINTS = {
     "mechanism": (" via ", " through ", " by ", " because ", " mediated by "),
@@ -18,7 +18,15 @@ FIELD_HINTS = {
 async def parser(state: dict[str, Any]) -> dict[str, ParsedHypothesis]:
     raw_hypothesis = str(state.get("raw_hypothesis", "")).strip()
     if not raw_hypothesis:
-        raise ValueError("raw_hypothesis is required for parser")
+        return {
+            "parsed": ParsedHypothesis(
+                claim="",
+                mechanism="",
+                context="",
+                population="",
+                method="",
+            )
+        }
 
     system_prompt = (
         "You are the Parser agent for the Hypothesis Steering Engine. "

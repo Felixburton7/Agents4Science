@@ -35,7 +35,7 @@ def search_paper_records(query: str, limit: int = 25) -> list[dict]:
         return list(cached.get("data", []))
 
     last_error = ""
-    for attempt in range(5):
+    for attempt in range(2):
         try:
             resp = requests.get(
                 BASE_URL,
