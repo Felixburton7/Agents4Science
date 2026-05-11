@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 export function Logo({ size = 32 }: { size?: number }) {
   return (
@@ -51,7 +51,7 @@ export function CircularGauge({
           cx={size / 2}
           cy={size / 2}
           r={r}
-          stroke="#f0f0f3"
+          stroke="rgba(29, 29, 31, 0.08)"
           strokeWidth={stroke}
           fill="none"
         />
@@ -126,7 +126,7 @@ export function DimensionRadar({
               key={s}
               points={pts}
               fill="none"
-              stroke="#e8e8ed"
+              stroke="rgba(29, 29, 31, 0.1)"
               strokeWidth={0.8}
             />
           );
@@ -140,7 +140,7 @@ export function DimensionRadar({
               y1={cy}
               x2={cx + Math.cos(angle) * radius}
               y2={cy + Math.sin(angle) * radius}
-              stroke="#f0f0f3"
+              stroke="rgba(29, 29, 31, 0.06)"
               strokeWidth={0.8}
             />
           );
@@ -434,7 +434,7 @@ export function ImpactProjections({
               x2={padX + innerW}
               y1={yFor(v)}
               y2={yFor(v)}
-              stroke="#f0f0f3"
+              stroke="rgba(29, 29, 31, 0.06)"
             />
             <text x={4} y={yFor(v) + 3} fontSize="9" fill="#86868b">
               {v}
@@ -584,24 +584,55 @@ export function ConceptSpread({
 
 export function SimilarLandscape({
   items,
+  total,
 }: {
-  items: { title: string; similarity: number }[];
+  items: { title: string; similarity: number; url?: string }[];
+  total: number;
 }) {
+  const [expanded, setExpanded] = useState(false);
+  const collapsedCount = 3;
+  const visible = expanded ? items : items.slice(0, collapsedCount);
+
   return (
     <div className="flex flex-col gap-2.5">
-      {items.map((it, i) => (
-        <div key={i} className="flex items-start gap-2">
-          <div className="w-1 h-1 rounded-full bg-[color:var(--color-muted)] mt-2" />
-          <div className="flex-1 min-w-0">
-            <div className="text-[12px] text-[color:var(--color-ink)] leading-tight truncate">
-              {it.title}
+      {visible.map((it, i) => {
+        const inner = (
+          <>
+            <div className="w-1 h-1 rounded-full bg-[color:var(--color-muted)] mt-2 shrink-0" />
+            <div className="flex-1 min-w-0">
+              <div className="text-[12px] text-[color:var(--color-ink)] leading-snug">
+                {it.title}
+              </div>
             </div>
+            <div className="text-[12px] text-mono text-[color:var(--color-ink)] font-semibold shrink-0">
+              {it.similarity}%
+            </div>
+          </>
+        );
+        return it.url ? (
+          <a
+            key={i}
+            href={it.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-start gap-2 group hover:bg-white/60 rounded-md -mx-1 px-1 py-0.5 transition-colors"
+          >
+            {inner}
+          </a>
+        ) : (
+          <div key={i} className="flex items-start gap-2">
+            {inner}
           </div>
-          <div className="text-[12px] text-mono text-[color:var(--color-ink)] font-semibold">
-            {it.similarity}%
-          </div>
-        </div>
-      ))}
+        );
+      })}
+      {items.length > collapsedCount && (
+        <button
+          className="btn-ghost mt-2"
+          onClick={() => setExpanded((v) => !v)}
+        >
+          {expanded ? "Show less" : `Show all (${total})`}
+        </button>
+      )}
     </div>
   );
 }
