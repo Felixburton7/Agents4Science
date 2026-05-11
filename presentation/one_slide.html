@@ -146,27 +146,26 @@
       font-weight: 520;
     }
 
-    /* ── schematic placeholder (right panel) ─────────── */
+    /* ── schematic panel (right half) ────────────────── */
     .schematic {
       position: absolute;
       left: 56%;
-      right: 5%;
-      top: 15%;
-      bottom: 13%;
+      right: 4%;
+      top: 14%;
+      bottom: 11%;
       z-index: 1;
-      border: 1.5px dashed rgba(60, 63, 66, 0.20);
-      border-radius: 5px;
+      background: none;
+      border: none;
+      border-radius: 0;
+      overflow: visible;
       display: flex;
-      align-items: flex-end;
+      align-items: center;
       justify-content: center;
-      padding-bottom: 10px;
+      padding: 10px 8px;
     }
-    .schematic-label {
-      color: rgba(83, 96, 112, 0.36);
-      font-size: clamp(8px, 0.68vw, 12px);
-      font-weight: 640;
-      letter-spacing: 0.13em;
-      text-transform: uppercase;
+    .schematic svg {
+      width: 100%;
+      height: 100%;
     }
 
     /* ── footer ───────────────────────────────────────── */
@@ -205,7 +204,7 @@
       .headline  { margin-top: 40px; }
       .subhead   { margin-top: 16px; }
       .workflow  { margin-top: 44px; grid-template-columns: 1fr; right: 24px; }
-      .schematic { margin-top: 40px; min-height: 220px; }
+      .schematic { margin-top: 40px; min-height: 320px; border-radius: 8px; }
       .footer    { margin-top: 36px; display: grid; padding-bottom: 32px; }
     }
   </style>
@@ -234,7 +233,7 @@
     <div class="workflow" aria-label="Core workflow">
       <div class="step">
         <strong>Score</strong>
-        <span>Novelty, saturation, conflict risk, feasibility, impact.</span>
+        <span>Novelty, saturation, conflict risk, feasibility, impact, evidence quality.</span>
       </div>
       <div class="step">
         <strong>Repair</strong>
@@ -246,10 +245,323 @@
       </div>
     </div>
 
-    <div id="schematic" class="schematic"
-         aria-label="Backend pipeline schematic — to be inserted">
-      <span class="schematic-label">backend schematic</span>
-    </div>
+    <!-- ── inline backend pipeline schematic ─────────── -->
+    <div class="schematic" aria-label="Backend pipeline">
+      <svg viewBox="0.00 0.00 471.20 661.20"
+           xmlns="http://www.w3.org/2000/svg"
+           xmlns:xlink="http://www.w3.org/1999/xlink"
+           preserveAspectRatio="xMidYMid meet">
+        <g id="graph0" transform="scale(1 1) rotate(0) translate(3.6 657.6)">
+
+          <!-- cluster: parallel metric scorers -->
+          <g id="clust1" class="cluster">
+            <title>cluster_scores</title>
+            <path fill="rgba(144,196,220,0.20)" stroke="rgba(32,104,160,0.40)"
+                  stroke-dasharray="5,2"
+                  d="M20,-403C20,-403 444,-403 444,-403 450,-403 456,-409 456,-415 456,-415 456,-462 456,-462 456,-468 450,-474 444,-474 444,-474 20,-474 20,-474 14,-474 8,-468 8,-462 8,-462 8,-415 8,-415 8,-409 14,-403 20,-403"/>
+            <text text-anchor="middle" x="232" y="-462"
+                  font-family="Arial" font-size="10.50"
+                  fill="#1e5a88" font-weight="600">3. parallel metric scorers</text>
+          </g>
+
+          <!-- cluster: variant re-scoring -->
+          <g id="clust2" class="cluster">
+            <title>cluster_variants</title>
+            <path fill="rgba(168,220,180,0.22)" stroke="rgba(48,128,68,0.40)"
+                  stroke-dasharray="5,2"
+                  d="M131,-196C131,-196 329,-196 329,-196 335,-196 341,-202 341,-208 341,-208 341,-255 341,-255 341,-261 335,-267 329,-267 329,-267 131,-267 131,-267 125,-267 119,-261 119,-255 119,-255 119,-208 119,-208 119,-202 125,-196 131,-196"/>
+            <text text-anchor="middle" x="230" y="-255"
+                  font-family="Arial" font-size="10.50"
+                  fill="#286840" font-weight="600">6. variant re&#45;scoring</text>
+          </g>
+
+          <!-- node: Raw hypothesis (input) -->
+          <g id="node1" class="node">
+            <title>raw</title>
+            <path fill="#d8eef8" stroke="#3878a8" stroke-width="1.6"
+                  d="M263.5,-654C263.5,-654 198.5,-654 198.5,-654 192.5,-654 186.5,-648 186.5,-642 186.5,-642 186.5,-630 186.5,-630 186.5,-624 192.5,-618 198.5,-618 198.5,-618 263.5,-618 263.5,-618 269.5,-618 275.5,-624 275.5,-630 275.5,-630 275.5,-642 275.5,-642 275.5,-648 269.5,-654 263.5,-654"/>
+            <text text-anchor="middle" x="231" y="-633.5"
+                  font-family="Arial" font-size="10.50" fill="#1e4870">Raw hypothesis</text>
+          </g>
+
+          <!-- node: 1. parser -->
+          <g id="node2" class="node">
+            <title>parser</title>
+            <path fill="#b8d8ec" stroke="#2868a0" stroke-width="1.4"
+                  d="M247.5,-586C247.5,-586 214.5,-586 214.5,-586 208.5,-586 202.5,-580 202.5,-574 202.5,-574 202.5,-562 202.5,-562 202.5,-556 208.5,-550 214.5,-550 214.5,-550 247.5,-550 247.5,-550 253.5,-550 259.5,-556 259.5,-562 259.5,-562 259.5,-574 259.5,-574 259.5,-580 253.5,-586 247.5,-586"/>
+            <text text-anchor="middle" x="231" y="-565.5"
+                  font-family="Arial" font-size="10.50" fill="#1e4870">1. parser</text>
+          </g>
+
+          <!-- edge: raw → parser -->
+          <g id="edge1" class="edge">
+            <path fill="none" stroke="#444444" d="M231,-617.66C231,-610.29 231,-601.57 231,-593.55"/>
+            <polygon fill="#444444" stroke="#444444" points="233.45,-593.45 231,-586.45 228.55,-593.45 233.45,-593.45"/>
+          </g>
+
+          <!-- node: 2. cartographer -->
+          <g id="node3" class="node">
+            <title>cart</title>
+            <path fill="#9ccce0" stroke="#1e68a0" stroke-width="1.4"
+                  d="M266,-518C266,-518 196,-518 196,-518 190,-518 184,-512 184,-506 184,-506 184,-494 184,-494 184,-488 190,-482 196,-482 196,-482 266,-482 266,-482 272,-482 278,-488 278,-494 278,-494 278,-506 278,-506 278,-512 272,-518 266,-518"/>
+            <text text-anchor="middle" x="231" y="-503"
+                  font-family="Arial" font-size="10.50" fill="#1e4870">2. cartographer</text>
+            <text text-anchor="middle" x="231" y="-492"
+                  font-family="Arial" font-size="10.50" fill="#1e4870">literature retriever</text>
+          </g>
+
+          <!-- edge: parser → cart -->
+          <g id="edge2" class="edge">
+            <path fill="none" stroke="#444444" d="M231,-549.66C231,-542.29 231,-533.57 231,-525.55"/>
+            <polygon fill="#444444" stroke="#444444" points="233.45,-525.45 231,-518.45 228.55,-525.45 233.45,-525.45"/>
+          </g>
+
+          <!-- node: novelty scorer -->
+          <g id="node4" class="node">
+            <title>nov</title>
+            <path fill="#a8d0e4" stroke="#2070a8" stroke-width="1.4"
+                  d="M436,-447C436,-447 406,-447 406,-447 400,-447 394,-441 394,-435 394,-435 394,-423 394,-423 394,-417 400,-411 406,-411 406,-411 436,-411 436,-411 442,-411 448,-417 448,-423 448,-423 448,-435 448,-435 448,-441 442,-447 436,-447"/>
+            <text text-anchor="middle" x="421" y="-426.5"
+                  font-family="Arial" font-size="10.50" fill="#1e4870">novelty</text>
+          </g>
+
+          <!-- edge: cart → nov -->
+          <g id="edge3" class="edge">
+            <path fill="none" stroke="#444444" d="M278.04,-491.36C323.33,-484.01 385,-474 385,-474 385,-474 393.61,-463.48 402.41,-452.73"/>
+            <polygon fill="#444444" stroke="#444444" points="404.44,-454.11 406.98,-447.14 400.65,-451 404.44,-454.11"/>
+          </g>
+
+          <!-- node: saturation scorer -->
+          <g id="node5" class="node">
+            <title>sat</title>
+            <path fill="#a8d0e4" stroke="#2070a8" stroke-width="1.4"
+                  d="M363.5,-447C363.5,-447 326.5,-447 326.5,-447 320.5,-447 314.5,-441 314.5,-435 314.5,-435 314.5,-423 314.5,-423 314.5,-417 320.5,-411 326.5,-411 326.5,-411 363.5,-411 363.5,-411 369.5,-411 375.5,-417 375.5,-423 375.5,-423 375.5,-435 375.5,-435 375.5,-441 369.5,-447 363.5,-447"/>
+            <text text-anchor="middle" x="345" y="-426.5"
+                  font-family="Arial" font-size="10.50" fill="#1e4870">saturation</text>
+          </g>
+
+          <!-- edge: cart → sat -->
+          <g id="edge4" class="edge">
+            <path fill="none" stroke="#444444" d="M278.28,-483.03C292.79,-478.13 305,-474 305,-474 305,-474 314.74,-463.29 324.61,-452.43"/>
+            <polygon fill="#444444" stroke="#444444" points="326.52,-453.97 329.42,-447.14 322.9,-450.67 326.52,-453.97"/>
+          </g>
+
+          <!-- node: conflict scorer -->
+          <g id="node6" class="node">
+            <title>con</title>
+            <path fill="#a8d0e4" stroke="#2070a8" stroke-width="1.4"
+                  d="M284,-447C284,-447 254,-447 254,-447 248,-447 242,-441 242,-435 242,-435 242,-423 242,-423 242,-417 248,-411 254,-411 254,-411 284,-411 284,-411 290,-411 296,-417 296,-423 296,-423 296,-435 296,-435 296,-441 290,-447 284,-447"/>
+            <text text-anchor="middle" x="269" y="-426.5"
+                  font-family="Arial" font-size="10.50" fill="#1e4870">conflict</text>
+          </g>
+
+          <!-- edge: cart → con -->
+          <g id="edge5" class="edge">
+            <path fill="none" stroke="#444444" d="M240.39,-481.94C245.11,-473.38 250.89,-462.88 256.02,-453.56"/>
+            <polygon fill="#444444" stroke="#444444" points="258.22,-454.65 259.45,-447.34 253.93,-452.29 258.22,-454.65"/>
+          </g>
+
+          <!-- node: feasibility scorer -->
+          <g id="node7" class="node">
+            <title>fea</title>
+            <path fill="#a8d0e4" stroke="#2070a8" stroke-width="1.4"
+                  d="M212,-447C212,-447 176,-447 176,-447 170,-447 164,-441 164,-435 164,-435 164,-423 164,-423 164,-417 170,-411 176,-411 176,-411 212,-411 212,-411 218,-411 224,-417 224,-423 224,-423 224,-435 224,-435 224,-441 218,-447 212,-447"/>
+            <text text-anchor="middle" x="194" y="-426.5"
+                  font-family="Arial" font-size="10.50" fill="#1e4870">feasibility</text>
+          </g>
+
+          <!-- edge: cart → fea -->
+          <g id="edge6" class="edge">
+            <path fill="none" stroke="#444444" d="M221.85,-481.94C217.26,-473.38 211.63,-462.88 206.63,-453.56"/>
+            <polygon fill="#444444" stroke="#444444" points="208.77,-452.35 203.3,-447.34 204.45,-454.67 208.77,-452.35"/>
+          </g>
+
+          <!-- node: impact scorer -->
+          <g id="node8" class="node">
+            <title>imp</title>
+            <path fill="#a8d0e4" stroke="#2070a8" stroke-width="1.4"
+                  d="M134,-447C134,-447 104,-447 104,-447 98,-447 92,-441 92,-435 92,-435 92,-423 92,-423 92,-417 98,-411 104,-411 104,-411 134,-411 134,-411 140,-411 146,-417 146,-423 146,-423 146,-435 146,-435 146,-441 140,-447 134,-447"/>
+            <text text-anchor="middle" x="119" y="-426.5"
+                  font-family="Arial" font-size="10.50" fill="#1e4870">impact</text>
+          </g>
+
+          <!-- edge: cart → imp -->
+          <g id="edge7" class="edge">
+            <path fill="none" stroke="#444444" d="M183.73,-483.45C168.28,-478.37 155,-474 155,-474 155,-474 146.39,-463.48 137.59,-452.73"/>
+            <polygon fill="#444444" stroke="#444444" points="139.35,-451 133.02,-447.14 135.56,-454.11 139.35,-451"/>
+          </g>
+
+          <!-- node: evidence quality scorer -->
+          <g id="node9" class="node">
+            <title>evi</title>
+            <path fill="#a8d0e4" stroke="#2070a8" stroke-width="1.4"
+                  d="M62,-447C62,-447 28,-447 28,-447 22,-447 16,-441 16,-435 16,-435 16,-423 16,-423 16,-417 22,-411 28,-411 28,-411 62,-411 62,-411 68,-411 74,-417 74,-423 74,-423 74,-435 74,-435 74,-441 68,-447 62,-447"/>
+            <text text-anchor="middle" x="45" y="-426.5"
+                  font-family="Arial" font-size="10.50" fill="#1e4870">evidence</text>
+          </g>
+
+          <!-- edge: cart → evi -->
+          <g id="edge8" class="edge">
+            <path fill="none" stroke="#444444" d="M183.76,-491.02C140.45,-483.7 83,-474 83,-474 83,-474 73.91,-463.48 64.63,-452.73"/>
+            <polygon fill="#444444" stroke="#444444" points="66.23,-450.83 59.8,-447.14 62.52,-454.04 66.23,-450.83"/>
+          </g>
+
+          <!-- node: 4. score aggregator -->
+          <g id="node10" class="node">
+            <title>agg</title>
+            <path fill="#72b4cc" stroke="#1058a0" stroke-width="1.5"
+                  d="M271.5,-379C271.5,-379 190.5,-379 190.5,-379 184.5,-379 178.5,-373 178.5,-367 178.5,-367 178.5,-355 178.5,-355 178.5,-349 184.5,-343 190.5,-343 190.5,-343 271.5,-343 271.5,-343 277.5,-343 283.5,-349 283.5,-355 283.5,-355 283.5,-367 283.5,-367 283.5,-373 277.5,-379 271.5,-379"/>
+            <text text-anchor="middle" x="231" y="-358.5"
+                  font-family="Arial" font-size="10.50" fill="#0e3060">4. score_aggregator</text>
+          </g>
+
+          <!-- edges: scorers → agg -->
+          <g id="edge9" class="edge">
+            <path fill="none" stroke="#444444" d="M396.39,-410.91C390.06,-406.52 385,-403 385,-403 385,-403 333.8,-389.37 290.45,-377.83"/>
+            <polygon fill="#444444" stroke="#444444" points="290.96,-375.43 283.57,-376 289.7,-380.16 290.96,-375.43"/>
+          </g>
+          <g id="edge10" class="edge">
+            <path fill="none" stroke="#444444" d="M317.66,-410.91C310.62,-406.52 305,-403 305,-403 305,-403 286.62,-392.82 268.18,-382.6"/>
+            <polygon fill="#444444" stroke="#444444" points="269.26,-380.4 261.95,-379.15 266.89,-384.69 269.26,-380.4"/>
+          </g>
+          <g id="edge11" class="edge">
+            <path fill="none" stroke="#444444" d="M259.02,-410.66C254.6,-402.99 249.34,-393.85 244.57,-385.58"/>
+            <polygon fill="#444444" stroke="#444444" points="246.67,-384.3 241.05,-379.45 242.42,-386.74 246.67,-384.3"/>
+          </g>
+          <g id="edge12" class="edge">
+            <path fill="none" stroke="#444444" d="M203.72,-410.66C208.02,-402.99 213.14,-393.85 217.78,-385.58"/>
+            <polygon fill="#444444" stroke="#444444" points="219.93,-386.76 221.22,-379.45 215.65,-384.36 219.93,-386.76"/>
+          </g>
+          <g id="edge13" class="edge">
+            <path fill="none" stroke="#444444" d="M143.61,-410.91C149.94,-406.52 155,-403 155,-403 155,-403 173.87,-392.82 192.81,-382.6"/>
+            <polygon fill="#444444" stroke="#444444" points="194.21,-384.63 199.21,-379.15 191.89,-380.32 194.21,-384.63"/>
+          </g>
+          <g id="edge14" class="edge">
+            <path fill="none" stroke="#444444" d="M70.98,-410.91C77.66,-406.52 83,-403 83,-403 83,-403 130.44,-389.86 171.6,-378.46"/>
+            <polygon fill="#444444" stroke="#444444" points="172.31,-380.8 178.4,-376.57 171,-376.08 172.31,-380.8"/>
+          </g>
+
+          <!-- node: 5. mutator (amber — creative step) -->
+          <g id="node11" class="node">
+            <title>mut</title>
+            <path fill="#f6e098" stroke="#b87010" stroke-width="1.5"
+                  d="M250.5,-311C250.5,-311 211.5,-311 211.5,-311 205.5,-311 199.5,-305 199.5,-299 199.5,-299 199.5,-287 199.5,-287 199.5,-281 205.5,-275 211.5,-275 211.5,-275 250.5,-275 250.5,-275 256.5,-275 262.5,-281 262.5,-287 262.5,-287 262.5,-299 262.5,-299 262.5,-305 256.5,-311 250.5,-311"/>
+            <text text-anchor="middle" x="231" y="-290.5"
+                  font-family="Arial" font-size="10.50" fill="#6b3c00">5. mutator</text>
+          </g>
+
+          <!-- edge: agg → mut -->
+          <g id="edge15" class="edge">
+            <path fill="none" stroke="#444444" d="M231,-342.66C231,-335.29 231,-326.57 231,-318.55"/>
+            <polygon fill="#444444" stroke="#444444" points="233.45,-318.45 231,-311.45 228.55,-318.45 233.45,-318.45"/>
+          </g>
+
+          <!-- node: variant 1 -->
+          <g id="node12" class="node">
+            <title>v1</title>
+            <path fill="#b4e0c0" stroke="#30884a" stroke-width="1.4"
+                  d="M321,-240C321,-240 289,-240 289,-240 283,-240 277,-234 277,-228 277,-228 277,-216 277,-216 277,-210 283,-204 289,-204 289,-204 321,-204 321,-204 327,-204 333,-210 333,-216 333,-216 333,-228 333,-228 333,-234 327,-240 321,-240"/>
+            <text text-anchor="middle" x="305" y="-219.5"
+                  font-family="Arial" font-size="10.50" fill="#185830">variant 1</text>
+          </g>
+
+          <!-- edge: mut → v1 (dashed) -->
+          <g id="edge16" class="edge">
+            <path fill="none" stroke="#444444" stroke-dasharray="5,2"
+                  d="M256.29,-274.91C262.8,-270.52 268,-267 268,-267 268,-267 276.85,-256.48 285.89,-245.73"/>
+            <polygon fill="#444444" stroke="#444444" points="287.96,-247.07 290.59,-240.14 284.21,-243.92 287.96,-247.07"/>
+          </g>
+
+          <!-- node: variant 2 -->
+          <g id="node13" class="node">
+            <title>v2</title>
+            <path fill="#b4e0c0" stroke="#30884a" stroke-width="1.4"
+                  d="M247,-240C247,-240 215,-240 215,-240 209,-240 203,-234 203,-228 203,-228 203,-216 203,-216 203,-210 209,-204 215,-204 215,-204 247,-204 247,-204 253,-204 259,-210 259,-216 259,-216 259,-228 259,-228 259,-234 253,-240 247,-240"/>
+            <text text-anchor="middle" x="231" y="-219.5"
+                  font-family="Arial" font-size="10.50" fill="#185830">variant 2</text>
+          </g>
+
+          <!-- edge: mut → v2 (dashed) -->
+          <g id="edge17" class="edge">
+            <path fill="none" stroke="#444444" stroke-dasharray="5,2"
+                  d="M231,-274.94C231,-266.63 231,-256.48 231,-247.37"/>
+            <polygon fill="#444444" stroke="#444444" points="233.45,-247.34 231,-240.34 228.55,-247.34 233.45,-247.34"/>
+          </g>
+
+          <!-- node: variant N -->
+          <g id="node14" class="node">
+            <title>vn</title>
+            <path fill="#b4e0c0" stroke="#30884a" stroke-width="1.4"
+                  d="M173,-240C173,-240 139,-240 139,-240 133,-240 127,-234 127,-228 127,-228 127,-216 127,-216 127,-210 133,-204 139,-204 139,-204 173,-204 173,-204 179,-204 185,-210 185,-216 185,-216 185,-228 185,-228 185,-234 179,-240 173,-240"/>
+            <text text-anchor="middle" x="156" y="-219.5"
+                  font-family="Arial" font-size="10.50" fill="#185830">variant N</text>
+          </g>
+
+          <!-- edge: mut → vN (dashed) -->
+          <g id="edge18" class="edge">
+            <path fill="none" stroke="#444444" stroke-dasharray="5,2"
+                  d="M205.71,-274.91C199.2,-270.52 194,-267 194,-267 194,-267 184.91,-256.48 175.63,-245.73"/>
+            <polygon fill="#444444" stroke="#444444" points="177.23,-243.83 170.8,-240.14 173.52,-247.04 177.23,-243.83"/>
+          </g>
+
+          <!-- node: 7. ranker / pareto curator -->
+          <g id="node15" class="node">
+            <title>rank</title>
+            <path fill="#7ab8d0" stroke="#0e58a0" stroke-width="1.5"
+                  d="M258.5,-172C258.5,-172 203.5,-172 203.5,-172 197.5,-172 191.5,-166 191.5,-160 191.5,-160 191.5,-148 191.5,-148 191.5,-142 197.5,-136 203.5,-136 203.5,-136 258.5,-136 258.5,-136 264.5,-136 270.5,-142 270.5,-148 270.5,-148 270.5,-160 270.5,-160 270.5,-166 264.5,-172 258.5,-172"/>
+            <text text-anchor="middle" x="231" y="-157"
+                  font-family="Arial" font-size="10.50" fill="#0e3060">7. ranker</text>
+            <text text-anchor="middle" x="231" y="-146"
+                  font-family="Arial" font-size="10.50" fill="#0e3060">pareto curator</text>
+          </g>
+
+          <!-- edges: variants → rank -->
+          <g id="edge19" class="edge">
+            <path fill="none" stroke="#444444" d="M285.56,-203.66C276.38,-195.47 265.33,-185.62 255.58,-176.92"/>
+            <polygon fill="#444444" stroke="#444444" points="257.17,-175.06 250.31,-172.22 253.91,-178.71 257.17,-175.06"/>
+          </g>
+          <g id="edge20" class="edge">
+            <path fill="none" stroke="#444444" d="M231,-203.66C231,-196.29 231,-187.57 231,-179.55"/>
+            <polygon fill="#444444" stroke="#444444" points="233.45,-179.45 231,-172.45 228.55,-179.45 233.45,-179.45"/>
+          </g>
+          <g id="edge21" class="edge">
+            <path fill="none" stroke="#444444" d="M175.71,-203.66C185.01,-195.47 196.21,-185.62 206.09,-176.92"/>
+            <polygon fill="#444444" stroke="#444444" points="207.79,-178.69 211.43,-172.22 204.55,-175.01 207.79,-178.69"/>
+          </g>
+
+          <!-- node: 8. strategist -->
+          <g id="node16" class="node">
+            <title>strat</title>
+            <path fill="#5898bc" stroke="#083ea0" stroke-width="1.5"
+                  d="M254,-104C254,-104 208,-104 208,-104 202,-104 196,-98 196,-92 196,-92 196,-80 196,-80 196,-74 202,-68 208,-68 208,-68 254,-68 254,-68 260,-68 266,-74 266,-80 266,-80 266,-92 266,-92 266,-98 260,-104 254,-104"/>
+            <text text-anchor="middle" x="231" y="-83.5"
+                  font-family="Arial" font-size="10.50" fill="#e8f4fc">8. strategist</text>
+          </g>
+
+          <!-- edge: rank → strat -->
+          <g id="edge22" class="edge">
+            <path fill="none" stroke="#444444" d="M231,-135.66C231,-128.29 231,-119.57 231,-111.55"/>
+            <polygon fill="#444444" stroke="#444444" points="233.45,-111.45 231,-104.45 228.55,-111.45 233.45,-111.45"/>
+          </g>
+
+          <!-- node: Strategy memo (output) -->
+          <g id="node17" class="node">
+            <title>memo</title>
+            <path fill="#d8eef8" stroke="#1858a8" stroke-width="2.0"
+                  d="M261.5,-36C261.5,-36 200.5,-36 200.5,-36 194.5,-36 188.5,-30 188.5,-24 188.5,-24 188.5,-12 188.5,-12 188.5,-6 194.5,0 200.5,0 200.5,0 261.5,0 261.5,0 267.5,0 273.5,-6 273.5,-12 273.5,-12 273.5,-24 273.5,-24 273.5,-30 267.5,-36 261.5,-36"/>
+            <text text-anchor="middle" x="231" y="-15.5"
+                  font-family="Arial" font-size="10.50" fill="#1e4870">Strategy memo</text>
+          </g>
+
+          <!-- edge: strat → memo -->
+          <g id="edge23" class="edge">
+            <path fill="none" stroke="#444444" d="M231,-67.66C231,-60.29 231,-51.57 231,-43.55"/>
+            <polygon fill="#444444" stroke="#444444" points="233.45,-43.45 231,-36.45 228.55,-43.45 233.45,-43.45"/>
+          </g>
+
+        </g>
+      </svg>
+    </div><!-- /.schematic -->
 
     <div class="footer">
       <span>Live case: accepted Denario cosmology paper</span>

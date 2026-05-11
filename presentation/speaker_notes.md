@@ -1,138 +1,87 @@
-# One-Slide Pitch Notes
+# Speaker Notes — Q-H8R
 
-## Slide Title
+## Demo hypothesis
 
-**Q-H8R**
-
-Subtitle: **Quantitative idea-hating for AI-generated science**
-
-## Demo Hypothesis
-
-```text
+```
 QITT-compressed multi-scale substructure features with learned topological
 embeddings improve cosmological parameter estimation from dark-matter halo
 merger trees.
 ```
 
-Backup hypothesis:
+Backup:
 
-```text
+```
 GraphSAGE-learned topology embeddings and QITT compression provide a compact
 202-dimensional representation that preserves enough merger-tree structure to
 predict Omega_m and sigma_8.
 ```
 
-## Source Paper
+---
 
-Title: **QITT-Enhanced Multi-Scale Substructure Analysis with Learned
-Topological Embeddings for Cosmological Parameter Estimation**
+## Baron — intro (30–45 sec)
 
-Authors: Denario Astropilotai, Pablo Bermejo, Boris Bolliet, Francisco
-Villaescusa-Navarro, Pablo Villanueva Domingo.
+> Paste the hypothesis and start the demo before speaking.
 
-Venue: Open Conference of AI Agents for Science 2025.
+"Denario can generate research ideas and turn them into papers — that's
+powerful. But it creates a harder upstream problem: if you can generate
+hundreds of plausible hypotheses, which one is actually worth writing?
 
-Local assets:
+This is a real paper authored by Denario. It was accepted. But the reviews
+still flagged concrete weaknesses — complexity, ablations, leakage risk.
+Q-H8R is designed to catch those before Denario commits to writing.
 
-- `denario_qitt_paper.pdf`
-- `openreview_reviews.json`
-- `openreview_review_summary.md`
+I'll hand over to the team to walk through how it works."
 
-## Two-Minute Pitch
+---
 
-Start by pasting or selecting the Denario-paper hypothesis and pressing run.
+## Backend team — technical walkthrough (75–90 sec)
 
-"This hypothesis comes from an actual Denario-authored Agents4Science paper:
-QITT-compressed substructure and topology features for cosmological parameter
-estimation from dark-matter merger trees.
+**Suggested beats — distribute across the team:**
 
-Denario is powerful because it can generate research ideas and turn them into
-papers. But that creates a harder upstream problem: if you can generate many
-plausible ideas, which one should you trust enough to write?
+1. **Literature retrieval** — we map the hypothesis onto nearby papers from
+   OpenAlex and Semantic Scholar, cached locally for reproducibility.
 
-Our project is a quantitative Idea Hater for Denario. The original paper was
-accepted, but the reviews also exposed exactly the kind of weaknesses Denario
-needs to catch earlier: limited improvement over simple aggregate baselines,
-methodological inconsistencies, leakage concerns, missing ablations, and weak
-uncertainty reporting.
+2. **Scorecard** — the system produces a 0–100 score across novelty,
+   saturation, conflict risk, feasibility, impact, and evidence quality.
+   Every score links back to the papers that drove it.
 
-While the demo runs, the system retrieves nearby literature and turns those
-review-style concerns into a scorecard: novelty, saturation, conflict risk,
-feasibility, volume, velocity, reach, depth, disruption, translation, and
-evidence quality. Every score is tied back to evidence, so the judgement is
-inspectable rather than rhetorical.
+3. **Mutation** — we target the weakest metrics and generate hypothesis
+   variants: narrow the claim, substitute the mechanism, cross-pollinate
+   from adjacent fields, or demand stricter ablations.
 
-Then it improves the hypothesis. If the QITT claim is too broad, it can narrow
-it to sigma_8 where the method may be more useful. If the complexity is not
-justified, it can demand PCA, end-to-end GNN, and aggregate-feature ablations.
-If leakage is a risk, it can mutate the method around stricter simulation-level
-splits.
+4. **Ranking** — variants are re-scored by the same pipeline. Pareto
+   selection picks the strongest trade-offs — no single number to game.
 
-Each variant is re-scored with the same metrics, so we rank the original
-against stronger versions rather than relying on taste.
+5. **Validation** — we backtest on 2018 papers using only pre-publication
+   information, then compare predictions against 2024 outcomes. Spearman
+   correlations, predicted-vs-actual plots. This is what beats a single
+   LLM opinion.
 
-The validation is historical: we backtest on 2018 papers using only information
-available before publication, then compare our predictions with 2024 outcomes.
-
-The point is simple: Denario should not just write papers. It should know which
-paper is worth writing."
-
-## 20-Second Backup
-
-"This demo uses a real Denario-authored Agents4Science paper. It was accepted,
-but reviews still found weaknesses: complexity, ablations, leakage risk, and
-uncertainty. Our system turns that judgement into a quantitative scorecard,
-mutates the hypothesis into stronger variants, re-scores them, and tells
-Denario which version is worth writing."
-
-## Technical Pillars
-
-- **Literature retrieval:** We map the hypothesis onto nearby papers from
-  OpenAlex and Semantic Scholar.
-- **Metric scorecard:** We score novelty, saturation, conflict risk,
-  feasibility, impact, and evidence quality.
-- **Hypothesis mutation:** We generate variants that target the weakest metrics.
-- **Ranking:** We re-score variants and select the strongest trade-offs.
-- **Validation:** We backtest on historical papers with strict pre-publication
-  date filtering.
+---
 
 ## Q&A
 
-**Why is this better than a single LLM review?**  
-A single LLM review is hard to audit. Our system decomposes the judgement into
-separate metrics, attaches evidence to each score, and reuses the same scoring
-logic across variants and backtests.
+**Why better than a single LLM review?**
+Decomposed metrics, evidence attached to every score, same logic reused
+across variants and backtests — auditable, not rhetorical.
 
-**How are the metrics computed?**  
-Some metrics are deterministic from literature metadata, such as near-neighbour
-density, citation velocity, concept spread, and evidence coverage. LLMs are used
-for bounded classification and explanation, not as the only source of truth.
+**How are metrics computed?**
+Deterministic where possible (near-neighbour density, citation velocity,
+concept spread). LLMs handle bounded classification and explanation only.
 
-**Why this Denario paper as the demo case?**  
-It is ideal because it was accepted while still receiving concrete technical
-criticisms. That lets us show the core product: not rejecting ideas blindly, but
-turning review weaknesses into measurable repairs.
+**How do you avoid Goodhart's law?**
+Multiple metrics + Pareto ranking. A variant can't win by gaming one
+dimension while collapsing elsewhere.
 
-**How do you avoid Goodhart's law?**  
-We do not optimize one score. The system exposes multiple metrics, confidence,
-and trade-offs, then uses Pareto ranking so a variant cannot win by gaming a
-single dimension while collapsing elsewhere.
+**Where does this plug into Denario?**
+Between idea generation and paper generation. Denario proposes; Q-H8R
+scores, repairs, and ranks before Denario commits to writing.
 
-**How do you prevent future-data leakage in validation?**  
-The backtest uses 2018 papers and restricts retrieval to information available
-before publication. Outcomes are then compared against 2024 evidence only after
-prediction.
+---
 
-**Where does this plug into Denario?**  
-It sits between idea generation and paper generation. Denario proposes candidate
-hypotheses; Q-H8R scores, improves, and ranks them before Denario
-commits to writing.
+## Demo checklist
 
-## Demo Checklist
-
-- Freeze exact Denario-paper hypothesis.
-- Freeze one backup hypothesis.
-- Warm the literature cache for both hypotheses.
-- Test the live run from a clean terminal.
-- Open `presentation/one_slide.html` in a browser.
-- Keep a screenshot or recording of a completed run ready.
+- [ ] Hypothesis pasted and cache warmed
+- [ ] Live run tested from clean terminal
+- [ ] `one_slide.html` open in browser, full-screen
+- [ ] Screenshot/recording of completed run ready as backup
