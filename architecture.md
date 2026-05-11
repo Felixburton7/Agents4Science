@@ -1,158 +1,238 @@
-# Hypothesis Steering Engine — Architecture
+# Quantitative Idea Hater - Architecture
 
-**One-liner:** Take a researcher's hypothesis, map it onto the live literature, predict its multi-dimensional impact, simulate how real research groups in the field would respond and where they'd take it next, then mutate it into Pareto-optimal variants.
+**One-liner:** Take a Denario-generated or user-written research hypothesis,
+score it against quantitative evidence from the literature, explain what is
+weak, generate stronger variants, and rank those variants with reproducible
+metrics.
 
-**Positioning:** Denario generates papers from data. We help researchers pick which paper is worth writing.
-
----
-
-## Pipeline
-
-```
-                          USER HYPOTHESIS (text)
-                                   │
-                                   ▼
-                          ┌────────────────┐
-                          │  1. PARSER     │   gpt-5-nano
-                          └────────┬───────┘
-                                   ▼
-              ┌────────────────────┼────────────────────┐
-              ▼                    ▼                    ▼
-      ┌──────────────┐    ┌──────────────┐    ┌──────────────┐
-      │ 2. CARTO-    │    │ 3. CONFLICT  │    │ 4. OVERLAP   │
-      │    GRAPHER   │    │   DETECTOR   │    │   AUDITOR    │
-      └──────┬───────┘    └──────┬───────┘    └──────┬───────┘
-             └────────────────────┼────────────────────┘
-                                  │  gpt-5-nano (parallel)
-                                  │  ← OpenAlex API
-                                  ▼
-                         ┌────────────────┐
-                         │ 5. GROUP       │   gpt-5-nano
-                         │  IDENTIFIER    │
-                         └────────┬───────┘
-                                  ▼
-                    ┌──────────────────────────────┐
-                    │  6. GROUP EMULATORS (×8–12)  │   gpt-5-mini
-                    │     parallel, grounded       │
-                    └──────────────┬───────────────┘
-                                   ▼
-                          ┌────────────────┐
-                          │ 7. TRAJECTORY  │   gpt-5
-                          │   SYNTHESISER  │
-                          └────────┬───────┘
-                                   ▼
-                          ┌────────────────┐
-                          │ 8. IMPACT      │   gpt-5-mini
-                          │   FORECASTER   │   (6 dims, structured)
-                          └────────┬───────┘
-                                   ▼
-                          ┌────────────────┐
-                          │  9. MUTATOR    │   gpt-5
-                          └────────┬───────┘   (7 mutation operators)
-                                   │
-                                   │  per variant ▼
-                          ┌────────────────┐
-                          │ Re-score via   │   gpt-5-mini
-                          │ Forecaster     │   (parallel batch)
-                          └────────┬───────┘
-                                   ▼
-                          ┌────────────────┐
-                          │ 10. PARETO     │   code + 1 LLM call
-                          │     CURATOR    │   (gpt-5-nano)
-                          └────────┬───────┘
-                                   ▼
-                          ┌────────────────┐
-                          │ 11. STRATEGIST │   gpt-5 (reasoning high)
-                          └────────┬───────┘
-                                   │
-            ┌──────────────────────┘
-            ▼
-   ┌────────────────┐
-   │ 12. GROUNDED-  │   gpt-5-nano
-   │     NESS CHECK │   (runs alongside emulators)
-   └────────────────┘
-
-                                   ▼
-                         DASHBOARD (Streamlit + Plotly + cytoscape.js)
-                         literature map • radar • Pareto plot • memo
-```
+**Positioning:** Denario can generate candidate research ideas. MAgent4Science
+upgrades the "Idea Hater" layer from qualitative judgement to metric-backed
+hypothesis steering.
 
 ---
 
-## The 12 Agents
+## Product Focus
 
-| # | Agent | Model | Input | Output |
+The core system is no longer a research-group emulator. The core system is a
+quantitative evaluator and improver for scientific hypotheses.
+
+The user flow is:
+
+1. Denario or a researcher proposes a hypothesis.
+2. MAgent4Science retrieves the relevant literature neighbourhood.
+3. The hypothesis is scored across quantitative dimensions.
+4. Weaknesses are traced back to papers, metrics, and evidence.
+5. The system mutates the hypothesis into improved variants.
+6. Variants are re-scored and ranked.
+7. A final memo recommends which version Denario should develop further.
+
+Group emulation is retained only as a frontend proof of concept for the
+hypothesis generator experience. It can show "who might care about this idea"
+or "which labs might respond", but it is not part of the core Idea Hater score,
+not required for validation, and not on the critical backend path.
+
+---
+
+## Core Pipeline
+
+```text
+                         HYPOTHESIS
+                Denario-generated or user-written
+                              |
+                              v
+                     +----------------+
+                     | 1. Parser      |
+                     +--------+-------+
+                              |
+                              v
+                     +----------------+
+                     | 2. Literature  |
+                     |    Retriever   |
+                     +--------+-------+
+                              |
+         +--------------------+--------------------+
+         |                    |                    |
+         v                    v                    v
++----------------+   +----------------+   +----------------+
+| 3. Novelty     |   | 4. Saturation   |   | 5. Conflict    |
+|    Scorer      |   |    Scorer       |   |    Scorer      |
++--------+-------+   +--------+-------+   +--------+-------+
+         |                    |                    |
+         +--------------------+--------------------+
+                              |
+         +--------------------+--------------------+
+         |                    |                    |
+         v                    v                    v
++----------------+   +----------------+   +----------------+
+| 6. Feasibility |   | 7. Impact      |   | 8. Evidence    |
+|    Scorer      |   |    Forecaster  |   |    Quality     |
++--------+-------+   +--------+-------+   +--------+-------+
+         |                    |                    |
+         +--------------------+--------------------+
+                              |
+                              v
+                     +----------------+
+                     | 9. Score       |
+                     |    Aggregator  |
+                     +--------+-------+
+                              |
+                              v
+                     +----------------+
+                     | 10. Mutator    |
+                     +--------+-------+
+                              |
+                              v
+                   Re-score all variants
+                              |
+                              v
+                     +----------------+
+                     | 11. Ranker /   |
+                     |     Pareto     |
+                     +--------+-------+
+                              |
+                              v
+                     +----------------+
+                     | 12. Strategist |
+                     +--------+-------+
+                              |
+                              v
+             DASHBOARD + DENARIO INTEGRATION
+     scorecard, evidence trace, ranked variants, memo
+```
+
+---
+
+## Core Agents And Modules
+
+| # | Module | Model / Method | Input | Output |
 |---|---|---|---|---|
-| 1 | **Parser** | gpt-5-nano | Raw hypothesis text | `{claim, mechanism, context, population, method}` |
-| 2 | **Cartographer** | gpt-5-nano | Parsed hypothesis + OpenAlex | ~50 nearest papers, clustered |
-| 3 | **Conflict Detector** | gpt-5-nano | Paper cluster | List of contradicting papers with dimension of disagreement |
-| 4 | **Overlap Auditor** | gpt-5-nano | Paper cluster | Crowding score 0–100 + named overlapping papers |
-| 5 | **Group Identifier** | gpt-5-nano | Paper cluster authors via OpenAlex | 8–12 named research groups + co-authorship grounding |
-| 6 | **Group Emulator** (×N) | gpt-5-mini | Hypothesis + group's last 20 papers | `{interest_score, engagement_type, proposed_direction, method_they_use, time_to_publish, competitive_risk}` |
-| 7 | **Trajectory Synthesiser** | gpt-5 | All group outputs | 2–4 field-response scenarios |
-| 8 | **Impact Forecaster** | gpt-5-mini | All upstream signals | 6-dim impact profile with confidence intervals |
-| 9 | **Mutator** | gpt-5 | Hypothesis + literature map | 5–7 variants, each tagged with which operator was applied |
-| 10 | **Pareto Curator** | code + gpt-5-nano | All variants with impact scores | Non-dominated set + dominance explanations |
-| 11 | **Strategist** | gpt-5 (reasoning high) | Everything | Final strategy memo with recommendation |
-| 12 | **Groundedness Checker** | gpt-5-nano | Group emulator outputs vs. their actual papers | Boolean + flagged inconsistencies |
+| 1 | **Parser** | gpt-5-nano | Raw hypothesis | Structured claim, mechanism, context, population, method |
+| 2 | **Literature Retriever / Cartographer** | OpenAlex + Semantic Scholar + gpt-5-nano | Parsed hypothesis | Nearby papers, citation metadata, concepts, clusters |
+| 3 | **Novelty Scorer** | Metrics + gpt-5-nano | Hypothesis + nearest papers | Novelty score, closest analogues, novelty explanation |
+| 4 | **Saturation Scorer** | Metrics + gpt-5-nano | Paper neighbourhood | Crowding score, overlap papers, whitespace summary |
+| 5 | **Conflict Scorer** | Metrics + gpt-5-nano | Hypothesis + papers | Contradiction score, conflicting papers, severity |
+| 6 | **Feasibility Scorer** | gpt-5-mini + structured heuristics | Hypothesis + methods evidence | Feasibility score, required resources, risk flags |
+| 7 | **Impact Forecaster** | gpt-5-mini + bibliometrics | Hypothesis + evidence | Six-dimensional impact forecast |
+| 8 | **Evidence Quality Scorer** | Code + gpt-5-nano | All metric evidence | Confidence score, evidence coverage, missing data |
+| 9 | **Score Aggregator** | Code | Metric scores | Composite scorecard and weighted Idea Hater verdict |
+| 10 | **Mutator** | gpt-5 | Original hypothesis + weaknesses | Improved variants tagged by mutation operator |
+| 11 | **Ranker / Pareto Curator** | Code + gpt-5-nano | Re-scored variants | Ranked list, Pareto set, dominance explanations |
+| 12 | **Strategist** | gpt-5, high reasoning | Full scorecard + variants | Final recommendation memo |
 
-**Runtime instance count:** 12 distinct roles, ~20 agent instances per run (emulator multiplied).
+The backend should be deterministic where possible. LLM calls should explain,
+structure, and synthesize. Metric calculation, ranking, and Pareto selection
+should be implemented in code.
 
 ---
 
-## Six Impact Dimensions
+## Quantitative Scorecard
 
-| Dimension | What it captures | Ground truth (for backtest) |
+Every hypothesis receives a metric-backed scorecard. Scores should be reported
+on a 0-100 scale, with confidence intervals where appropriate.
+
+| Metric | What it captures | Candidate signals |
 |---|---|---|
-| **Volume** | Total attention | Citations at 5y |
-| **Velocity** | Speed of recognition | Citations in first 24 months |
-| **Reach** | Cross-disciplinary spread | Number of distinct OpenAlex concepts citing it |
-| **Depth** | Foundational vs. incremental | h-index of citing authors; cited by reviews |
-| **Disruption** | Displaces prior work? | CD-index (Funk & Owen-Smith / Wu et al. *Nature* 2019) |
-| **Translation** | Real-world uptake | Citations from clinical trials, patents, policy |
+| **Novelty** | How different the idea is from the nearest prior work | Embedding distance, lexical overlap, closest-paper similarity, concept novelty |
+| **Saturation** | How crowded the area already is | Number of near-neighbour papers, recent publication velocity, overlap count |
+| **Conflict Risk** | How strongly existing papers challenge the claim | Contradictory findings, disagreement dimensions, severity-weighted conflict count |
+| **Feasibility** | Whether the idea can realistically be tested | Availability of data, methods, instruments, timescale, dependency risk |
+| **Volume** | Expected total attention | 5-year citation forecast |
+| **Velocity** | Expected speed of recognition | First-24-month citation forecast |
+| **Reach** | Cross-disciplinary spread | Number and diversity of OpenAlex concepts likely to cite |
+| **Depth** | Foundational versus incremental value | Review citations, high-authority citing authors, field-centrality proxies |
+| **Disruption** | Whether it may displace prior assumptions | CD-index proxy, conflict with dominant clusters, backward citation pattern |
+| **Translation** | Real-world uptake potential | Patent, policy, clinical, industrial, or standards-adjacent signals |
+| **Evidence Quality** | How much to trust the scorecard | Retrieval coverage, source agreement, recency balance, confidence calibration |
+
+The Idea Hater verdict should not be a single opaque number. The dashboard
+should show the composite score alongside the contributing metrics and the
+evidence behind each score.
 
 ---
 
-## Seven Mutation Operators
+## Hypothesis Mutation And Improvement
 
-1. **Generalise** — broaden population (mice → humans)
-2. **Narrow** — focus context (general → early-stage disease)
-3. **Substitute mechanism** — same outcome via different pathway
-4. **Shift scale** — acute ↔ chronic, in vitro ↔ in vivo
-5. **Cross-pollinate** — apply method from adjacent field
-6. **Invert** — test the null aggressively
-7. **Combine** — fuse with adjacent open question
+The Mutator converts the scorecard into concrete improvement operations. It
+does not generate ideas in the abstract; it repairs weaknesses identified by
+the quantitative evaluation.
 
-Each operator is a prompt template the Mutator applies.
+Seven mutation operators:
+
+1. **Generalise** - broaden population, setting, or domain.
+2. **Narrow** - focus on a sharper context, subgroup, or mechanism.
+3. **Substitute mechanism** - keep the outcome but change the causal pathway.
+4. **Shift scale** - move between in vitro / in vivo, acute / chronic, local / systemic.
+5. **Cross-pollinate** - import a method or framing from an adjacent field.
+6. **Invert** - test the null, opposite, or boundary condition directly.
+7. **Combine** - fuse with an adjacent open question.
+
+Each variant is re-scored by the same quantitative pipeline. The Ranker then
+selects variants using:
+
+- Composite score improvement over the original.
+- Pareto dominance across the metric set.
+- Evidence quality and uncertainty.
+- Practical feasibility.
+- A short explanation of what trade-off each variant makes.
 
 ---
 
-## Model Allocation (GPT-5 family, tiered)
+## Group Emulation Frontend Concept
 
-- **gpt-5-nano** — bulk parallel literature reasoning, structured extraction, lightweight verification (agents 1–5, 10, 12)
-- **gpt-5-mini** — grounded persona reasoning and calibrated forecasting (agents 6, 8, variant re-scoring)
-- **gpt-5** — creative synthesis and strategic reasoning (agents 7, 9, 11). Reasoning mode (`reasoning_effort="high"`) enabled for Strategist only.
+Group emulation is now explicitly out of scope for the core backend pipeline.
+It can remain as a frontend proof of concept attached to the hypothesis
+generator component.
 
-The architecture is **provider-agnostic**: models route via a single config table. When Claude / Gemini keys arrive, swap models per agent without changing the pipeline. Plan: emulators → Claude Sonnet, parallel light agents → Gemini Flash. One-line swap each.
+Purpose:
+
+- Make the generator demo feel alive.
+- Show possible audiences for a generated idea.
+- Visualize which research communities might be interested.
+- Suggest future collaboration or competition narratives.
+
+Constraints:
+
+- Do not feed group-emulator outputs into the quantitative Idea Hater score.
+- Do not make group emulation part of the validation story.
+- Do not block the backend on group identification, groundedness checks, or
+  trajectory synthesis.
+- Use mock or lightly grounded data if needed for the frontend demonstration.
+
+The legacy backend files for `group_identifier`, `group_emulator`,
+`trajectory_synth`, and `groundedness_check` should either be moved behind an
+experimental frontend flag or left as non-critical prototype stubs.
 
 ---
 
-## Routing Config
+## Model Allocation
+
+| Workload | Model / Method |
+|---|---|
+| Parsing, classification, extraction | gpt-5-nano |
+| Literature explanations and metric rationales | gpt-5-nano |
+| Feasibility and impact forecasting | gpt-5-mini |
+| Hypothesis mutation | gpt-5 |
+| Final strategy memo | gpt-5 with high reasoning |
+| Ranking, aggregation, Pareto selection | Code |
+
+The architecture remains provider-agnostic. Model names should be routed
+through `backend/model_routing.py`, not hardcoded inside individual agents.
+
+Suggested routing:
 
 ```python
 MODEL_ROUTING = {
-    "parser":              "gpt-5-nano",
-    "cartographer":        "gpt-5-nano",
-    "conflict_detector":   "gpt-5-nano",
-    "overlap_auditor":     "gpt-5-nano",
-    "group_identifier":    "gpt-5-nano",
-    "group_emulator":      "gpt-5-mini",
-    "trajectory_synth":    "gpt-5",
-    "impact_forecaster":   "gpt-5-mini",
-    "mutator":             "gpt-5",
-    "pareto_curator":      "gpt-5-nano",
-    "strategist":          "gpt-5",  # reasoning_effort="high"
-    "groundedness_check":  "gpt-5-nano",
+    "parser": "gpt-5-nano",
+    "cartographer": "gpt-5-nano",
+    "novelty_scorer": "gpt-5-nano",
+    "saturation_scorer": "gpt-5-nano",
+    "conflict_scorer": "gpt-5-nano",
+    "feasibility_scorer": "gpt-5-mini",
+    "impact_forecaster": "gpt-5-mini",
+    "evidence_quality_scorer": "gpt-5-nano",
+    "mutator": "gpt-5",
+    "ranker": "gpt-5-nano",
+    "strategist": "gpt-5",
 }
 ```
 
@@ -160,41 +240,77 @@ MODEL_ROUTING = {
 
 ## Data Sources
 
-- **OpenAlex API** (free, no key required; use email in headers for polite pool)
-  - Papers, abstracts, citations, authors, concepts
-  - Co-authorship graph (for Group Identifier)
-  - Date-filtered queries (critical for backtest integrity)
-- **Semantic Scholar API** (fallback for full-text where OpenAlex is thin)
+- **OpenAlex API**
+  - Papers, concepts, authors, venues, citation counts, references.
+  - Date-filtered queries for validation.
+  - Concept diversity and field-spread signals.
+- **Semantic Scholar API**
+  - Paper search, abstracts, citation counts, authors, external IDs.
+  - Fallback and cross-check for OpenAlex retrieval.
+- **Local cache**
+  - SQLite cache keyed by query hash.
+  - Required for repeatable demos and validation runs.
 
-**Caching:** All OpenAlex pulls cached locally by query hash. Demo runs with warm cache.
+No code execution sandbox is required. The pipeline evaluates hypotheses and
+literature metadata; it does not execute arbitrary generated code.
 
 ---
 
 ## Validation
 
-**Backtest harness:**
-- 200 papers from 2018, sampled across CS / bio / materials (drop to 30 if time-constrained)
-- All data sources date-filtered to pre-publication
-- Predict 6 dimensions; compare to actual 2024 outcomes
-- Report Spearman correlation per dimension
-- Three baselines: citation-at-1-year, single GPT-5 call, linear regression on bibliometric features
+The validation story should prove that the quantitative Idea Hater is more
+useful than a qualitative LLM judgement.
 
-**Scatter plot of predicted vs. actual** is the permanent credibility anchor in the dashboard corner.
+Backtest harness:
 
-**Groundedness audit:** for the audience emulator, verify each group's proposed direction uses methods that appear in their actual paper history. Reject and re-prompt if not.
+- Sample historical papers from 2018 across computer science, biology, and
+  materials.
+- Convert each abstract into a pre-publication hypothesis.
+- Restrict retrieval to information available before publication.
+- Predict the scorecard and impact dimensions.
+- Compare against 2024 outcomes.
+- Report Spearman correlation per measurable dimension.
+
+Baselines:
+
+- Single qualitative LLM judgement.
+- One-year citation count.
+- Simple bibliometric regression.
+- Random or mean-field baseline for sanity checking.
+
+Primary validation outputs:
+
+- Predicted-versus-actual scatter plots.
+- Correlation table by metric.
+- Calibration plot for confidence intervals.
+- Example cases where mutation improves the scorecard.
+
+Critical rule: date filtering is non-negotiable. The system must not see
+post-publication evidence during historical prediction runs.
 
 ---
 
-## Stack
+## Dashboard
 
-| Layer | Choice |
-|---|---|
-| Orchestration | LangGraph (state machine, native parallel branches) |
-| LLM provider | OpenAI (GPT-5 family) |
-| Tracing | Langfuse, wrapping every node |
-| Frontend | Streamlit + Plotly + cytoscape.js |
-| Caching | Local SQLite for OpenAlex responses |
-| Sandbox | Not needed — no code execution in this pipeline |
+The dashboard should sell the quantitative upgrade clearly.
+
+Core Idea Hater panels:
+
+- Hypothesis input or Denario idea import.
+- Literature map with nearest papers and evidence links.
+- Quantitative scorecard with 0-100 metric bars.
+- Radar or parallel-coordinates plot across metrics.
+- Evidence drawer for each score.
+- Ranked variants table.
+- Pareto frontier plot.
+- Final strategy memo.
+- Backtest scatter plot as the credibility anchor.
+
+Optional generator-side concept:
+
+- Research-group interest mockup or proof of concept.
+- Kept visually separate from the Idea Hater scorecard.
+- Labelled as an extension concept, not a validated backend signal.
 
 ---
 
@@ -202,47 +318,62 @@ MODEL_ROUTING = {
 
 | Metric | Target |
 |---|---|
-| End-to-end latency (demo) | ≤ 120 seconds |
-| LLM calls per run | ~55–70 |
-| OpenAlex calls per run | ~30–40 |
-| Cost per run | $0.15–0.40 |
-| Cost of 200-paper backtest | ~$30–50 |
+| End-to-end latency for demo run | <= 90 seconds |
+| LLM calls per original hypothesis | 15-30 before variants |
+| Variants generated per run | 5-7 |
+| OpenAlex / Semantic Scholar calls | 20-40 with cache |
+| Demo cost per run | Low enough for repeated live runs |
+| Backtest size for hackathon | 20-30 papers if time-constrained |
 
-**Mandatory:** parallelise from the start (LangGraph parallel branches). Don't build sequential first. Reasoning mode is expensive — restrict to the Strategist only.
-
----
-
-## Build Order (priority — drop in reverse if time-constrained)
-
-1. **End-to-end skeleton with one demo hypothesis** — non-negotiable
-2. **Audience emulator with 4 grounded groups + Trajectory Synthesiser** — the signature feature
-3. **Mutation + Pareto curation** — the steering loop
-4. **Dashboard with literature map and reveal animations**
-5. **Historical backtest on 30 papers + scatter plot** — start before lunch, runs unattended
+Parallelize independent score modules from the start. Do not put optional group
+emulation on the critical path.
 
 ---
 
-## Demo Arc (60–120 seconds)
+## Build Order
 
-1. Hypothesis goes in (audience-supplied or pre-prepared)
-2. Literature map blooms (50 papers, colour-coded by conflict / overlap / support)
-3. Research-group portraits light up around the periphery, interest scores fill
-4. Each group's proposed direction radiates outward as arrows from the centre
-5. Race-condition and white-space flags appear
-6. Six-dimension radar chart fills
-7. Mutator spawns variants as satellites on the map
-8. Pareto frontier highlights — original hypothesis crossed out as dominated
-9. Strategy memo appears
+1. Refactor schemas around quantitative `MetricScore`, `IdeaEvaluation`,
+   `VariantEvaluation`, and `StrategyMemo`.
+2. Get an end-to-end mock Idea Hater run working from CLI.
+3. Implement literature retrieval and caching.
+4. Implement novelty, saturation, conflict, feasibility, and evidence-quality
+   scoring.
+5. Implement impact forecasting and variant re-scoring.
+6. Implement mutation, ranking, and Pareto selection.
+7. Build the dashboard around scorecard, evidence trace, and ranked variants.
+8. Run the historical backtest and produce validation plots.
+9. Add optional group-emulation frontend proof of concept only if the core path
+   is stable.
 
-Backtest scatter plot stays in the corner throughout as the credibility anchor.
+---
+
+## Demo Arc
+
+1. Denario proposes a candidate hypothesis.
+2. Idea Hater maps the nearby literature.
+3. Quantitative scorecard fills in: novelty, saturation, conflict risk,
+   feasibility, impact, and evidence quality.
+4. The system highlights why the idea is weak or promising.
+5. Mutator generates improved variants targeted at the weak metrics.
+6. Variants are re-scored with the same quantitative pipeline.
+7. Pareto frontier reveals which variants dominate the original.
+8. Strategy memo recommends the best next hypothesis for Denario.
+9. Backtest plot stays visible as the credibility anchor.
+
+Optional frontend flourish: a separate "who might care" panel can show mock
+research-group reactions for the generator component, but the pitch should make
+clear this is not the validated quantitative Idea Hater.
 
 ---
 
 ## What This Is Not
 
-- Not a hypothesis generator (Denario does that)
-- Not a paper writer (Denario does that too)
-- Not a peer reviewer
-- Not a citation count predictor (we explicitly refuse to collapse impact to one number)
+- Not a paper writer.
+- Not a peer reviewer.
+- Not a raw citation-count predictor.
+- Not a research-group simulator as the main product.
+- Not a single qualitative LLM opinion.
 
-This system sits **strictly upstream** of Denario and complements it. Output can be piped directly into Denario's idea module as a steered, ranked input.
+MAgent4Science is the quantitative steering layer between idea generation and
+paper generation. It tells Denario which hypotheses are weak, why they are
+weak, and how to make them stronger.
