@@ -124,7 +124,13 @@ async def feasibility_scorer(state: PipelineState) -> PartialState:
 
 @observe(name="impact_forecaster")
 async def impact_forecaster(state: PipelineState) -> PartialState:
-    return await _call_agent("impact_forecaster", _impact_forecaster_stub, state)
+    result = await _call_agent("impact_forecaster", _impact_forecaster_stub, state)
+    if "forecast" in result and "metric_scores" not in result:
+        result = {
+            **result,
+            "metric_scores": _impact_metric_scores(result["forecast"]),
+        }
+    return result
 
 
 @observe(name="evidence_quality_scorer")
@@ -149,7 +155,10 @@ async def variant_rescorer(state: PipelineState) -> PartialState:
 
 @observe(name="ranker")
 async def ranker(state: PipelineState) -> PartialState:
-    return await _call_agent("ranker", _ranker_stub, state, aliases=("pareto_curator",))
+    result = await _call_agent("ranker", _ranker_stub, state)
+    if "ranked_variants" not in result and "variants" in result:
+        result = _rank_variants(result["variants"])
+    return result
 
 
 @observe(name="strategist")
@@ -505,6 +514,10 @@ async def _variant_rescorer_stub(state: PipelineState) -> PartialState:
 
 async def _ranker_stub(state: PipelineState) -> PartialState:
     variants = state.get("rescored_variants") or state.get("variants", [])
+    return _rank_variants(variants)
+
+
+def _rank_variants(variants: list[Variant]) -> PartialState:
     selected_ids = _pareto_variant_ids(variants)
     ranked = sorted(
         variants,
@@ -597,6 +610,17 @@ def _impact_dimension(score: int, rationale: str) -> ImpactDimension:
         confidence_high=min(100, score + 12),
         rationale=rationale,
     )
+
+
+def _impact_metric_scores(forecast: ImpactForecast) -> list[MetricScore]:
+    return [
+        _metric("volume", forecast.volume.score, forecast.volume.rationale),
+        _metric("velocity", forecast.velocity.score, forecast.velocity.rationale),
+        _metric("reach", forecast.reach.score, forecast.reach.rationale),
+        _metric("depth", forecast.depth.score, forecast.depth.rationale),
+        _metric("disruption", forecast.disruption.score, forecast.disruption.rationale),
+        _metric("translation", forecast.translation.score, forecast.translation.rationale),
+    ]
 
 
 def _weighted_score(metric_map: dict[str, MetricScore], weights: dict[str, float]) -> int:
