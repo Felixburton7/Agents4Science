@@ -11,9 +11,9 @@
 > **A literature-grounded peer reviewer for AI-generated science.**
 > Agents4Science scores a hypothesis on novelty, saturation, conflict, feasibility, impact, and evidence quality — then rewrites it into stronger variants and tells [Denario](https://github.com/AstroPilot-AI/Denario) which idea is actually worth writing a paper about.
 
-Denario can generate thousands of plausible research ideas. Most of them aren't worth pursuing. **Agents4Science is the filter that sits between idea generation and paper writing** — turning a single qualitative LLM "looks good to me" into a transparent, auditable scorecard backed by real papers from OpenAlex and Semantic Scholar.
+Denario can generate plausible research ideas faster than any human can read them. The hard part isn't generating ideas, it's deciding which ones are worth writing a paper about. Today that decision is usually one LLM saying "yes, looks promising" with no evidence behind it.
 
-In short: it's an **idea hater that's right for the right reasons** — every score comes with citations, confidence intervals, and a clear verdict (reject / revise / pursue / strengthen).
+Agents4Science replaces that with a scorecard. Each hypothesis gets numbers for novelty, saturation, conflict, feasibility, impact, and evidence quality, and each number points back to the OpenAlex and Semantic Scholar papers it came from. The verdict is one of four: reject, revise, pursue, or strengthen.
 
 ## 🎯 What The System Does
 
