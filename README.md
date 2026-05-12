@@ -1,4 +1,4 @@
-# 🧪 MAgent4Science
+# 🧪 Agents4Science
 
 <p align="center">
   <a href="https://science.ai.cam.ac.uk/events/hackathon-multi-agent-systems-for-scientific-research">
@@ -8,17 +8,16 @@
 
 <sub>🥇 1st place at the [Cambridge–Infosys Hackathon 2026](https://science.ai.cam.ac.uk/events/hackathon-multi-agent-systems-for-scientific-research) · built on top of [Denario](https://github.com/AstroPilot-AI/Denario).</sub>
 
-MAgent4Science is a quantitative **Idea Hater** for [Denario](https://github.com/AstroPilot-AI/Denario). It evaluates
-scientific hypotheses with literature-grounded metrics, explains what is weak,
-generates improved variants, and ranks those variants before Denario commits to
-writing a paper from them.
+> **A literature-grounded peer reviewer for AI-generated science.**
+> Agents4Science scores a hypothesis on novelty, saturation, conflict, feasibility, impact, and evidence quality — then rewrites it into stronger variants and tells [Denario](https://github.com/AstroPilot-AI/Denario) which idea is actually worth writing a paper about.
 
-[Denario](https://github.com/AstroPilot-AI/Denario) can generate candidate research ideas. MAgent4Science helps decide
-which ideas are worth developing.
+Denario can generate thousands of plausible research ideas. Most of them aren't worth pursuing. **Agents4Science is the filter that sits between idea generation and paper writing** — turning a single qualitative LLM "looks good to me" into a transparent, auditable scorecard backed by real papers from OpenAlex and Semantic Scholar.
+
+In short: it's an **idea hater that's right for the right reasons** — every score comes with citations, confidence intervals, and a clear verdict (reject / revise / pursue / strengthen).
 
 ## 🎯 What The System Does
 
-Given a Denario-generated or user-written hypothesis, MAgent4Science produces:
+Given a Denario-generated or user-written hypothesis, Agents4Science produces:
 
 - A structured parse of the claim, mechanism, context, population, and method.
 - A literature neighbourhood from OpenAlex and Semantic Scholar.
