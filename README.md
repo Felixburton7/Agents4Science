@@ -1,17 +1,12 @@
 # 🧪 MAgent4Science
 
-> 🏆 **1st Place — [Cambridge–Infosys Hackathon 2026](https://science.ai.cam.ac.uk/events/hackathon-multi-agent-systems-for-scientific-research)**
-> *Multi-Agent Systems for Scientific Research — Cambridge, 2026*
-
 <p align="center">
   <a href="https://science.ai.cam.ac.uk/events/hackathon-multi-agent-systems-for-scientific-research">
-    <img alt="Hackathon" src="https://img.shields.io/badge/Cambridge--Infosys-Hackathon%202026-0a66c2?style=for-the-badge" />
+    <img alt="Cambridge–Infosys Hackathon 2026" src="https://img.shields.io/badge/Cambridge--Infosys-Hackathon%202026-0a66c2?style=for-the-badge" />
   </a>
-  <a href="https://github.com/AstroPilot-AI/Denario">
-    <img alt="Built for Denario" src="https://img.shields.io/badge/Built%20for-Denario-6f42c1?style=for-the-badge" />
-  </a>
-  <img alt="Place" src="https://img.shields.io/badge/🥇%20First%20Place-Winner-f7b500?style=for-the-badge" />
 </p>
+
+<sub>🥇 1st place at the [Cambridge–Infosys Hackathon 2026](https://science.ai.cam.ac.uk/events/hackathon-multi-agent-systems-for-scientific-research) · built on top of [Denario](https://github.com/AstroPilot-AI/Denario).</sub>
 
 MAgent4Science is a quantitative **Idea Hater** for [Denario](https://github.com/AstroPilot-AI/Denario). It evaluates
 scientific hypotheses with literature-grounded metrics, explains what is weak,
@@ -20,9 +15,6 @@ writing a paper from them.
 
 [Denario](https://github.com/AstroPilot-AI/Denario) can generate candidate research ideas. MAgent4Science helps decide
 which ideas are worth developing.
-
-🔗 **Event:** [Hackathon: Multi-Agent Systems for Scientific Research](https://science.ai.cam.ac.uk/events/hackathon-multi-agent-systems-for-scientific-research) — Cambridge AI for Science
-🔗 **Upstream project:** [AstroPilot-AI / Denario](https://github.com/AstroPilot-AI/Denario)
 
 ## 🎯 What The System Does
 
