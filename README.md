@@ -39,22 +39,48 @@ auditable, and repeatable hypothesis steering layer.
 The canonical architecture is defined in [architecture.md](architecture.md).
 
 ```text
-Hypothesis
-  -> Parser
-  -> Literature Retriever / Cartographer
-  -> Quantitative Scorers
-       novelty
-       saturation
-       conflict risk
-       feasibility
-       impact
-       evidence quality
-  -> Score Aggregator
-  -> Mutator
-  -> Variant Re-scoring
-  -> Ranker / Pareto Curator
-  -> Strategist
-  -> Dashboard / Denario integration
+                         ┌──────────────┐
+                         │  Hypothesis  │
+                         └──────┬───────┘
+                                ▼
+                         ┌──────────────┐
+                         │    Parser    │   claim · mechanism · context
+                         └──────┬───────┘
+                                ▼
+                  ┌───────────────────────────┐
+                  │ Literature Retriever      │   OpenAlex
+                  │     / Cartographer        │   Semantic Scholar
+                  └─────────────┬─────────────┘
+                                ▼
+   ┌────────────────── Quantitative Scorers ──────────────────┐
+   │                                                          │
+   │   novelty    saturation    conflict    feasibility       │
+   │              impact        evidence quality              │
+   │                                                          │
+   └─────────────────────────────┬────────────────────────────┘
+                                 ▼
+                       ┌──────────────────┐
+                       │ Score Aggregator │
+                       └────────┬─────────┘
+                                ▼
+                       ┌──────────────────┐        ┌──────────────────────┐
+                       │     Mutator      │──────► │  Variant Re-scoring  │
+                       └──────────────────┘        └──────────┬───────────┘
+                            ▲                                 │
+                            │   loop until improvement plateau│
+                            └─────────────────────────────────┤
+                                                              ▼
+                                                  ┌────────────────────────┐
+                                                  │ Ranker / Pareto Curator│
+                                                  └───────────┬────────────┘
+                                                              ▼
+                                                  ┌────────────────────────┐
+                                                  │      Strategist        │   memo: next hypothesis
+                                                  └───────────┬────────────┘
+                                                              ▼
+                                                  ┌────────────────────────┐
+                                                  │  Dashboard / Denario   │
+                                                  └────────────────────────┘
 ```
 
 This replaces the previous research-group-emulation-first architecture. Group
