@@ -1,14 +1,30 @@
-# MAgent4Science
+# 🧪 MAgent4Science
 
-MAgent4Science is a quantitative Idea Hater for Denario. It evaluates
+> 🏆 **1st Place — [Cambridge–Infosys Hackathon 2026](https://science.ai.cam.ac.uk/events/hackathon-multi-agent-systems-for-scientific-research)**
+> *Multi-Agent Systems for Scientific Research — Cambridge, 2026*
+
+<p align="center">
+  <a href="https://science.ai.cam.ac.uk/events/hackathon-multi-agent-systems-for-scientific-research">
+    <img alt="Hackathon" src="https://img.shields.io/badge/Cambridge--Infosys-Hackathon%202026-0a66c2?style=for-the-badge" />
+  </a>
+  <a href="https://github.com/AstroPilot-AI/Denario">
+    <img alt="Built for Denario" src="https://img.shields.io/badge/Built%20for-Denario-6f42c1?style=for-the-badge" />
+  </a>
+  <img alt="Place" src="https://img.shields.io/badge/🥇%20First%20Place-Winner-f7b500?style=for-the-badge" />
+</p>
+
+MAgent4Science is a quantitative **Idea Hater** for [Denario](https://github.com/AstroPilot-AI/Denario). It evaluates
 scientific hypotheses with literature-grounded metrics, explains what is weak,
 generates improved variants, and ranks those variants before Denario commits to
 writing a paper from them.
 
-Denario can generate candidate research ideas. MAgent4Science helps decide
+[Denario](https://github.com/AstroPilot-AI/Denario) can generate candidate research ideas. MAgent4Science helps decide
 which ideas are worth developing.
 
-## What The System Does
+🔗 **Event:** [Hackathon: Multi-Agent Systems for Scientific Research](https://science.ai.cam.ac.uk/events/hackathon-multi-agent-systems-for-scientific-research) — Cambridge AI for Science
+🔗 **Upstream project:** [AstroPilot-AI / Denario](https://github.com/AstroPilot-AI/Denario)
+
+## 🎯 What The System Does
 
 Given a Denario-generated or user-written hypothesis, MAgent4Science produces:
 
@@ -27,7 +43,7 @@ Given a Denario-generated or user-written hypothesis, MAgent4Science produces:
 The goal is to upgrade Denario's qualitative idea evaluation into a measurable,
 auditable, and repeatable hypothesis steering layer.
 
-## Core Architecture
+## 🏗️ Core Architecture
 
 The canonical architecture is defined in [architecture.md](architecture.md).
 
@@ -54,7 +70,7 @@ This replaces the previous research-group-emulation-first architecture. Group
 emulation is now only an optional frontend proof of concept for the hypothesis
 generator experience, not part of the core Idea Hater score.
 
-## Quantitative Scorecard
+## 📊 Quantitative Scorecard
 
 Every hypothesis is evaluated using a transparent 0-100 scorecard.
 
@@ -75,7 +91,7 @@ Every hypothesis is evaluated using a transparent 0-100 scorecard.
 The system should not hide behind a single opaque number. The composite verdict
 is shown alongside metric rationales, confidence intervals, and linked evidence.
 
-## Hypothesis Improvement
+## 🧬 Hypothesis Improvement
 
 The Mutator uses scorecard weaknesses to generate better variants. It applies
 explicit operators:
@@ -91,7 +107,7 @@ explicit operators:
 Each variant is evaluated by the same scorecard, then ranked by composite
 improvement, Pareto dominance, feasibility, and evidence quality.
 
-## Validation
+## ✅ Validation
 
 The validation plan is designed to prove that the quantitative Idea Hater beats
 a single qualitative LLM judgement.
@@ -111,7 +127,7 @@ simple bibliometric regression, and random or mean-field baselines.
 Date filtering is mandatory. The validation must not leak future evidence into
 historical prediction runs.
 
-## Dashboard
+## 🖥️ Dashboard
 
 The dashboard should make the quantitative upgrade obvious:
 
@@ -129,7 +145,7 @@ Optional frontend concept: a small "who might care" group-emulation panel can
 be shown as a future extension for the hypothesis generator. It should be kept
 visually and conceptually separate from the validated Idea Hater scorecard.
 
-## Technical Stack
+## 🛠️ Technical Stack
 
 | Layer | Current / Target choice |
 | --- | --- |
@@ -142,7 +158,7 @@ visually and conceptually separate from the validated Idea Hater scorecard.
 | Cache | Local SQLite keyed by query hash |
 | Dashboard | Streamlit, Plotly, cytoscape.js |
 
-## Running The Integrated Demo
+## 🚀 Running The Integrated Demo
 
 The backend exposes an HTTP API in [backend/api.py](backend/api.py) and the
 Next.js dashboard in [frontend/](frontend/) calls it from
@@ -173,7 +189,7 @@ To point the frontend at a different host, copy
 `OPENAI_API_KEY` is required for non-stubbed agents. All agents currently run as
 stubs, so the integrated demo works without keys.
 
-## Repository Status
+## 📦 Repository Status
 
 The repo now contains a backend skeleton under `backend/`, including pipeline
 scaffolding, schemas, model routing, tracing, literature tools, and agent prompt
@@ -210,7 +226,7 @@ For the first scoring pass, the working plan is:
    support-versus-contradiction classification.
 5. Return every score with rationale, confidence interval, and evidence IDs.
 
-## Repository Layout
+## 🗂️ Repository Layout
 
 ```text
 .
@@ -230,9 +246,9 @@ For the first scoring pass, the working plan is:
 `-- LICENCE
 ```
 
-## Team
+## 👥 Team
 
-Team 17:
+🥇 **Team 17 — Winners, [Cambridge–Infosys Hackathon 2026](https://science.ai.cam.ac.uk/events/hackathon-multi-agent-systems-for-scientific-research)**
 
 - Basia Koch
 - Baron Gracias
@@ -241,6 +257,11 @@ Team 17:
 - Funmi Looi-Somoye
 - Harvey Bermingham
 
-## Licence
+## 🙏 Acknowledgements
+
+- The [Cambridge AI for Science](https://science.ai.cam.ac.uk/) programme and Infosys, for hosting the [Multi-Agent Systems for Scientific Research hackathon](https://science.ai.cam.ac.uk/events/hackathon-multi-agent-systems-for-scientific-research).
+- The [Denario](https://github.com/AstroPilot-AI/Denario) team — Boris Bolliet, Pablo Villanueva-Domingo, Francisco Villaescusa-Navarro, and collaborators — whose multi-agent scientific research system this project plugs into.
+
+## 📄 Licence
 
 See [LICENCE](LICENCE).
