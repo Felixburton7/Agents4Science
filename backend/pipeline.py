@@ -5,7 +5,7 @@ import inspect
 import operator
 import warnings
 from datetime import datetime
-from typing import Annotated, Any, Callable, List, TypedDict
+from typing import Annotated, Any, Callable, List, Optional, TypedDict
 
 try:
     from langchain_core._api.deprecation import (
@@ -55,6 +55,9 @@ class PipelineState(TypedDict, total=False):
     pareto_variants: List[Variant]
     ranked_variants: List[Variant]
     final_memo: StrategyMemo
+    information_cutoff_year: Optional[int]
+    backtest_metadata: Optional[dict]
+    openalex_total_count: Optional[int]
 
 
 PartialState = dict[str, Any]

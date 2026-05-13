@@ -21,14 +21,17 @@ MAX_QUERY_ATTEMPTS = 5
 MAX_SEMANTIC_SCHOLAR_QUERIES = 1
 
 
-async def cartographer(state: dict[str, Any]) -> dict[str, list[Paper]]:
+async def cartographer(state: dict[str, Any]) -> dict[str, Any]:
     primary_query = parsed_query(state)
     papers_by_key: dict[str, Paper] = {}
+    openalex_total_count: int = 0
 
     attempted_queries = query_candidates(state, max_candidates=MAX_QUERY_ATTEMPTS)
     for query in attempted_queries:
-        for paper in _openalex_papers(query, primary_query):
+        papers, count = _openalex_papers(query, primary_query)
+        for paper in papers:
             _merge_paper(papers_by_key, paper)
+        openalex_total_count = max(openalex_total_count, count)
 
     for query in attempted_queries[:MAX_SEMANTIC_SCHOLAR_QUERIES]:
         for paper in _semantic_scholar_papers(query, primary_query):
@@ -39,23 +42,26 @@ async def cartographer(state: dict[str, Any]) -> dict[str, list[Paper]]:
         if not paper.cluster or paper.cluster == "unclustered":
             papers[index] = _copy_model(paper, cluster=cluster_label(paper, primary_query))
 
+    papers = _embed_rerank(papers, primary_query)
+
     ranked = sorted(
         papers,
         key=lambda paper: (paper.relevance_score, len(paper.source_provenance), paper.citation_count, paper.year or 0),
         reverse=True,
     )[:MAX_PAPERS]
-    return {"papers": ranked}
+    return {"papers": ranked, "openalex_total_count": openalex_total_count}
 
 
 run = cartographer
 
 
-def _openalex_papers(query: str, scoring_query: str) -> list[Paper]:
+def _openalex_papers(query: str, scoring_query: str) -> tuple[list[Paper], int]:
     try:
         data = search_works(query, per_page=MAX_PAPERS)
     except Exception:
-        return []
+        return [], 0
 
+    total_count: int = int((data.get("meta") or {}).get("count") or 0)
     results = data.get("results", [])
     max_raw_relevance = max((float(work.get("relevance_score") or 0) for work in results), default=0.0)
     papers = []
@@ -97,7 +103,7 @@ def _openalex_papers(query: str, scoring_query: str) -> list[Paper]:
             source_provenance=["openalex"],
         )
         papers.append(_copy_model(paper, paper_id=paper_evidence_id(paper)))
-    return papers
+    return papers, total_count
 
 
 def _semantic_scholar_papers(query: str, scoring_query: str) -> list[Paper]:
@@ -190,6 +196,38 @@ def _semantic_scholar_url(record: dict[str, Any], doi: str) -> str:
 def _concept_cluster(work: dict[str, Any]) -> str:
     concepts = [concept.get("display_name", "") for concept in work.get("concepts", [])[:2] if concept.get("display_name")]
     return " / ".join(concepts) if concepts else "unclustered"
+
+
+def _embed_rerank(papers: list[Paper], primary_query: str) -> list[Paper]:
+    """Re-score papers using embedding similarity, blended with existing lexical scores.
+
+    Sends ONE batch API call for all uncached texts, then updates relevance_score:
+        final = max(lexical, 0.4*lexical + 0.6*embedding)
+    Falls back to the original papers unchanged if embeddings are unavailable.
+    """
+    from backend.embedding_utils import embed_texts, embedding_relevance
+
+    # Warm the cache in a single batch call: query + all unique titles/abstracts.
+    unique_texts: list[str] = []
+    seen: set[str] = set()
+    for text in [primary_query] + [p.title for p in papers] + [p.abstract for p in papers if p.abstract.strip()]:
+        if text not in seen:
+            seen.add(text)
+            unique_texts.append(text)
+
+    if embed_texts(unique_texts) is None:
+        return papers  # API key absent or call failed — keep lexical scores
+
+    updated: list[Paper] = []
+    for paper in papers:
+        embedding_score = embedding_relevance(primary_query, paper.title, paper.abstract)
+        if embedding_score is None:
+            updated.append(paper)
+            continue
+        lexical = paper.relevance_score
+        blended = max(lexical, 0.4 * lexical + 0.6 * embedding_score)
+        updated.append(_copy_model(paper, relevance_score=round(blended, 3)))
+    return updated
 
 
 def _copy_model(model: Any, **updates: Any) -> Any:

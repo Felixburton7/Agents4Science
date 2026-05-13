@@ -117,12 +117,14 @@ def _heuristic_forecast(state: dict[str, Any], cutoff_year: int | None) -> Impac
         parsed.get("context", ""),
         parsed.get("population", ""),
         parsed.get("method", ""),
+        # backtest metadata (empty in live mode, populated when information_cutoff_year is set)
         metadata.get("title", ""),
         metadata.get("abstract", ""),
         metadata.get("venue", ""),
         " ".join(metadata.get("concepts", []) if isinstance(metadata.get("concepts"), list) else []),
-        " ".join(str(paper.get("title", "")) for paper in papers[:12]),
-        " ".join(str(paper.get("abstract", "")) for paper in papers[:8]),
+        # Cluster labels are short domain strings (e.g. "CRISPR / Gene therapy") — safe to include.
+        # Paper titles and abstracts are intentionally excluded: including them inflates keyword
+        # scores with field-vocabulary that belongs to prior art, not to the hypothesis itself.
         " ".join(str(paper.get("cluster", "")) for paper in papers[:20]),
     ]
     text = " ".join(str(part) for part in text_parts if part).lower()
@@ -145,13 +147,21 @@ def _heuristic_forecast(state: dict[str, Any], cutoff_year: int | None) -> Impac
         + evidence_bonus
         + paper_signal["citation_momentum"] * 0.45
         + paper_signal["source_depth"] * 0.20
-        + _keyword_score(text, VOLUME_KEYWORDS)
+        + max(
+            _keyword_score(text, VOLUME_KEYWORDS),
+            _keyword_score(text, VOLUME_KEYWORDS_BIO),
+            _keyword_score(text, VOLUME_KEYWORDS_MAT),
+        )
         + interest * 0.10
         - crowding * 0.10
     )
     velocity = _clamp(
         volume * 0.78
-        + _keyword_score(text, VELOCITY_KEYWORDS)
+        + max(
+            _keyword_score(text, VELOCITY_KEYWORDS),
+            _keyword_score(text, VELOCITY_KEYWORDS_BIO),
+            _keyword_score(text, VELOCITY_KEYWORDS_MAT),
+        )
         + paper_signal["relevance"] * 0.12
         + paper_signal["recency"] * 0.10
         + venue_bonus * 0.35
@@ -161,27 +171,43 @@ def _heuristic_forecast(state: dict[str, Any], cutoff_year: int | None) -> Impac
         30
         + min(22, _concept_count(state, metadata) * 3.5)
         + min(12, paper_signal["cluster_diversity"] * 2.0)
-        + _keyword_score(text, REACH_KEYWORDS)
+        + max(
+            _keyword_score(text, REACH_KEYWORDS),
+            _keyword_score(text, REACH_KEYWORDS_BIO),
+            _keyword_score(text, REACH_KEYWORDS_MAT),
+        )
         + interest * 0.07
     )
     depth = _clamp(
         32
         + venue_bonus * 0.45
         + paper_signal["citation_momentum"] * 0.25
-        + _keyword_score(text, DEPTH_KEYWORDS)
+        + max(
+            _keyword_score(text, DEPTH_KEYWORDS),
+            _keyword_score(text, DEPTH_KEYWORDS_BIO),
+            _keyword_score(text, DEPTH_KEYWORDS_MAT),
+        )
         + min(12, abstract_len / 45)
         - crowding * 0.05
     )
     disruption = _clamp(
         34
-        + _keyword_score(text, DISRUPTION_KEYWORDS)
+        + max(
+            _keyword_score(text, DISRUPTION_KEYWORDS),
+            _keyword_score(text, DISRUPTION_KEYWORDS_BIO),
+            _keyword_score(text, DISRUPTION_KEYWORDS_MAT),
+        )
         + max(0, 12 - crowding * 0.18)
         + _conflict_bonus(state)
         + max(0, 10 - paper_signal["relevance"] * 0.10)
     )
     translation = _clamp(
         22
-        + _keyword_score(text, TRANSLATION_KEYWORDS)
+        + max(
+            _keyword_score(text, TRANSLATION_KEYWORDS),
+            _keyword_score(text, TRANSLATION_KEYWORDS_BIO),
+            _keyword_score(text, TRANSLATION_KEYWORDS_MAT),
+        )
         + _keyword_score(text, MATERIALS_KEYWORDS) * 0.8
         + paper_signal["source_depth"] * 0.15
         + interest * 0.04
@@ -196,7 +222,7 @@ def _heuristic_forecast(state: dict[str, Any], cutoff_year: int | None) -> Impac
             uncertainty,
             "5-year citations",
             _citations_from_score,
-            f"Estimated from venue signal, abstract specificity, AI-topic momentum, and {note}.",
+            f"Estimated from venue signal, abstract specificity, domain-topic momentum (CS/bio/materials), and {note}.",
         ),
         velocity=_dimension(
             velocity,
@@ -414,6 +440,7 @@ def _uncertainty_width(abstract_len: int, has_venue: bool, cutoff_year: int | No
     return max(10, min(28, width))
 
 
+# ML / CS domain
 VOLUME_KEYWORDS = {
     "transformer": 14,
     "attention": 8,
@@ -471,6 +498,7 @@ DISRUPTION_KEYWORDS = {
     "outperform": 8,
     "state-of-the-art": 7,
     "replace": 8,
+    "alternative to": 9,
     "without": 5,
     "novel": 6,
     "new architecture": 10,
@@ -492,6 +520,43 @@ TRANSLATION_KEYWORDS = {
     "autonomous": 8,
     "medical": 12,
     "diagnosis": 12,
+    # Therapy vocabulary that appears in hypothesis text, not just paper abstracts
+    "therapy": 11,
+    "therapeutic": 11,
+    "treatment": 9,
+    "in-vivo": 8,
+    "in vivo": 8,
+}
+
+# Biology translation: clinical outcomes and therapeutic pathways
+TRANSLATION_KEYWORDS_BIO = {
+    "statin": 10,
+    "vaccine": 12,
+    "gene therapy": 12,
+    "cell therapy": 11,
+    "immunotherapy": 12,
+    "precision medicine": 11,
+    "clinical application": 13,
+    "efficacy": 9,
+    "cholesterol": 9,
+    "cardiovascular": 10,
+    "alternative to": 10,
+    "permanent": 8,
+}
+
+# Materials translation: industrial and commercial pathways
+TRANSLATION_KEYWORDS_MAT = {
+    "energy storage": 11,
+    "commercial": 10,
+    "scalable synthesis": 11,
+    "manufacturing": 11,
+    "prototype": 9,
+    "grid": 8,
+    "industry": 9,
+    "cost": 8,
+    "durability": 8,
+    "ambient conditions": 9,
+    "replacing": 10,
 }
 
 MATERIALS_KEYWORDS = {
@@ -501,4 +566,136 @@ MATERIALS_KEYWORDS = {
     "chemistry": 9,
     "drug": 12,
     "crystal": 8,
+}
+
+# Biology domain
+VOLUME_KEYWORDS_BIO = {
+    "crispr": 14,
+    "gene editing": 14,
+    "rna-seq": 12,
+    "single-cell": 11,
+    "clinical trial": 13,
+    "gene expression": 9,
+    "protein structure": 11,
+    "genomics": 9,
+    "proteomics": 9,
+    "sequencing": 8,
+    "metagenomics": 10,
+    "epigenomics": 10,
+    "cell therapy": 11,
+    "mrna": 12,
+}
+
+VELOCITY_KEYWORDS_BIO = {
+    "clinical trial": 13,
+    "rna-seq": 12,
+    "single-cell": 11,
+    "crispr": 12,
+    "gene expression": 9,
+    "genomics": 8,
+    "sequencing": 7,
+    "mrna": 11,
+    "biomarker": 9,
+}
+
+REACH_KEYWORDS_BIO = {
+    "cancer": 9,
+    "neurological": 8,
+    "cardiovascular": 8,
+    "infectious disease": 8,
+    "therapeutic": 9,
+    "biomarker": 8,
+    "precision medicine": 10,
+    "translational": 9,
+    "microbiome": 9,
+    "immune": 8,
+}
+
+DEPTH_KEYWORDS_BIO = {
+    "mechanism": 9,
+    "pathway": 8,
+    "receptor": 7,
+    "enzyme": 7,
+    "protein interaction": 9,
+    "cell signaling": 8,
+    "regulatory network": 9,
+    "molecular basis": 8,
+    "epigenetic": 9,
+    "transcription factor": 8,
+}
+
+DISRUPTION_KEYWORDS_BIO = {
+    "replace": 8,
+    "novel target": 10,
+    "first-in-class": 12,
+    "paradigm": 9,
+    "without": 5,
+    "outperform": 8,
+    "superior efficacy": 9,
+    "gene therapy": 10,
+    "unprecedented": 10,
+}
+
+# Materials domain
+VOLUME_KEYWORDS_MAT = {
+    "metal organic framework": 12,
+    "perovskite": 12,
+    "battery": 11,
+    "synthesis": 9,
+    "catalyst": 10,
+    "nanoparticle": 9,
+    "crystal structure": 10,
+    "alloy": 9,
+    "polymer": 8,
+    "electrolyte": 10,
+    "electrode": 9,
+    "photovoltaic": 11,
+}
+
+VELOCITY_KEYWORDS_MAT = {
+    "battery": 11,
+    "catalyst": 10,
+    "synthesis": 8,
+    "perovskite": 11,
+    "nanoparticle": 8,
+    "electrode": 9,
+    "electrolyte": 9,
+    "photovoltaic": 10,
+}
+
+REACH_KEYWORDS_MAT = {
+    "energy storage": 10,
+    "renewable": 9,
+    "sustainable": 8,
+    "photovoltaic": 10,
+    "semiconductor": 9,
+    "functional material": 9,
+    "structural": 7,
+    "corrosion": 7,
+    "superconductor": 10,
+    "thermoelectric": 9,
+}
+
+DEPTH_KEYWORDS_MAT = {
+    "mechanism": 9,
+    "first-principles": 10,
+    "ab initio": 10,
+    "density functional": 10,
+    "thermodynamic": 8,
+    "kinetic": 7,
+    "molecular dynamics": 9,
+    "phase diagram": 8,
+    "defect": 7,
+}
+
+DISRUPTION_KEYWORDS_MAT = {
+    "outperform": 8,
+    "replace": 8,
+    "novel": 6,
+    "high performance": 9,
+    "record": 10,
+    "unprecedented": 10,
+    "without": 5,
+    "new class": 9,
+    "beyond": 7,
 }

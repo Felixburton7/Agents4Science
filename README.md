@@ -173,7 +173,7 @@ visually and conceptually separate from the validated Idea Hater scorecard.
 | Tracing | Langfuse |
 | Literature data | OpenAlex and Semantic Scholar |
 | Cache | Local SQLite keyed by query hash |
-| Dashboard | Streamlit, Plotly, cytoscape.js |
+| Dashboard | Next.js, Plotly, cytoscape.js |
 
 ## 🚀 Running The Integrated Demo
 
@@ -199,49 +199,22 @@ before; in parallel the frontend POSTs the hypothesis to
 the dashboard. If the backend is offline, the demo falls back to mock data and
 logs a warning to the browser console.
 
-To point the frontend at a different host, copy
-[frontend/.env.local.example](frontend/.env.local.example) to
-`frontend/.env.local` and edit `NEXT_PUBLIC_API_BASE`.
+To point the frontend at a different host, copy `frontend/.env.local.example`
+to `frontend/.env.local` and edit `NEXT_PUBLIC_API_BASE`.
 
-`OPENAI_API_KEY` is required for non-stubbed agents. All agents currently run as
-stubs, so the integrated demo works without keys.
+`OPENAI_API_KEY` is required for LLM-backed scoring. All 13 pipeline agents have
+production implementations that fall back to deterministic heuristics when no key
+is present, so the integrated demo runs without an API key.
 
 ## 📦 Repository Status
 
-The repo now contains a backend skeleton under `backend/`, including pipeline
-scaffolding, schemas, model routing, tracing, literature tools, and agent prompt
-files. The demo CLI runs the quantitative Idea Hater path end to end with mock
-data while real agents land.
-
-The immediate scoring implementation priority is the first defensible
-quantitative layer:
-
-- `novelty_scorer`
-- `saturation_scorer`
-- `conflict_scorer`
-- `evidence_quality_scorer`
-
-These four modules should share one literature neighbourhood, one evidence-ID
-contract, and one structured score format so the dashboard and validation code
-can inspect every metric in the same way.
-
-Immediate implementation targets from [team_tasks.md](team_tasks.md):
-
-- Replace mock metric scorer stubs with retrieval-backed implementations.
-- Improve score aggregation weights and calibration.
-- Connect mutation and variant re-scoring to the real scorecard.
-- Build a dashboard around the scorecard, evidence trace, ranked variants, and
-  validation plots.
-- Build a historical backtest harness.
-
-For the first scoring pass, the working plan is:
-
-1. Normalize OpenAlex and Semantic Scholar records into one paper format.
-2. Use DOI-first evidence IDs for reproducible metric traces.
-3. Implement deterministic saturation and novelty before hybrid metrics.
-4. Use bounded LLM calls only for explanation and abstract-level
-   support-versus-contradiction classification.
-5. Return every score with rationale, confidence interval, and evidence IDs.
+All 13 pipeline modules (Parser → Cartographer → parallel scorers → Score
+Aggregator → Mutator → Variant Rescorer → Pareto Curator → Ranker → Strategist)
+have production implementations backed by real OpenAlex and Semantic Scholar
+retrieval. Each module falls back to a calibrated heuristic when the OpenAI API
+is unavailable. A historical backtest harness (`scripts/backtest.py`) validates
+Spearman correlations against 2024 citation ground truth for 2018 papers across
+computer science, biology, and materials science.
 
 ## 🗂️ Repository Layout
 
@@ -250,15 +223,37 @@ For the first scoring pass, the working plan is:
 |-- architecture.md              # Canonical quantitative Idea Hater architecture
 |-- team_tasks.md                # Current implementation workstreams
 |-- backend/
-|   |-- pipeline.py              # LangGraph pipeline skeleton
+|   |-- api.py                   # FastAPI HTTP entry point
+|   |-- pipeline.py              # LangGraph pipeline (fan-out scoring, Pareto)
 |   |-- schemas.py               # Pydantic contracts
-|   |-- model_routing.py         # Agent-to-model routing
-|   |-- agents/                  # Agent prompt specs and stubs
-|   `-- tools/                   # Literature APIs and caching
+|   |-- model_routing.py         # Agent-to-model routing (gpt-5-nano/mini/full)
+|   |-- llm_client.py            # Structured-output LLM client with SQLite cache
+|   |-- config.py                # Environment variable config
+|   |-- tracing.py               # Langfuse tracing helpers
+|   |-- evidence_utils.py        # Shared retrieval helpers and DOI-first evidence IDs
+|   |-- parser.py                # Hypothesis parser
+|   |-- cartographer.py          # Literature retrieval (OpenAlex + Semantic Scholar)
+|   |-- novelty_scorer.py
+|   |-- saturation_scorer.py
+|   |-- conflict_scorer.py
+|   |-- feasibility_scorer.py
+|   |-- impact_forecaster.py
+|   |-- evidence_quality_scorer.py
+|   |-- score_aggregator.py
+|   |-- mutator.py               # 7-operator hypothesis mutation
+|   |-- variant_rescorer.py
+|   |-- pareto_curator.py
+|   |-- ranker.py
+|   |-- strategist.py
+|   `-- tools/                   # OpenAlex, Semantic Scholar clients + SQLite cache
+|-- scripts/
+|   |-- backtest.py              # 2018→2024 Spearman-correlation backtest
+|   `-- fetch_assets.py
+|-- frontend/                    # Next.js + Plotly + cytoscape dashboard
+|-- backtest_outputs/            # Backtest CSV, JSON correlations, scatter plots
 |-- run.py                       # CLI entry point
 |-- pyproject.toml
 |-- requirements.txt
-|-- AgentsIdeas.md               # Earlier concept notes
 |-- README.md
 `-- LICENCE
 ```

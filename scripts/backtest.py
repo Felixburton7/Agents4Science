@@ -36,14 +36,28 @@ TOPIC_QUERIES = [
     ("cs", "graph neural network deep learning"),
     ("cs", "generative adversarial network deep learning"),
     ("cs", "diffusion model generative deep learning"),
+    # AI-assisted biology (kept for continuity)
     ("bio", "deep learning protein prediction"),
     ("bio", "convolutional neural network medical imaging"),
     ("bio", "machine learning genomics neural network"),
     ("bio", "deep learning drug discovery"),
+    # Pure biology — no ML framing
+    ("bio", "CRISPR gene editing genome"),
+    ("bio", "single cell RNA sequencing transcriptomics"),
+    ("bio", "cancer immunotherapy T cell"),
+    ("bio", "antibiotic resistance bacterial pathogen"),
+    ("bio", "protein folding structure function"),
+    # AI-assisted materials (kept for continuity)
     ("materials", "machine learning materials discovery"),
     ("materials", "deep learning molecule generation"),
     ("materials", "neural network crystal structure prediction"),
     ("materials", "artificial intelligence materials science"),
+    # Pure materials — no ML framing
+    ("materials", "metal organic framework gas adsorption"),
+    ("materials", "lithium ion battery cathode electrolyte"),
+    ("materials", "perovskite solar cell efficiency"),
+    ("materials", "high entropy alloy mechanical properties"),
+    ("materials", "catalyst hydrogen evolution reaction"),
 ]
 
 AI_KEYWORDS = (

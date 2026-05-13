@@ -72,6 +72,17 @@ def _repair(parsed: ParsedHypothesis, raw_hypothesis: str) -> ParsedHypothesis:
     }
     if repaired["claim"] == "unspecified":
         repaired["claim"] = _claim(raw_hypothesis)
+    # Drop non-claim fields that are clearly mis-extractions: too long (> 90 chars)
+    # or are a near-verbatim substring of the raw hypothesis (contamination).
+    raw_lower = raw_hypothesis.lower()
+    for key in ("mechanism", "context", "population", "method"):
+        val = repaired[key]
+        if val == "unspecified":
+            continue
+        if len(val) > 90:
+            repaired[key] = "unspecified"
+        elif len(val) > 20 and val.rstrip(".,;:").lower() in raw_lower:
+            repaired[key] = "unspecified"
     return ParsedHypothesis(**repaired)
 
 
@@ -81,15 +92,23 @@ def _claim(text: str) -> str:
 
 
 def _field_after_hint(text: str, hints: tuple[str, ...]) -> str:
+    # lowered has a leading space for word-boundary matching, so indices are +1 vs text.
     lowered = f" {text.lower()} "
     for hint in hints:
         index = lowered.find(hint)
         if index == -1:
             continue
-        start = index + len(hint)
+        # Offset by -1 to correct for the extra leading space in lowered.
+        start = index + len(hint) - 1
         fragment = text[start:].strip(" ,.;:")
-        fragment = re.split(r"\b(?:and|but|while|whereas|which)\b|[.;]", fragment, maxsplit=1)[0]
-        return _truncate(_clean(fragment), 140) or "unspecified"
+        # Stop at punctuation, conjunctions, or verbs that start a new clause
+        fragment = re.split(
+            r"\b(?:and|but|while|whereas|which|will|can|should|reduces?|increases?|is|are|was|were|have|has)\b|[.,;]",
+            fragment, maxsplit=1
+        )[0]
+        fragment = _truncate(_clean(fragment), 80)
+        if fragment and len(fragment) >= 4:
+            return fragment
     return "unspecified"
 
 
